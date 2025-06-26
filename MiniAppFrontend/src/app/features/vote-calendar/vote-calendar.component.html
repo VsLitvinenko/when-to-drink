@@ -24,23 +24,45 @@
     mode="ios"
     presentation="date"
     [multiple]="true"
+    [firstDayOfWeek]="1"
     appIonDateSpecify
     [popover]="popover"
   ></ion-datetime>
-
-  <ion-popover #popover side="top" alignment="center" [arrow]="true" >
-    <ng-template>
-      <div class="popover-content">
-        <ion-button #readyButton size="small" color="primary" (click)="popover.dismiss({ ready: true })">
-          <ion-icon name="checkmark-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button #maybeButton size="small" color="warning" (click)="popover.dismiss({ maybe: true })">
-          <ion-icon name="help-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-        <ion-button #timeButton size="small" color="success" (click)="popover.dismiss({ time: true })">
-          <ion-icon name="time-outline" slot="icon-only"></ion-icon>
-        </ion-button>
-      </div>
-    </ng-template>
-  </ion-popover>
 </div>
+
+<ion-popover #popover side="top" alignment="center" [arrow]="true" >
+  <ng-template>
+    <div class="popover-content">
+      <ion-button #readyButton size="small" color="primary" (click)="popover.dismiss({ ready: true })">
+        <ion-icon name="checkmark-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button #maybeButton size="small" color="warning" (click)="popover.dismiss({ maybe: true })">
+        <ion-icon name="help-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button #timeButton size="small" color="success" (click)="timeModal.present()">
+        <ion-icon name="time-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+  </ng-template>
+</ion-popover>
+
+<ion-modal #timeModal [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+  <ng-template>
+    <div class="time-modal-content">
+      <div class="time-pickers">
+        <div class="pick">
+          <ion-label> Start Time </ion-label>
+          <ion-datetime #startTime presentation="time" mode="ios" [value]="nowDate"></ion-datetime>
+        </div>
+        <div class="pick">
+          <ion-label> End Time </ion-label>
+          <ion-datetime #endTime presentation="time" mode="ios" [value]="nowDate"></ion-datetime>
+        </div>
+      </div>
+      <ion-button
+        [disabled]="!isStartLessThanEnd(startTime.value, endTime.value)"
+        (click)="timeModal.dismiss(); popover.dismiss({ time: true, start: startTime.value, end: endTime.value })"
+      > Select Time </ion-button>
+    </div>
+  </ng-template>
+</ion-modal>
