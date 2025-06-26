@@ -16,7 +16,7 @@
       </ion-chip>
     </div>
      <span class="subtitle">
-      Hold date (or rightclick) to specify options
+      Hold date to specify date options
     </span>
   </div>
 
@@ -30,7 +30,7 @@
   ></ion-datetime>
 </div>
 
-<ion-popover #popover side="top" alignment="center" [arrow]="true" >
+<ion-popover #popover mode="ios" side="top" alignment="center" [arrow]="true">
   <ng-template>
     <div class="popover-content">
       <ion-button #readyButton size="small" color="primary" (click)="popover.dismiss({ ready: true })">
@@ -60,6 +60,7 @@
         </div>
       </div>
       <ion-button
+        mode="ios"
         [disabled]="!isStartLessThanEnd(startTime.value, endTime.value)"
         (click)="timeModal.dismiss(); popover.dismiss({ time: true, start: startTime.value, end: endTime.value })"
       > Select Time </ion-button>
