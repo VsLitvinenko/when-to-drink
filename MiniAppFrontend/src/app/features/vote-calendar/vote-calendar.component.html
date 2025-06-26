@@ -20,5 +20,27 @@
     </span>
   </div>
 
-  <ion-datetime mode="ios" presentation="date" [multiple]="true"></ion-datetime>
+  <ion-datetime
+    mode="ios"
+    presentation="date"
+    [multiple]="true"
+    appIonDateSpecify
+    [popover]="popover"
+  ></ion-datetime>
+
+  <ion-popover #popover side="top" alignment="center" [arrow]="true" >
+    <ng-template>
+      <div class="popover-content">
+        <ion-button #readyButton size="small" color="primary" (click)="popover.dismiss({ ready: true })">
+          <ion-icon name="checkmark-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button #maybeButton size="small" color="warning" (click)="popover.dismiss({ maybe: true })">
+          <ion-icon name="help-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+        <ion-button #timeButton size="small" color="success" (click)="popover.dismiss({ time: true })">
+          <ion-icon name="time-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+    </ng-template>
+  </ion-popover>
 </div>
