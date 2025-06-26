@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { VoteCalendarComponent } from 'src/app/features/vote-calendar';
 import { PageCommonModule } from 'src/app/shared';
 
 @Component({
@@ -7,6 +8,7 @@ import { PageCommonModule } from 'src/app/shared';
   styleUrls: ['./vote-event-page.component.scss'],
   imports: [
     PageCommonModule,
+    VoteCalendarComponent,
   ],
 })
 export class VoteEventPageComponent  implements OnInit {

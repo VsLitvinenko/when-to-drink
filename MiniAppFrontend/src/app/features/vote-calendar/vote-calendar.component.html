@@ -1,0 +1,24 @@
+<div class="vote-calendar">
+  <div class="vote-calendar-header">
+   
+    <div class="chips">
+      <ion-chip color="primary" class="ion-activated">
+        <ion-icon name="checkmark-outline"></ion-icon>
+        <ion-label> Ready </ion-label>
+      </ion-chip>
+      <ion-chip color="warning" class="ion-activated">
+        <ion-icon name="help-outline"></ion-icon>
+        <ion-label> Maybe </ion-label>
+      </ion-chip>
+      <ion-chip color="success" class="ion-activated">
+        <ion-icon name="time-outline"></ion-icon>
+        <ion-label> Time </ion-label>
+      </ion-chip>
+    </div>
+     <span class="subtitle">
+      Hold date (or rightclick) to specify options
+    </span>
+  </div>
+
+  <ion-datetime mode="ios" presentation="date" [multiple]="true"></ion-datetime>
+</div>
