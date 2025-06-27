@@ -3,6 +3,7 @@ import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/stand
 import { SharedFeatureModule } from 'src/app/shared';
 import { IonDateSpecifyDirective } from './directives';
 import { format } from 'date-fns';
+import { VoteDate } from './models';
 
 
 @Component({
@@ -30,6 +31,14 @@ export class VoteCalendarComponent  implements OnInit {
     const startDate = new Date(start);
     const endDate = new Date(end);
     return startDate < endDate;
+  }
+
+  public onResetChanges(): void {
+    console.log('Reset changes');
+  }
+
+  public onSaveChanges(voteDates: VoteDate[]): void {
+    console.log('Saved vote dates:', voteDates);
   }
   
 }

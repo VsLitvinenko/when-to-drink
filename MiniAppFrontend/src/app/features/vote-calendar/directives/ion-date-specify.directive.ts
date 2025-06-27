@@ -1,18 +1,46 @@
-import { AfterViewInit, Directive, ElementRef, inject, Input, OnDestroy } from '@angular/core';
+import { AfterViewInit, Directive, effect, ElementRef, inject, Input, OnDestroy, signal } from '@angular/core';
 import { fromEvent, map, merge, ReplaySubject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { IonButton, IonDatetime, IonPopover } from '@ionic/angular/standalone';
+import { VoteDate, VoteType } from '../models';
+import { groupBy } from 'lodash';
+import { format } from 'date-fns';
 
 
 const focusButtonBg = 'rgba(var(--ion-color-base-rgb), 0.2)';
+const formatVoteDate = (date: Date) => format(date, 'yyyy-MM-dd');
 
 @Directive({
   selector: '[appIonDateSpecify]',
+  exportAs: 'appIonDateSpecify',
 })
 export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
   @Input({ required: true}) popover!: IonPopover;
   @Input() readyButton?: IonButton;
   @Input() maybeButton?: IonButton;
   @Input() timeButton?: IonButton;
+
+  @Input() set voteDates(items: VoteDate[]) {
+    const grouped = groupBy(items, 'type');
+    this.readyDates.set(new Set(grouped[VoteType.Ready]!.map((d) => formatVoteDate(d.date))));
+    this.maybeDates.set(new Set(grouped[VoteType.Maybe]!.map((d) => formatVoteDate(d.date))));
+    this.timeDates.set(new Map(grouped[VoteType.Time]!.map((d) => [formatVoteDate(d.date), d])));
+  }
+
+  public get voteDates(): VoteDate[] {
+    const ready = this.readyDates();
+    const maybe = this.maybeDates();
+    const time = this.timeDates();
+    return [
+      ...Array.from(ready).map((date) => ({ date: new Date(date), type: VoteType.Ready })),
+      ...Array.from(maybe).map((date) => ({ date: new Date(date), type: VoteType.Maybe })),
+      ...Array.from(time.values())
+    ];
+  }
+
+  private readonly readyDates = signal(new Set<string>());
+  private readonly maybeDates = signal(new Set<string>());
+  private readonly timeDates = signal(new Map<string, VoteDate>());
+
 
   private readonly ionDateComponent = inject(IonDatetime);
   private readonly elRef = inject(ElementRef);
@@ -29,7 +57,29 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
   private readonly dateButtons$ = new ReplaySubject<HTMLButtonElement[]>(1);
   private readonly destroyed$ = new ReplaySubject<void>(1);
 
-  constructor() {}
+  constructor() {
+    effect(() => {
+      const readyDates = this.readyDates();
+      this.ionDateComponent.value = Array.from(readyDates);
+    });
+
+    effect(() => {
+      const maybeDates = this.maybeDates();
+      const timeDates = this.timeDates();
+      this.ionDateComponent.highlightedDates = [
+        ...Array.from(maybeDates).map((date) => ({
+          date: date,
+          textColor: 'rgba(255, 206, 49, 1)',
+          backgroundColor: 'rgba(255, 206, 49, 0.16)',
+        })),
+        ...Array.from(timeDates.keys()).map((date) => ({
+          date: date,
+          textColor: 'rgba(45, 213, 91, 1)',
+          backgroundColor: 'rgba(45, 213, 91, 0.16)',
+        })),
+      ];
+    });
+  }
 
   ngAfterViewInit(): void {
     // update dateButtons$ array
@@ -37,7 +87,10 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
     // get date buttons hold events
     this.dateButtons$
       .pipe(
-        tap((dateButtons) => dateButtons.forEach((b) => b.style.boxShadow = 'none')),
+        tap((dateButtons) => dateButtons.forEach((b) => {
+          b.style.boxShadow = 'none';
+          b.style.fontWeight = '400';
+        })),
         switchMap((dateButtons) => {
           const buttonClicks = dateButtons.map((target) => {
             return fromEvent(target, 'contextmenu').pipe(
@@ -50,6 +103,13 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
         takeUntil(this.destroyed$)
       )
       .subscribe((event: any) => this.showPopover(event));
+    // sync ready set with ion-datetime value
+    this.ionDateComponent.ionChange
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((event) => {
+        const { value } = event.detail;
+        this.readyDates.set(new Set(value));
+      });
   }
 
   ngOnDestroy(): void {
@@ -71,18 +131,49 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
       .pipe(take(1))
       .subscribe((event) => {
         buttonEl.style.backgroundColor = '';
-        this.handlePopoverButtons(event.detail.data, buttonEl);
+        if (event.detail.data) {
+          const day = Number(buttonEl.getAttribute('data-day'));
+          const month = Number(buttonEl.getAttribute('data-month'));
+          const year = Number(buttonEl.getAttribute('data-year'));
+          this.handlePopoverButtons(event.detail.data, year, month, day);
+        }
       });
   }
 
-  private handlePopoverButtons(event: any, target: HTMLButtonElement): void {
-    if (!event) {
-      return;
-    }
-    const day = Number(target.getAttribute('data-day'));
-    const month = Number(target.getAttribute('data-month'));
-    const year = Number(target.getAttribute('data-year'));
+  private handlePopoverButtons(event: any, year: number, month: number, day: number): void {
     const date = new Date(year, month - 1, day);
-    console.log(event, date);
+    const formatted = formatVoteDate(date);
+    const ready = this.readyDates();
+    const maybe = this.maybeDates();
+    const time = this.timeDates();
+    if (event.ready) {
+      // handle ready date
+      ready.add(formatted);
+      maybe.delete(formatted);
+      time.delete(formatted);
+    } else if (event.maybe) {
+      // handle maybe date
+      maybe.add(formatted);
+      ready.delete(formatted);
+      time.delete(formatted);
+    } else if (event.time) {
+      // handle time date
+      const startDate = new Date(event.start);
+      const endDate = new Date(event.end);
+      startDate.setFullYear(year, month - 1, day);
+      endDate.setFullYear(year, month - 1, day);
+      const voteDate: VoteDate = {
+        date: date,
+        type: VoteType.Time,
+        start: startDate,
+        end: endDate,
+      };
+      time.set(formatted, voteDate);
+      ready.delete(formatted);
+      maybe.delete(formatted);
+    }
+    this.readyDates.set(new Set(ready));
+    this.maybeDates.set(new Set(maybe));
+    this.timeDates.set(new Map(time));
   }
 }
