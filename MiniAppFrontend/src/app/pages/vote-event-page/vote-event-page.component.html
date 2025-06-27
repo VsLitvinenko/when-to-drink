@@ -1,8 +1,28 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title> When to drink beer event </ion-title>
-  </ion-toolbar>
-</ion-header>
+
 <ion-content class="ion-padding">
-  <app-vote-calendar></app-vote-calendar>
+  <ion-segment mode="ios">
+    <ion-segment-button value="info" contentId="info">
+      <ion-label> Info </ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="vote" contentId="vote">
+      <ion-label> Vote </ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div class="main-segment-info">
+    When to drink beer event
+  </div>
+
+  <ion-segment-view mode="ios">
+    <ion-segment-content id="info">
+      <div class="segment-content">
+        event info features
+      </div>
+    </ion-segment-content>
+    <ion-segment-content id="vote">
+      <div class="segment-content">
+        <app-vote-calendar></app-vote-calendar>
+      </div>
+    </ion-segment-content>
+  </ion-segment-view>
 </ion-content>

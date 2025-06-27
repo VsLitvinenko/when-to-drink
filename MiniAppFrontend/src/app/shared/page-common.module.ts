@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { IonContent, IonHeader, IonToolbar, IonTitle } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonToolbar, IonTitle, IonLabel, IonIcon } from '@ionic/angular/standalone';
 
 @NgModule({
   imports: [
@@ -9,6 +9,8 @@ import { IonContent, IonHeader, IonToolbar, IonTitle } from '@ionic/angular/stan
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonLabel,
+    IonIcon,
   ],
   exports: [
     CommonModule,
@@ -16,6 +18,8 @@ import { IonContent, IonHeader, IonToolbar, IonTitle } from '@ionic/angular/stan
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonLabel,
+    IonIcon,
   ],
 })
 export class PageCommonModule {}

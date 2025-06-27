@@ -90,6 +90,7 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
         tap((dateButtons) => dateButtons.forEach((b) => {
           b.style.boxShadow = 'none';
           b.style.fontWeight = '400';
+          b.style.fontSize = '1.25rem';
         })),
         switchMap((dateButtons) => {
           const buttonClicks = dateButtons.map((target) => {

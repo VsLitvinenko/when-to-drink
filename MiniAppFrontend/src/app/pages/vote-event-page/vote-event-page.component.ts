@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView } from '@ionic/angular/standalone';
 import { VoteCalendarComponent } from 'src/app/features/vote-calendar';
 import { PageCommonModule } from 'src/app/shared';
 
@@ -9,6 +10,10 @@ import { PageCommonModule } from 'src/app/shared';
   imports: [
     PageCommonModule,
     VoteCalendarComponent,
+    IonSegment,
+    IonSegmentButton,
+    IonSegmentContent,
+    IonSegmentView,
   ],
 })
 export class VoteEventPageComponent  implements OnInit {
