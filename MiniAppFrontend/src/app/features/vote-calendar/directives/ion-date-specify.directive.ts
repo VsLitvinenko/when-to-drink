@@ -5,7 +5,6 @@ import { VoteDate, VoteType } from '../models';
 import { groupBy } from 'lodash';
 import { format } from 'date-fns';
 
-
 const focusButtonBg = 'rgba(var(--ion-color-base-rgb), 0.2)';
 const formatVoteDate = (date: Date) => format(date, 'yyyy-MM-dd');
 
@@ -64,6 +63,7 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
     });
 
     effect(() => {
+      // highlight dates in ion-datetime
       const maybeDates = this.maybeDates();
       const timeDates = this.timeDates();
       this.ionDateComponent.highlightedDates = [
@@ -103,12 +103,18 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
         takeUntil(this.destroyed$)
       )
       .subscribe((event: any) => this.showPopover(event));
-    // sync ready set with ion-datetime value
+    // sync dates signals with ion-datetime value
     this.ionDateComponent.ionChange
       .pipe(takeUntil(this.destroyed$))
       .subscribe((event) => {
-        const { value } = event.detail;
-        this.readyDates.set(new Set(value));
+        this.readyDates().clear();
+        const value = event.detail.value as (string[] | undefined);
+        value?.forEach((date) => {
+          this.readyDates().add(date);
+          this.maybeDates().delete(date);
+          this.timeDates().delete(date);
+        });
+        this.emitAllDatesSignals();
       });
   }
 
@@ -143,19 +149,16 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
   private handlePopoverButtons(event: any, year: number, month: number, day: number): void {
     const date = new Date(year, month - 1, day);
     const formatted = formatVoteDate(date);
-    const ready = this.readyDates();
-    const maybe = this.maybeDates();
-    const time = this.timeDates();
     if (event.ready) {
       // handle ready date
-      ready.add(formatted);
-      maybe.delete(formatted);
-      time.delete(formatted);
+      this.readyDates().add(formatted);
+      this.maybeDates().delete(formatted);
+      this.timeDates().delete(formatted);
     } else if (event.maybe) {
       // handle maybe date
-      maybe.add(formatted);
-      ready.delete(formatted);
-      time.delete(formatted);
+      this.maybeDates().add(formatted);
+      this.readyDates().delete(formatted);
+      this.timeDates().delete(formatted);
     } else if (event.time) {
       // handle time date
       const startDate = new Date(event.start);
@@ -168,12 +171,17 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
         start: startDate,
         end: endDate,
       };
-      time.set(formatted, voteDate);
-      ready.delete(formatted);
-      maybe.delete(formatted);
+      this.timeDates().set(formatted, voteDate);
+      this.readyDates().delete(formatted);
+      this.maybeDates().delete(formatted);
     }
-    this.readyDates.set(new Set(ready));
-    this.maybeDates.set(new Set(maybe));
-    this.timeDates.set(new Map(time));
+    this.emitAllDatesSignals();
+  }
+
+  private emitAllDatesSignals(): void {
+    // update all signals to trigger change detection
+    this.readyDates.set(new Set(this.readyDates()));
+    this.maybeDates.set(new Set(this.maybeDates()));
+    this.timeDates.set(new Map(this.timeDates()));
   }
 }

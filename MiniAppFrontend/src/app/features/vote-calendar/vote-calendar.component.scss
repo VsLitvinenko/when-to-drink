@@ -10,7 +10,7 @@
   flex-direction: column;
   gap: 0.5rem;
   background-color: var(--ion-color-light, #f4f5f8);
-  padding: 0.35rem 0.5rem 0.25rem;
+  padding: 0.5rem 0.5rem 0.25rem;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
 
@@ -35,8 +35,8 @@
   padding: 0.25rem 0.75rem 0.5rem;
   background-color: var(--ion-color-light, #f4f5f8);
   justify-content: space-between;
-  border-bottom-left-radius: 1rem;
-  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 ion-datetime {
