@@ -3,9 +3,9 @@ import { IonAccordion, IonAccordionGroup, IonAvatar, IonList } from '@ionic/angu
 import { SharedFeatureModule } from 'src/app/shared';
 
 @Component({
-  selector: 'app-vote-main-info',
-  templateUrl: './vote-main-info.component.html',
-  styleUrls: ['./vote-main-info.component.scss'],
+  selector: 'app-event-main-info',
+  templateUrl: './event-main-info.component.html',
+  styleUrls: ['./event-main-info.component.scss'],
   imports: [
     SharedFeatureModule,
     IonAccordionGroup,
@@ -14,7 +14,7 @@ import { SharedFeatureModule } from 'src/app/shared';
     IonList,
   ],
 })
-export class VoteMainInfoComponent  implements OnInit {
+export class EventMainInfoComponent  implements OnInit {
   public readonly now = new Date();
 
   constructor() { }

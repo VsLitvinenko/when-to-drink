@@ -1,0 +1,1 @@
+export * from './event-main-info.component';

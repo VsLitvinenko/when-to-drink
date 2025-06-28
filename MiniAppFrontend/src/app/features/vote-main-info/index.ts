@@ -1,1 +1,0 @@
-export * from './vote-main-info.component';
