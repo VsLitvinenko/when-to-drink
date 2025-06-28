@@ -23,6 +23,8 @@
   <ion-datetime
     #appIonDateSpecify="appIonDateSpecify"
     appIonDateSpecify
+    [voteDates]="voteDates"
+    (focusedTimeChanges)="updateTime($event)"
     [popover]="popover"
     [multiple]="true"
     [firstDayOfWeek]="1"
@@ -58,17 +60,17 @@
       <div class="time-pickers">
         <div class="pick">
           <ion-label> Start Time </ion-label>
-          <ion-datetime #startTime presentation="time" mode="ios" [value]="nowDate"></ion-datetime>
+          <ion-datetime [(ngModel)]="startTime" presentation="time" mode="ios"></ion-datetime>
         </div>
         <div class="pick">
           <ion-label> End Time </ion-label>
-          <ion-datetime #endTime presentation="time" mode="ios" [value]="nowDate"></ion-datetime>
+          <ion-datetime [(ngModel)]="endTime" presentation="time" mode="ios"></ion-datetime>
         </div>
       </div>
       <ion-button
         mode="ios"
-        [disabled]="!isStartLessThanEnd(startTime.value, endTime.value)"
-        (click)="timeModal.dismiss(); popover.dismiss({ time: true, start: startTime.value, end: endTime.value })"
+        [disabled]="isTimeInvalid()"
+        (click)="timeModal.dismiss(); popover.dismiss({ time: true, start: startTime(), end: endTime() })"
       > Select Time </ion-button>
     </div>
   </ng-template>

@@ -1,6 +1,6 @@
-import { AfterViewInit, Directive, effect, ElementRef, inject, Input, OnDestroy, signal } from '@angular/core';
+import { AfterViewInit, Directive, effect, ElementRef, inject, Input, OnDestroy, Output, signal } from '@angular/core';
 import { fromEvent, map, merge, ReplaySubject, switchMap, take, takeUntil, tap } from 'rxjs';
-import { IonButton, IonDatetime, IonPopover } from '@ionic/angular/standalone';
+import { IonDatetime, IonPopover } from '@ionic/angular/standalone';
 import { VoteDate, VoteType } from '../models';
 import { groupBy } from 'lodash';
 import { format } from 'date-fns';
@@ -14,15 +14,15 @@ const formatVoteDate = (date: Date) => format(date, 'yyyy-MM-dd');
 })
 export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
   @Input({ required: true}) popover!: IonPopover;
-  @Input() readyButton?: IonButton;
-  @Input() maybeButton?: IonButton;
-  @Input() timeButton?: IonButton;
 
   @Input() set voteDates(items: VoteDate[]) {
     const grouped = groupBy(items, 'type');
-    this.readyDates.set(new Set(grouped[VoteType.Ready]!.map((d) => formatVoteDate(d.date))));
-    this.maybeDates.set(new Set(grouped[VoteType.Maybe]!.map((d) => formatVoteDate(d.date))));
-    this.timeDates.set(new Map(grouped[VoteType.Time]!.map((d) => [formatVoteDate(d.date), d])));
+    const ready = grouped[VoteType.Ready] ?? [];
+    const maybe = grouped[VoteType.Maybe] ?? [];
+    const time = grouped[VoteType.Time] ?? [];
+    this.readyDates.set(new Set(ready.map((d) => formatVoteDate(d.date))));
+    this.maybeDates.set(new Set(maybe.map((d) => formatVoteDate(d.date))));
+    this.timeDates.set(new Map(time.map((d) => [formatVoteDate(d.date), d])));
   }
 
   public get voteDates(): VoteDate[] {
@@ -40,6 +40,17 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
   private readonly maybeDates = signal(new Set<string>());
   private readonly timeDates = signal(new Map<string, VoteDate>());
 
+  private readonly lastFocusedDateButton$ = new ReplaySubject<HTMLButtonElement | undefined>(1);
+  @Output() focusedTimeChanges = this.lastFocusedDateButton$.pipe(
+    map((el) => {
+      if (!el) { return undefined; }
+      const day = Number(el.getAttribute('data-day'));
+      const month = Number(el.getAttribute('data-month'));
+      const year = Number(el.getAttribute('data-year'));
+      const date = new Date(year, month - 1, day);
+      return this.timeDates().get(formatVoteDate(date));
+    })
+  );
 
   private readonly ionDateComponent = inject(IonDatetime);
   private readonly elRef = inject(ElementRef);
@@ -132,11 +143,15 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
     // add style
     this.popover.willPresent
       .pipe(take(1))
-      .subscribe(() => buttonEl.style.backgroundColor = focusButtonBg);
+      .subscribe(() => {
+        this.lastFocusedDateButton$.next(buttonEl);
+        buttonEl.style.backgroundColor = focusButtonBg;
+      });
     // remove style and handle buttons if needed
     this.popover.willDismiss
       .pipe(take(1))
       .subscribe((event) => {
+        this.lastFocusedDateButton$.next(undefined);
         buttonEl.style.backgroundColor = '';
         if (event.detail.data) {
           const day = Number(buttonEl.getAttribute('data-day'));
