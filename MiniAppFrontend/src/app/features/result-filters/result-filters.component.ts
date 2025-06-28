@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonCheckbox, IonRange } from '@ionic/angular/standalone';
+import { IonAccordion, IonAccordionGroup, IonCheckbox, IonRange } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 
 @Component({
@@ -9,6 +9,8 @@ import { SharedFeatureModule } from 'src/app/shared';
   styleUrls: ['./result-filters.component.scss'],
   imports: [
     SharedFeatureModule,
+    IonAccordionGroup,
+    IonAccordion,
     IonCheckbox,
     IonRange,
     FormsModule,

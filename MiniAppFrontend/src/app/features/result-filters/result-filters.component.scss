@@ -1,6 +1,14 @@
-ion-list {
-  padding-block: 0.25rem;
+ion-accordion {
+  background: var(--ion-color-light, #f4f5f8);
   border-radius: 0.5rem;
+  --padding-end: 0;
+}
+
+.header-item {
+  --inner-padding-end: 0.9rem;
+}
+
+ion-list {  
   background: var(--ion-color-light, #f4f5f8);
 }
 ion-item {
@@ -12,7 +20,7 @@ ion-item {
     --knob-size: 22px;
   }
   &.range-list-item {
-    margin-top: -0.6rem;
+    margin-top: -0.65rem;
     --padding-start: 1px;
     --inner-padding-end: 0.2rem;
   }

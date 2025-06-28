@@ -1,25 +1,35 @@
-<ion-list mode="ios">
-  <ion-item>
-    <ion-checkbox [(ngModel)]="maybe">
-      Consider <ion-text color="warning"> maybe </ion-text>
-    </ion-checkbox>
-  </ion-item>
-  <ion-item>
-    <ion-checkbox [(ngModel)]="time">
-      Consider <ion-text color="success"> time </ion-text>
-    </ion-checkbox>
-  </ion-item>
-  <ion-item lines="none" >
-    <ion-label> Threshold members count </ion-label>
-    <ion-note> {{ membersCount() }} people </ion-note>
-  </ion-item>
-  <ion-item lines="none" class="range-list-item">
-    <ion-range
-      [(ngModel)]="membersCount"
-      [ticks]="true"
-      [snaps]="true"
-      [min]="0"
-      [max]="10"
-    ></ion-range>
-  </ion-item>
-</ion-list>
+
+<ion-accordion-group mode="ios">
+  <ion-accordion value="filters" toggleIcon="remove-outline">
+    
+    <ion-item slot="header" class="header-item">
+      <ion-label> Filter results </ion-label>
+    </ion-item>
+
+    <ion-list slot="content" mode="ios">
+      <ion-item>
+        <ion-checkbox [(ngModel)]="maybe">
+          Consider <ion-text color="warning"> maybe </ion-text>
+        </ion-checkbox>
+      </ion-item>
+      <ion-item>
+        <ion-checkbox [(ngModel)]="time">
+          Consider <ion-text color="success"> time </ion-text>
+        </ion-checkbox>
+      </ion-item>
+      <ion-item lines="none" >
+        <ion-label> Threshold members count </ion-label>
+        <ion-note> {{ membersCount() }} people </ion-note>
+      </ion-item>
+      <ion-item lines="none" class="range-list-item">
+        <ion-range
+          [(ngModel)]="membersCount"
+          [ticks]="true"
+          [snaps]="true"
+          [min]="0"
+          [max]="10"
+        ></ion-range>
+      </ion-item>
+    </ion-list>
+  </ion-accordion>
+</ion-accordion-group>
