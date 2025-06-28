@@ -1,0 +1,19 @@
+ion-list {
+  padding-block: 0.25rem;
+  border-radius: 0.5rem;
+  background: var(--ion-color-light, #f4f5f8);
+}
+ion-item {
+  --background: transparent;
+  ion-text {
+    opacity: 0.85;
+  }
+  ion-range {
+    --knob-size: 22px;
+  }
+  &.range-list-item {
+    margin-top: -0.6rem;
+    --padding-start: 1px;
+    --inner-padding-end: 0.2rem;
+  }
+}

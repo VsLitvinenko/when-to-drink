@@ -2,9 +2,9 @@
 <ion-content class="ion-padding">
   <app-event-main-info></app-event-main-info>
 
-  <ion-segment mode="ios" value="vote">
+  <ion-segment mode="ios">
     <ion-segment-button value="info" contentId="info">
-      <ion-label> Info </ion-label>
+      <ion-label> Results </ion-label>
     </ion-segment-button>
     <ion-segment-button value="vote" contentId="vote">
       <ion-label> Vote </ion-label>
@@ -13,12 +13,12 @@
 
   <ion-segment-view mode="ios">
     <ion-segment-content id="info">
-      <div class="segment-content">
-        event info features
+      <div class="segment-view-content">
+        <app-result-filters #infoForm></app-result-filters>
       </div>
     </ion-segment-content>
     <ion-segment-content id="vote">
-      <div class="segment-content">
+      <div class="segment-view-content">
         <app-vote-calendar></app-vote-calendar>
       </div>
     </ion-segment-content>

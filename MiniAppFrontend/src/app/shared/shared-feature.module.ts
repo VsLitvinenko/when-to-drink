@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { IonButton, IonLabel, IonIcon, IonButtons, IonItem, IonNote, IonList } from '@ionic/angular/standalone';
+import { IonButton, IonLabel, IonIcon, IonButtons, IonItem, IonNote, IonList, IonText } from '@ionic/angular/standalone';
 
 const sharedFeatureImports = [
   CommonModule,
@@ -11,6 +11,7 @@ const sharedFeatureImports = [
   IonList,
   IonItem,
   IonNote,
+  IonText,
 ];
 
 @NgModule({

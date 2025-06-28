@@ -1,0 +1,25 @@
+<ion-list mode="ios">
+  <ion-item>
+    <ion-checkbox [(ngModel)]="maybe">
+      Consider <ion-text color="warning"> maybe </ion-text>
+    </ion-checkbox>
+  </ion-item>
+  <ion-item>
+    <ion-checkbox [(ngModel)]="time">
+      Consider <ion-text color="success"> time </ion-text>
+    </ion-checkbox>
+  </ion-item>
+  <ion-item lines="none" >
+    <ion-label> Threshold members count </ion-label>
+    <ion-note> {{ membersCount() }} people </ion-note>
+  </ion-item>
+  <ion-item lines="none" class="range-list-item">
+    <ion-range
+      [(ngModel)]="membersCount"
+      [ticks]="true"
+      [snaps]="true"
+      [min]="0"
+      [max]="10"
+    ></ion-range>
+  </ion-item>
+</ion-list>

@@ -5,6 +5,10 @@ ion-segment {
 
 ion-segment-view {
   height: auto;
-  padding: 1px;
-  margin-bottom: 0.5rem;
+}
+
+.segment-view-content {
+  padding: 0.25rem 0.75rem;
+  display: flex;
+  flex-direction: column;
 }
