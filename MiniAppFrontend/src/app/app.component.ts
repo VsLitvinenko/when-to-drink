@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
+  chevronForwardOutline,
   checkmarkOutline,
   timeOutline,
   helpOutline,
@@ -15,6 +16,7 @@ import {
 export class AppComponent {
   constructor() {
     addIcons({
+      chevronForwardOutline,
       checkmarkOutline,
       timeOutline,
       helpOutline,
