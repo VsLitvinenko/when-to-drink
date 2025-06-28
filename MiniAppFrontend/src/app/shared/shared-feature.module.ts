@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { IonButton, IonLabel, IonIcon, IonButtons } from '@ionic/angular/standalone';
+import { IonButton, IonLabel, IonIcon, IonButtons, IonItem, IonNote } from '@ionic/angular/standalone';
 
 @NgModule({
   imports: [
@@ -9,6 +9,8 @@ import { IonButton, IonLabel, IonIcon, IonButtons } from '@ionic/angular/standal
     IonButton,
     IonButtons,
     IonIcon,
+    IonItem,
+    IonNote,
   ],
   exports: [
     CommonModule,
@@ -16,6 +18,8 @@ import { IonButton, IonLabel, IonIcon, IonButtons } from '@ionic/angular/standal
     IonButton,
     IonButtons,
     IonIcon,
+    IonItem,
+    IonNote,
   ],
 })
 export class SharedFeatureModule {}

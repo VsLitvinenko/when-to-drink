@@ -1,0 +1,24 @@
+ion-accordion-group {
+  border-radius: 0.5rem;
+}
+
+ion-list {
+  background: transparent;
+}
+ion-item {
+  --background: transparent;
+  &.header-item {
+    border-radius: 0.5rem;
+    --min-height: 3rem;
+  }
+  &.notes-item {
+    ion-label {
+      margin-bottom: auto;
+    }
+    ion-note {
+      padding: 0.5rem 0;
+      margin-left: max(20%, 2.5rem);
+      text-align: end;
+    }
+  }
+}

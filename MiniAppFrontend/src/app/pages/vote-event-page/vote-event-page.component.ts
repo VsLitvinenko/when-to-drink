@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView } from '@ionic/angular/standalone';
 import { VoteCalendarComponent } from 'src/app/features/vote-calendar';
+import { VoteMainInfoComponent } from 'src/app/features/vote-main-info';
 import { PageCommonModule } from 'src/app/shared';
 
 @Component({
@@ -10,6 +11,7 @@ import { PageCommonModule } from 'src/app/shared';
   imports: [
     PageCommonModule,
     VoteCalendarComponent,
+    VoteMainInfoComponent,
     IonSegment,
     IonSegmentButton,
     IonSegmentContent,
