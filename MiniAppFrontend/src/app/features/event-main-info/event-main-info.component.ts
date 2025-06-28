@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonAccordion, IonAccordionGroup, IonAvatar, IonList } from '@ionic/angular/standalone';
+import { IonAccordion, IonAccordionGroup, IonAvatar } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 
 @Component({
@@ -11,7 +11,6 @@ import { SharedFeatureModule } from 'src/app/shared';
     IonAccordionGroup,
     IonAccordion,
     IonAvatar,
-    IonList,
   ],
 })
 export class EventMainInfoComponent  implements OnInit {
