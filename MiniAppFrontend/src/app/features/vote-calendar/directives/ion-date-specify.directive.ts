@@ -141,6 +141,7 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
     const buttonEl = event.target as HTMLButtonElement;
     this.popover.present(event);
     // add style
+    const prevButtonBgColor = buttonEl.style.backgroundColor ?? '';
     this.popover.willPresent
       .pipe(take(1))
       .subscribe(() => {
@@ -152,7 +153,7 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
       .pipe(take(1))
       .subscribe((event) => {
         this.lastFocusedDateButton$.next(undefined);
-        buttonEl.style.backgroundColor = '';
+        buttonEl.style.backgroundColor = prevButtonBgColor;
         if (event.detail.data) {
           const day = Number(buttonEl.getAttribute('data-day'));
           const month = Number(buttonEl.getAttribute('data-month'));
