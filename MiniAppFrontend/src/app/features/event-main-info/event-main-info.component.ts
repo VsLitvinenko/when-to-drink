@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IonAccordion, IonAccordionGroup, IonAvatar } from '@ionic/angular/standalone';
+import { IonAccordion, IonAccordionGroup, IonAvatar, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
+import { AvatarsListComponent, UsersListComponent } from 'src/app/shared/components';
 
 @Component({
   selector: 'app-event-main-info',
@@ -11,6 +12,9 @@ import { SharedFeatureModule } from 'src/app/shared';
     IonAccordionGroup,
     IonAccordion,
     IonAvatar,
+    IonModal,
+    AvatarsListComponent,
+    UsersListComponent,
   ],
 })
 export class EventMainInfoComponent  implements OnInit {

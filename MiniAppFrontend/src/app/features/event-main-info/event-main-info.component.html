@@ -9,10 +9,15 @@
       </ion-item>
 
       <ion-list slot="content" mode="ios">
+        <ion-item button [detail]="false" (click)="usersModal.present()">
+          <ion-label> 6 member(s) </ion-label>
+          <app-avatars-list></app-avatars-list>
+        </ion-item>
         <ion-item>
           <ion-label> Created by </ion-label>
           <ion-note> Vyacheslav Litvinenko </ion-note>
         </ion-item>
+
         <ion-item>
           <ion-label> Starts</ion-label>
           <ion-note> {{ now | date : 'dd.mm.yyyy'}} </ion-note>
@@ -31,4 +36,14 @@
       </ion-list>
     </ion-accordion>
   </ion-accordion-group>
+
+  <ion-modal
+    #usersModal
+    [initialBreakpoint]="0.25"
+    [breakpoints]="[0, 0.25, 0.5, 0.75, 1]"
+  >
+    <ng-template>
+      <app-users-list></app-users-list>
+    </ng-template>
+  </ion-modal>
 

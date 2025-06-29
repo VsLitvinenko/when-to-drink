@@ -3,6 +3,7 @@ ion-accordion-group {
 }
 
 ion-list {
+  margin-top: 0.5rem;
   background: transparent;
 }
 ion-item {
@@ -27,4 +28,11 @@ ion-item {
       text-align: end;
     }
   }
+}
+app-avatars-list {
+  opacity: 0.9;
+}
+
+app-users-list {
+  margin: 2rem  1rem;
 }
