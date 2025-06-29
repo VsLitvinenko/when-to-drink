@@ -62,6 +62,7 @@
               "outputHashing": "all"
             },
             "git-pages": {
+              "baseHref": "/when-to-drink/",
               "outputPath": {
                 "base": "../docs",
                 "browser": ""
