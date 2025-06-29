@@ -10,8 +10,7 @@ ion-item {
   --background: transparent;
   &.header-item {
     border-radius: 0.5rem;
-    --padding-start: 0.5rem;
-    --padding-end: 0;
+    --padding-start: 0.75rem;
     --min-height: 3.7rem;
     ion-avatar {
       width: 2.75rem !important;
