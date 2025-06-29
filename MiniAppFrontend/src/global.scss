@@ -39,3 +39,9 @@
 ion-datetime.datetime-presentation-date {
   max-width: 100%;
 }
+
+ion-app:has(> ion-modal.modal-sheet) {
+  ion-content {
+    --overflow: hidden;
+  }
+}
