@@ -2,12 +2,12 @@
   "name": "MiniAppFrontend",
   "version": "0.0.1",
   "author": "Vyacheslav Litvinenko",
-  "homepage": "https://github.com/VsLitvinenko/WhenToDrink",
+  "homepage": "https://github.com/VsLitvinenko/when-to-drink",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "git-pages": "ng build --configuration git-pages --base-href /WhenToDrink",
+    "git-pages": "ng build --configuration git-pages --base-href /when-to-drink",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
