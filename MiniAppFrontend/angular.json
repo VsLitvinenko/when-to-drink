@@ -66,6 +66,18 @@
                 "base": "../docs",
                 "browser": ""
               },
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": ".gitpages",
+                  "output": ""
+                },
+                {
+                  "glob": "**/*",
+                  "input": "src/assets",
+                  "output": "assets"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",

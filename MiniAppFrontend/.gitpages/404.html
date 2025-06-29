@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+      const repoName = "/your-repo-name";
+      const path = window.location.pathname.split(repoName)[1] || "/";
+      window.location.href = repoName + path;
+    </script>
+  </head>
+  <body>
+    <h1>Redirecting...</h1>
+  </body>
+</html>
