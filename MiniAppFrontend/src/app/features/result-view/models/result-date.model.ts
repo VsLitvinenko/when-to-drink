@@ -2,7 +2,7 @@ import { VoteType } from '../../vote-calendar/models';
 import { ResultUser } from './result-user.model';
 
 export interface ResultDate {
-  date: Date[];
+  date: Date;
   type: VoteType;
-  user: ResultUser[];
+  users: ResultUser[];
 }
