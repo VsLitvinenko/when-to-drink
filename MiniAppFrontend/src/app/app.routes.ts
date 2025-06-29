@@ -14,4 +14,8 @@ export const routes: Routes = [
     redirectTo: 'vote',
     pathMatch: 'full',
   },
+  {
+    path: '**',
+    redirectTo: 'vote',
+  },
 ];
