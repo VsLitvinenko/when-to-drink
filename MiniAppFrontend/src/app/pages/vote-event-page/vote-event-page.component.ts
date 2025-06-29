@@ -4,7 +4,8 @@ import { EventMainInfoComponent } from 'src/app/features/event-main-info';
 import { ResultFiltersComponent } from 'src/app/features/result-filters';
 import { VoteCalendarComponent } from 'src/app/features/vote-calendar';
 import { PageCommonModule } from 'src/app/shared';
-import { ResultViewPickerComponent } from '../../features/result-view-picker';
+import { ResultViewPickerComponent, ViewPick } from '../../features/result-view-picker';
+import { ResultViewCalendarComponent, ResultViewListComponent } from 'src/app/features/result-view';
 
 @Component({
   selector: 'app-vote-event-page',
@@ -16,6 +17,8 @@ import { ResultViewPickerComponent } from '../../features/result-view-picker';
     EventMainInfoComponent,
     ResultFiltersComponent,
     ResultViewPickerComponent,
+    ResultViewListComponent,
+    ResultViewCalendarComponent,
     IonSegment,
     IonSegmentButton,
     IonSegmentContent,
@@ -23,6 +26,7 @@ import { ResultViewPickerComponent } from '../../features/result-view-picker';
 ],
 })
 export class VoteEventPageComponent  implements OnInit {
+  public readonly ViewPick = ViewPick;
 
   constructor() { }
 

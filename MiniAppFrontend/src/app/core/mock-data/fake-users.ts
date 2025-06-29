@@ -1,7 +1,7 @@
 import { VoteType } from 'src/app/features/vote-calendar/models';
-import { UserItem } from './users-list/users-list.component';
+import { ResultUser } from 'src/app/features/result-view';
 
-export const fakeUsers: UserItem[] = [
+export const fakeUsers: ResultUser[] = [
   {
     imgSrc:
       'https://sun9-70.userapi.com/s/v1/ig1/6TXRo0SjdKeh-P-doF7uu2odkqlfbLP3oi7I1PMZE8L5qXpFD-rwjnL8ZgtdjKtvSoxm9Q.jpg?quality=96&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x479,540x539,640x639,720x719,939x938&from=bu&cs=939x0',

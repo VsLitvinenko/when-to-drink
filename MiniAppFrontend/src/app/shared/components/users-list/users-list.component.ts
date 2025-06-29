@@ -1,12 +1,11 @@
 import { Component, computed, ContentChild, input, output, signal, TemplateRef } from '@angular/core';
 import { IonAvatar, IonList, IonItem, IonLabel, IonSearchbar } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { fakeUsers } from '../fake-users';
+import { fakeUsers } from '../../../core/mock-data';
 
 export interface UserItem {
   imgSrc: string;
   fullName: string;
-  [key: string]: any;
 }
 
 @Component({

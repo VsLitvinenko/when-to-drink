@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { IonAvatar } from '@ionic/angular/standalone';
-import { avatars } from '../fake-users';
+import { avatars } from '../../../core/mock-data';
 
 @Component({
   selector: 'app-avatars-list',
