@@ -1,12 +1,13 @@
 {
   "name": "MiniAppFrontend",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Vyacheslav Litvinenko",
+  "homepage": "https://github.com/VsLitvinenko/WhenToDrink",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "git-pages": "ng build --configuration git-pages --base-href WhenToDrink",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
