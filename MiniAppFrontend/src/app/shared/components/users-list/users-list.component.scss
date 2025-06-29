@@ -1,6 +1,19 @@
+:host {
+  height: 100%;
+  position: relative;
+}
+
+ion-searchbar {
+  position: sticky;
+  top: 0;
+}
+
 ion-list {  
   background: transparent;
+  max-height: calc(100% - 3.75rem);
+  overflow-y: auto;
 }
+
 ion-item {  
   --background: transparent;
 }

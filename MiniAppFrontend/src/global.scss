@@ -45,3 +45,12 @@ ion-app:has(> ion-modal.modal-sheet) {
     --overflow: hidden;
   }
 }
+
+ion-searchbar {
+  .searchbar-search-icon {
+    margin-left: 0.25rem !important;
+  }
+  .searchbar-input {
+    padding-inline-start: 2.5rem !important;
+  }
+}

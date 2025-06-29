@@ -29,10 +29,15 @@ ion-item {
     }
   }
 }
+
 app-avatars-list {
   opacity: 0.9;
 }
 
-app-users-list {
-  margin: 2rem  1rem;
+ion-modal {
+  --height: auto;
+  app-users-list {
+    height: 60vh;
+    padding: 1rem;
+  }
 }

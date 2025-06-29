@@ -1,6 +1,15 @@
+<ion-searchbar
+  mode="ios"
+  clear-icon="close-outline"
+  [debounce]="300"
+  (ionInput)="searchStr.set($event.detail.value)"
+  (ionFocus)="searchFocused.emit(true)"
+  (ionBlur)="searchFocused.emit(false)"
+></ion-searchbar>
+
 <ion-list mode="ios">
-  @for (user of users; track $index) {
-    <ion-item>
+  @for (user of filteredUsers(); track $index) {
+    <ion-item [lines]="$last ? 'none' : ''">
       <ion-avatar slot="start">
         <img [src]="user.imgSrc"/>
       </ion-avatar>
