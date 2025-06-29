@@ -1,7 +1,7 @@
 import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
-import { SharedFeatureModule } from '../../shared-feature.module';
-import { IonAvatar } from '@ionic/angular/standalone';
-import { fakeUsers } from './fake-users';
+import { IonAvatar, IonList, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { CommonModule } from '@angular/common';
+import { fakeUsers } from '../fake-users';
 
 
 export interface UserItem {
@@ -15,8 +15,11 @@ export interface UserItem {
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.scss'],
   imports: [
-    SharedFeatureModule,
+    CommonModule,
+    IonList,
+    IonItem,
     IonAvatar,
+    IonLabel,
   ],
 })
 export class UsersListComponent {
