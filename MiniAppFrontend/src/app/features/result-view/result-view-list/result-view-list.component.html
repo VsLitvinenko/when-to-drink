@@ -1,3 +1,22 @@
-<p>
-  result-view-list works!
-</p>
+<ion-list mode="ios">
+  @for (item of filteredDates(); track $index) {
+    <ion-item [lines]="$last ? 'none' : ''" button>
+      <ion-icon
+        slot="start"
+        [color]="getColorByType(item.type)"
+        [name]="getIconByType(item.type)"
+      ></ion-icon>
+      <ion-label>
+        {{ item.date | date : 'dd.MM.yyyy' }}
+      </ion-label>
+      <ion-note slot="end">
+        {{ item.users.length }} member(s)
+      </ion-note>
+    </ion-item>
+  } @empty {
+    <ion-item lines="none">
+      <ion-icon slot="start" name="calendar-clear-outline"></ion-icon>
+      <ion-note> No passed dates, try to change filters </ion-note>
+    </ion-item>
+  }
+</ion-list>

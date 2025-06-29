@@ -14,16 +14,23 @@
   <ion-segment-view mode="ios">
     <ion-segment-content id="info">
       <div class="segment-view-content">
-        <app-result-filters #infoForm></app-result-filters>
+        <app-result-filters #filters></app-result-filters>
         <app-result-view-picker #viewPicker></app-result-view-picker>
-        @switch (viewPicker.value()) {
-          @case (ViewPick.List) {
-            <app-result-view-list></app-result-view-list>
+        <ng-container
+          appResultView
+          [min]="filters.membersCount()"
+          [maybe]="filters.maybe()"
+          [time]="filters.time()"
+        >
+          @switch (viewPicker.value()) {
+            @case (ViewPick.List) {
+              <app-result-view-list></app-result-view-list>
+            }
+            @case (ViewPick.Calendar) {
+              <app-result-view-calendar></app-result-view-calendar>
+            }
           }
-          @case (ViewPick.Calendar) {
-            <app-result-view-calendar></app-result-view-calendar>
-          }
-        }
+        </ng-container>
       </div>
     </ion-segment-content>
     <ion-segment-content id="vote">
