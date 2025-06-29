@@ -1,0 +1,13 @@
+
+<div class="picker" [ngClass]="value()">
+  <div class="item" (click)="value.set(ViewPick.List)">
+    <ion-icon name="list-outline"></ion-icon>
+  </div>
+  <div class="item" (click)="value.set(ViewPick.Calendar)">
+    <ion-icon name="calendar-outline"></ion-icon>
+  </div>
+</div>
+
+<ion-button (click)="refresh.emit()">
+  <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+</ion-button>

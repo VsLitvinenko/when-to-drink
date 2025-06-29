@@ -1,0 +1,50 @@
+:host {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // justify-content: flex-end;
+}
+
+.picker {
+  position: relative;
+  display: flex;
+  border-radius: 0.5rem;
+  background-color: var(--ion-color-light, #f4f5f8);
+
+  .item {
+    z-index: 2;
+    padding: 0.8rem 1.25rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &:after {
+    content: '';
+    transition: left 0.25s;
+    z-index: 1;
+    background-color: var(--ion-background-color-step-350);
+    border-radius: 0.5rem;
+    position: absolute;
+    height: 100%;
+    width: 50%;
+  }
+  &.list:after {
+    left: 0 !important;
+  }
+  &.calendar:after {
+    left: 50% !important;
+  }
+}
+
+ion-button {
+  margin: 0;
+  --border-radius: 0.5rem;
+  --padding-bottom: 0.75rem;
+  --padding-end: 0.75rem;
+  --padding-start: 0.75rem;
+  --padding-top: 0.75rem;
+}

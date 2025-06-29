@@ -8,6 +8,9 @@ import {
   helpOutline,
   removeOutline,
   closeOutline,
+  refreshOutline,
+  calendarOutline,
+  listOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -24,6 +27,9 @@ export class AppComponent {
       helpOutline,
       removeOutline,
       closeOutline,
+      refreshOutline,
+      calendarOutline,
+      listOutline,
     })
   }
 }
