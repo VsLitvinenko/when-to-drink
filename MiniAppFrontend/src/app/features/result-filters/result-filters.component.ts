@@ -20,7 +20,7 @@ export class ResultFiltersComponent  implements OnInit {
 
   public readonly maybe = signal<boolean>(true);
   public readonly time = signal<boolean>(true);
-  public readonly membersCount = signal<number>(7);
+  public readonly membersCount = signal<number>(6);
 
   constructor() { }
 

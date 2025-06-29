@@ -1,0 +1,1 @@
+export * from './result-date-info-modal/result-date-info-modal.component';

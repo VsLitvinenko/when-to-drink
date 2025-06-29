@@ -2,6 +2,7 @@ import { getIconByType, getColorByType } from './../helpers';
 import { Component, inject, OnInit } from '@angular/core';
 import { SharedFeatureModule } from 'src/app/shared';
 import { ResultViewDirective } from '../result-view.directive';
+import { ResultDateInfoModalComponent } from '../components';
 
 @Component({
   selector: 'app-result-view-list',
@@ -9,7 +10,8 @@ import { ResultViewDirective } from '../result-view.directive';
   styleUrls: ['./result-view-list.component.scss'],
   imports: [
     SharedFeatureModule,
-  ],
+    ResultDateInfoModalComponent,
+],
 })
 export class ResultViewListComponent  implements OnInit {
   private readonly data = inject(ResultViewDirective);

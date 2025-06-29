@@ -1,6 +1,10 @@
 <ion-list mode="ios">
   @for (item of filteredDates(); track $index) {
-    <ion-item [lines]="$last ? 'none' : ''" button>
+    <ion-item
+      [lines]="$last ? 'none' : ''"
+      (click)="infoModal.present(item)"
+      button
+    >
       <ion-icon
         slot="start"
         [color]="getColorByType(item.type)"
@@ -20,3 +24,5 @@
     </ion-item>
   }
 </ion-list>
+
+<app-result-date-info-modal #infoModal></app-result-date-info-modal>

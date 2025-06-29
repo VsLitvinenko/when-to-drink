@@ -1,0 +1,22 @@
+<ion-modal
+  #modal
+  [initialBreakpoint]="1"
+  [breakpoints]="[0, 1]"
+  (ionModalDidDismiss)="resultDate = undefined"
+>
+  <ng-template>
+    @if (resultDate) {
+      <app-users-list
+        [users]="resultDate.users"
+        (searchFocused)="modal.backdropDismiss = !$event"
+      >
+        <ng-template #end let-user>
+          <ion-icon
+            [color]="getColorByType(user.type)"
+            [icon]="getIconByType(user.type)"
+          ></ion-icon>
+        </ng-template>
+      </app-users-list>
+    }
+  </ng-template>
+</ion-modal>
