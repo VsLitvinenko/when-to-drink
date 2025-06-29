@@ -1,0 +1,16 @@
+<ion-list mode="ios">
+  @for (user of users; track $index) {
+    <ion-item>
+      <ion-avatar slot="start">
+        <img [src]="user.imgSrc"/>
+      </ion-avatar>
+      <ion-label> {{ user.fullName }} </ion-label>
+      @if (endTemplateRef) {
+        <ng-container
+          [ngTemplateOutlet]="endTemplateRef"
+          [ngTemplateOutletContext]="{ $implicit: user }"
+        ></ng-container>
+      }
+    </ion-item>
+  }
+</ion-list>
