@@ -22,6 +22,8 @@ export const fakeDates: ResultDate[] = [
   },
   {
     date: new Date(2025, 5, 10),
+    start: new Date(2025, 5, 10, 18, 30),
+    end: new Date(2025, 5, 10, 22, 0),
     type: VoteType.Time,
     users: [
       fakeUsers[0],
@@ -32,6 +34,8 @@ export const fakeDates: ResultDate[] = [
   },
   {
     date: new Date(2025, 5, 13),
+    start: new Date(2025, 5, 10, 18, 30),
+    end: new Date(2025, 5, 10, 22, 0),
     type: VoteType.Maybe,
     users: [
       fakeUsers[0],

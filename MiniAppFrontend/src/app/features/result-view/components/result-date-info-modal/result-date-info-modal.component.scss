@@ -1,7 +1,24 @@
 ion-modal {
   --height: auto;
   app-users-list {
-    height: 60vh;
-    padding: 1rem;
+    height: 52vh;
+    padding: 0 1rem 1rem;
+  }
+}
+
+.header {
+  padding: 2rem 2rem 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+  }
+
+  .ion-activated {
+    pointer-events: none;
+    margin: 0;
+    margin-left: -0.25rem;
   }
 }

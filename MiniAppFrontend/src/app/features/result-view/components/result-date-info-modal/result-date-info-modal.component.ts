@@ -1,5 +1,5 @@
 import { Component, viewChild } from '@angular/core';
-import { IonModal } from '@ionic/angular/standalone';
+import { IonChip, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { UsersListComponent } from 'src/app/shared/components';
 import { ResultDate } from '../../models';
@@ -13,6 +13,7 @@ import { getColorByType, getIconByType } from '../../helpers';
     SharedFeatureModule,
     UsersListComponent,
     IonModal,
+    IonChip,
   ]
 })
 export class ResultDateInfoModalComponent {

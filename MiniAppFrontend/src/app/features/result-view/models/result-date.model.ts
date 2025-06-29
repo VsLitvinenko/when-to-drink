@@ -1,8 +1,6 @@
-import { VoteType } from '../../vote-calendar/models';
+import { VoteDate } from '../../vote-calendar/models';
 import { ResultUser } from './result-user.model';
 
-export interface ResultDate {
-  date: Date;
-  type: VoteType;
+export interface ResultDate extends VoteDate {
   users: ResultUser[];
 }
