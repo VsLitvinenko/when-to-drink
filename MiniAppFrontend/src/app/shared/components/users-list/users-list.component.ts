@@ -8,6 +8,11 @@ export interface UserItem {
   fullName: string;
 }
 
+export interface UserClickedEvent {
+  index: number;
+  user: UserItem;
+}
+
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
@@ -22,6 +27,7 @@ export interface UserItem {
   ],
 })
 export class UsersListComponent {
+  public readonly clickable = input(false);
   public readonly users = input([...fakeUsers]);
   public readonly searchStr = signal<string | null | undefined>(null);
 
@@ -37,5 +43,12 @@ export class UsersListComponent {
   });
 
   public readonly searchFocused = output<boolean>();
+  public readonly userClicked = output<UserClickedEvent>();
   @ContentChild('end', { static: true }) endTemplateRef?: TemplateRef<any>;
+
+  public onUserClicked(index: number, user: UserItem): void {
+    if (this.clickable()) {
+      this.userClicked.emit({ index, user: {...user} });
+    }
+  }
 }

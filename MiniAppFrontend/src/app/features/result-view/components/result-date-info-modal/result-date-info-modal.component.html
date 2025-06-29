@@ -2,7 +2,7 @@
   #modal
   [initialBreakpoint]="1"
   [breakpoints]="[0, 1]"
-  (ionModalDidDismiss)="resultDate = undefined"
+  (ionModalDidDismiss)="clearData()"
 >
   <ng-template>
     @if (resultDate) {
@@ -18,13 +18,25 @@
       </div>
       <app-users-list
         [users]="resultDate.users"
+        [clickable]="true"
+        (userClicked)="toggleUserMode($event.index)"
         (searchFocused)="modal.backdropDismiss = !$event"
       >
-        <ng-template #end let-user>
-          <ion-icon
-            [color]="getColorByType(user.type)"
-            [icon]="getIconByType(user.type)"
-          ></ion-icon>
+        <ng-template #end let-user let-index="index">
+          @if (timeModeIndexes.has(index)) {
+            <!-- time mode -->
+           <ion-text [color]="getColorByType(user.type)" class="user-time-info">
+              {{ user.start ? (user.start | date : 'HH:mm') : '00:00' }} - 
+              {{ user.end ? (user.end | date : 'HH:mm') : '23:59' }}
+           </ion-text>
+          } @else {
+            <!-- default mode -->
+            <ion-icon
+              [color]="getColorByType(user.type)"
+              [icon]="getIconByType(user.type)"
+            ></ion-icon>
+          }
+
         </ng-template>
       </app-users-list>
     }

@@ -9,7 +9,11 @@
 
 <ion-list mode="ios">
   @for (user of filteredUsers(); track $index) {
-    <ion-item [lines]="$last ? 'none' : ''">
+    <ion-item
+      [lines]="$last ? 'none' : ''"
+      [button]="clickable()"
+      (click)="onUserClicked($index, user)"
+    >
       <ion-avatar slot="start">
         <img [src]="user.imgSrc"/>
       </ion-avatar>
@@ -17,7 +21,10 @@
       @if (endTemplateRef) {
         <ng-container
           [ngTemplateOutlet]="endTemplateRef"
-          [ngTemplateOutletContext]="{ $implicit: user }"
+          [ngTemplateOutletContext]="{
+            $implicit: user,
+            index: $index,
+          }"
         ></ng-container>
       }
     </ion-item>

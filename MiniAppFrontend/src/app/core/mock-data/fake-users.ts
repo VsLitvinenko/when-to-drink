@@ -13,6 +13,8 @@ export const fakeUsers: ResultUser[] = [
       'https://sun9-55.userapi.com/s/v1/ig1/JImYYh7ZEphKqDhC9ATO3KOxR9_gWzoLeDiU-xxYoMxYLVMJF8mQMb1ZM7bOR92-yfHTBw.jpg?quality=96&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1200x1200&from=bu&cs=1200x0',
     fullName: 'Alexander Lyakishev',
     type: VoteType.Time,
+    start: new Date(2025, 5, 10, 18, 30),
+    end: new Date(2025, 5, 10, 22, 0),
   },
   {
     imgSrc:

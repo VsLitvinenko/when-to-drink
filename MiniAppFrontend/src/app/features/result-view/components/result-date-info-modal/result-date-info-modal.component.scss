@@ -19,6 +19,10 @@ ion-modal {
   .ion-activated {
     pointer-events: none;
     margin: 0;
-    margin-left: -0.25rem;
   }
+}
+
+.user-time-info {
+  font-size: 0.8rem;
+  margin-bottom: -1px;
 }

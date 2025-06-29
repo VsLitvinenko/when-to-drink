@@ -19,6 +19,7 @@ import { getColorByType, getIconByType } from '../../helpers';
 export class ResultDateInfoModalComponent {
   private readonly ionModal = viewChild(IonModal);
   public resultDate?: ResultDate;
+  public timeModeIndexes = new Set<number>();
 
   public readonly getIconByType = getIconByType;
   public readonly getColorByType = getColorByType;
@@ -28,5 +29,18 @@ export class ResultDateInfoModalComponent {
     if (!modal) { return; }
     this.resultDate = resultDate;
     modal.present();
+  }
+
+  public clearData(): void {
+    this.resultDate = undefined;
+    this.timeModeIndexes = new Set<number>();
+  }
+
+  public toggleUserMode(index: number): void {
+    if (this.timeModeIndexes.has(index)) {
+      this.timeModeIndexes.delete(index);
+    } else {
+      this.timeModeIndexes.add(index);
+    }
   }
 }
