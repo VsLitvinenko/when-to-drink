@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { IonDateSpecifyDirective } from './directives';
@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 import { VoteDate } from './models';
 import { FormsModule } from '@angular/forms';
 import { fakeCalendar } from 'src/app/core/mock-data';
+import { SmallToolsService } from 'src/app/core/services';
 
 
 const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -22,9 +23,9 @@ const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
     IonPopover,
     IonModal,
     FormsModule,
-  ]
+  ],
 })
-export class VoteCalendarComponent  implements OnInit {
+export class VoteCalendarComponent {
   public voteDates: VoteDate[] = fakeCalendar;
 
   public readonly startTime = signal(format(new Date(), timeFormat));
@@ -36,9 +37,10 @@ export class VoteCalendarComponent  implements OnInit {
     return startDate >= endDate;
   });
 
-  constructor() { }
+  private readonly tools = inject(SmallToolsService);
+  public readonly isTouchDevice = this.tools.isTouchDevice;
 
-  ngOnInit() { }
+  constructor() { }
 
   public updateTime(voteDate?: VoteDate): void {
     const nowTime = format(new Date(), timeFormat);

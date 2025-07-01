@@ -19,7 +19,9 @@
     color: var(--ion-text-color-step-600, #b3b3b3);
     font-size: 0.9rem;
     line-height: 1.25rem;
-    margin-bottom: 1.125rem;
+    // margin to match results calendar
+    margin-top: 0.125rem;
+    margin-bottom: 1rem;
   }
   .chips {
     display: flex;
