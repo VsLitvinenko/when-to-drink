@@ -1,26 +1,28 @@
-<div class="calendar-header"></div>
-<ion-datetime
-  [firstDayOfWeek]="1"
-  presentation="date"
-  mode="ios"
-></ion-datetime>
-<div
-  *ngIf="selectedDate() as sDate"
-  class="calendar-footer"
->
-  <ion-item (click)="infoModal.present(sDate)" button lines="none">
-    <ion-icon
-      slot="start"
-      [color]="getColorByType(sDate.type)"
-      [name]="getIconByType(sDate.type)"
-    ></ion-icon>
-    <ion-label>
-      {{ sDate.date | date : 'dd.MM.yyyy' }}
-    </ion-label>
-    <ion-note slot="end">
-      {{ sDate.users.length }} member(s)
-    </ion-note>
-  </ion-item>
+<div>
+  <div class="calendar-header"></div>
+  <ion-datetime
+    [firstDayOfWeek]="1"
+    presentation="date"
+    mode="ios"
+  ></ion-datetime>
+  <div
+    *ngIf="selectedDate() as sDate"
+    class="calendar-footer"
+  >
+    <ion-item (click)="infoModal.present(sDate)" button lines="none">
+      <ion-icon
+        slot="start"
+        [color]="getColorByType(sDate.type)"
+        [name]="getIconByType(sDate.type)"
+      ></ion-icon>
+      <ion-label>
+        {{ sDate.date | date : 'dd.MM.yyyy' }}
+      </ion-label>
+      <ion-note slot="end">
+        {{ sDate.users.length }} member(s)
+      </ion-note>
+    </ion-item>
+  </div>
 </div>
 
 <app-result-date-info-modal #infoModal></app-result-date-info-modal>
