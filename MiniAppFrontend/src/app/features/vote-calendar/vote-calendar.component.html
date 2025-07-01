@@ -33,8 +33,11 @@
   ></ion-datetime>
 
   <ion-buttons class="vote-calendar-actions" mode="ios">
-    <ion-button color="danger" (click)="onResetChanges()"> Reset </ion-button>
-    <ion-button color="primary" (click)="onSaveChanges(appIonDateSpecify.voteDates)"> Save </ion-button>
+    <ion-button color="medium" (click)="clearDates()"> Clear </ion-button>
+    <div class="right">
+      <ion-button color="danger" (click)="resetDates()"> Reset </ion-button>
+      <ion-button color="primary" (click)="saveDates(appIonDateSpecify.voteDates)"> Save </ion-button>
+    </div>
   </ion-buttons>
 </div>
 

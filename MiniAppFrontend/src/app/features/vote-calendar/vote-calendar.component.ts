@@ -5,6 +5,7 @@ import { IonDateSpecifyDirective } from './directives';
 import { format } from 'date-fns';
 import { VoteDate } from './models';
 import { FormsModule } from '@angular/forms';
+import { fakeCalendar } from 'src/app/core/mock-data';
 
 
 const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -24,8 +25,7 @@ const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
   ]
 })
 export class VoteCalendarComponent  implements OnInit {
-
-  public voteDates: VoteDate[] = [];
+  public voteDates: VoteDate[] = fakeCalendar;
 
   public readonly startTime = signal(format(new Date(), timeFormat));
   public readonly endTime = signal(format(new Date(), timeFormat));
@@ -53,12 +53,17 @@ export class VoteCalendarComponent  implements OnInit {
     this.endTime.set(endValue);
   }
 
-  public onResetChanges(): void {
-    console.log('Reset changes');
+  public clearDates(): void {
+    console.log('Clear changes');
     this.voteDates = [];
   }
 
-  public onSaveChanges(voteDates: VoteDate[]): void {
+  public resetDates(): void {
+    console.log('Reset changes');
+    this.voteDates = [...fakeCalendar];
+  }
+
+  public saveDates(voteDates: VoteDate[]): void {
     console.log('Saved vote dates:', voteDates);
   }
   
