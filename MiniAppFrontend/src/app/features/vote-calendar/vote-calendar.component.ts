@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import { VoteDate } from './models';
 import { FormsModule } from '@angular/forms';
 import { fakeCalendar } from 'src/app/core/mock-data';
-import { SmallToolsService } from 'src/app/core/services';
+import { SmallToolsService, ToastService } from 'src/app/core/services';
 
 
 const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -37,6 +37,7 @@ export class VoteCalendarComponent {
     return startDate >= endDate;
   });
 
+  private readonly toast = inject(ToastService);
   private readonly tools = inject(SmallToolsService);
   public readonly isTouchDevice = this.tools.isTouchDevice;
 
@@ -67,6 +68,7 @@ export class VoteCalendarComponent {
 
   public saveDates(voteDates: VoteDate[]): void {
     console.log('Saved vote dates:', voteDates);
+    this.toast.info('Your vote has been saved');
   }
   
 }
