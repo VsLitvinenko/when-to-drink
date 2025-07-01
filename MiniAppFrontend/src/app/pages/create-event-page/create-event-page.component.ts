@@ -8,6 +8,9 @@ import { PageCommonModule } from 'src/app/shared';
   imports: [
     PageCommonModule,
   ],
+  host: {
+    class: 'app-page-inner',
+  },
 })
 export class CreateEventPageComponent  implements OnInit {
 

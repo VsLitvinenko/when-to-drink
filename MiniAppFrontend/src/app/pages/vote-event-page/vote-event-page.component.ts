@@ -24,7 +24,10 @@ import { ResultViewCalendarComponent, ResultViewDirective, ResultViewListCompone
     IonSegmentButton,
     IonSegmentContent,
     IonSegmentView,
-],
+  ],
+  host: {
+    class: 'app-page-inner',
+  },
 })
 export class VoteEventPageComponent  implements OnInit {
   public readonly ViewPick = ViewPick;
