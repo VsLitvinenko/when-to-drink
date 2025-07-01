@@ -21,6 +21,7 @@
           [min]="filters.membersCount()"
           [maybe]="filters.maybe()"
           [time]="filters.time()"
+          [trimPast]="filters.trimPast()"
         >
           @switch (viewPicker.value()) {
             @case (ViewPick.List) {

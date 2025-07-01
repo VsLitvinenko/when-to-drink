@@ -17,6 +17,12 @@
           Consider <ion-text color="success"> time </ion-text>
         </ion-checkbox>
       </ion-item>
+      <ion-item>
+        <ion-checkbox [(ngModel)]="trimPast">
+          Trim past dates
+        </ion-checkbox>
+      </ion-item>
+
       <ion-item lines="none" >
         <ion-label> Threshold count </ion-label>
         <ion-note> {{ membersCount() }} member(s) </ion-note>
