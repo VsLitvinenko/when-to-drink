@@ -1,7 +1,8 @@
 import { computed, Directive, input, signal } from '@angular/core';
 import { fakeDates } from 'src/app/core/mock-data';
 import { VoteType } from '../vote-calendar/models';
-import { startOfDay } from 'date-fns';
+import { format, startOfDay } from 'date-fns';
+import { ResultDate } from './models';
 
 @Directive({
   selector: '[appResultView]'
@@ -24,6 +25,20 @@ export class ResultViewDirective {
       && (this.time() || date.type !== VoteType.Time)
     );
   });
+
+  private readonly filteredDatesMap = computed(() => {
+    const filteredDates = this.filteredDates();
+    return new Map(filteredDates.map((i) => [this.formatVoteDate(i.date), i]));
+  });
   
   constructor() { }
+
+  public formatVoteDate(date: Date) {
+    return format(date, 'yyyy-MM-dd');
+  }
+
+  public getVoteDate(date: Date): ResultDate | undefined {
+    const formatted = this.formatVoteDate(date);
+    return this.filteredDatesMap().get(formatted);
+  }
 }
