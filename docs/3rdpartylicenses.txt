@@ -133,12 +133,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 --------------------------------------------------------------------------------
-Package: ionicons
+Package: @angular/core
 License: "MIT"
 
-The MIT License (MIT)
+The MIT License
 
-Copyright (c) 2015-present Ionic (http://ionic.io/)
+Copyright (c) 2010-2025 Google LLC. https://angular.dev/license
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -159,12 +159,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 --------------------------------------------------------------------------------
-Package: @angular/core
+Package: ionicons
 License: "MIT"
 
-The MIT License
+The MIT License (MIT)
 
-Copyright (c) 2010-2025 Google LLC. https://angular.dev/license
+Copyright (c) 2015-present Ionic (http://ionic.io/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
