@@ -11,7 +11,7 @@ import { ResultDateInfoModalComponent } from '../components';
   imports: [
     SharedFeatureModule,
     ResultDateInfoModalComponent,
-],
+  ],
 })
 export class ResultViewListComponent  implements OnInit {
   private readonly data = inject(ResultViewDirective);

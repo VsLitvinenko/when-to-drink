@@ -1,0 +1,22 @@
+.calendar-header {
+  background-color: var(--ion-color-light, #f4f5f8);
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  width: 100%;
+  height: 0.5rem;
+}
+
+ion-datetime:last-child {
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.calendar-footer {
+  background-color: var(--ion-color-light, #f4f5f8);
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  padding-bottom: 0.25rem;
+  ion-item {
+    --background: transparent;
+  }
+}

@@ -43,7 +43,7 @@ export const fakeDates: ResultDate[] = [
       fakeUsers[2],
       fakeUsers[3],
       fakeUsers[4],
-      fakeUsers[6],
+      fakeUsers[5],
     ],
   },
   {
@@ -61,7 +61,7 @@ export const fakeDates: ResultDate[] = [
       fakeUsers[2],
       fakeUsers[3],
       fakeUsers[4],
-      fakeUsers[6],
+      fakeUsers[5],
     ],
   },
 ];
