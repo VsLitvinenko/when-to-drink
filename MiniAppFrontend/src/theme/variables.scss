@@ -1,2 +1,24 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+:root {
+  --ready-bg-color: rgba(0, 74, 205, 0.16);
+  --ready-text-color: rgba(0, 74, 205, 1);
+
+  --maybe-bg-color: rgba(224, 172, 8, 0.16);
+  --maybe-text-color: rgba(224, 172, 8, 1);
+
+  --time-bg-color: rgba(40, 187, 80, 0.16);
+  --time-text-color: rgba(40, 187, 80, 1);
+}
+
+.ion-palette-dark {
+  --ready-bg-color: rgba(77, 141, 255, 0.2);
+  --ready-text-color: rgba(77, 141, 255, 1);
+
+  --maybe-bg-color: rgba(255, 206, 49, 0.16);
+  --maybe-text-color: rgba(255, 206, 49, 1);
+
+  --time-bg-color: rgba(45, 213, 91, 0.16);
+  --time-text-color: rgba(45, 213, 91, 1);
+}

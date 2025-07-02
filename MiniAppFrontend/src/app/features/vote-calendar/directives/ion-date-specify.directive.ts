@@ -80,13 +80,13 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
       this.ionDateComponent.highlightedDates = [
         ...Array.from(maybeDates).map((date) => ({
           date: date,
-          textColor: 'rgba(255, 206, 49, 1)',
-          backgroundColor: 'rgba(255, 206, 49, 0.16)',
+          textColor: 'var(--maybe-text-color)',
+          backgroundColor: 'var(--maybe-bg-color)',
         })),
         ...Array.from(timeDates.keys()).map((date) => ({
           date: date,
-          textColor: 'rgba(45, 213, 91, 1)',
-          backgroundColor: 'rgba(45, 213, 91, 0.16)',
+          textColor: 'var(--time-text-color)',
+          backgroundColor: 'var(--time-bg-color)',
         })),
       ];
     });

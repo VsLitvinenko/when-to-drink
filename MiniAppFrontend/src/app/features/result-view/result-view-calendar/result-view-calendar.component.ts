@@ -48,18 +48,18 @@ export class ResultViewCalendarComponent {
         ionDate.highlightedDates = [
           ...ready.map((item) => ({
             date: this.data.formatVoteDate(item.date),
-            textColor: 'rgba(77, 141, 255, 1)',
-            backgroundColor: 'rgba(77, 141, 255, 0.2)',
+            textColor: 'var(--ready-text-color)',
+            backgroundColor: 'var(--ready-bg-color)',
           })),
           ...maybe.map((item) => ({
             date: this.data.formatVoteDate(item.date),
-            textColor: 'rgba(255, 206, 49, 1)',
-            backgroundColor: 'rgba(255, 206, 49, 0.16)',
+            textColor: 'var(--maybe-text-color)',
+            backgroundColor: 'var(--maybe-bg-color)',
           })),
           ...time.map((item) => ({
             date: this.data.formatVoteDate(item.date),
-            textColor: 'rgba(45, 213, 91, 1)',
-            backgroundColor: 'rgba(45, 213, 91, 0.16)',
+            textColor: 'var(--time-text-color)',
+            backgroundColor: 'var(--time-bg-color)',
           })),
         ];
       }
