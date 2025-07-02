@@ -6,7 +6,7 @@ enum LocalizeEnum {
   Maybe = 'Maybe',
   Time = 'Time',
   IgnorePastDates = 'IgnorePastDates',
-  ThresholdMembersCount = 'ThresholdMembersCount',
+  AtLeast = 'AtLeast',
   Members = 'Members',
 }
 
@@ -31,9 +31,9 @@ export const ResultFiltersLocalize: LocalizationPreset<LocalizeEnum> = {
     en: 'Ignore past dates',
     ru: 'Убрать прошедшие даты',
   },
-  ThresholdMembersCount: {
-    en: 'Minimum members',
-    ru: 'Минимум участников',
+  AtLeast: {
+    en: 'At least',
+    ru: 'Как минимум',
   },
   Members: {
     en: 'member(s)',
