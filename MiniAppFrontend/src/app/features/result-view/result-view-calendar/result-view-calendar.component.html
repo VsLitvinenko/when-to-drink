@@ -4,6 +4,7 @@
     appResultViewCalendarPicker
     (dateSelected)="selectedDate.set($event)"
     [firstDayOfWeek]="1"
+    [locale]="localizeFormat$ | async"
     presentation="date"
     mode="ios"
   ></ion-datetime>

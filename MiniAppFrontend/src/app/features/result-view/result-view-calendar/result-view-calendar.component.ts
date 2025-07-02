@@ -8,6 +8,7 @@ import { ResultDateInfoModalComponent } from '../components';
 import { getColorByType, getIconByType } from '../helpers';
 import { ResultViewCalendarPickerDirective } from './result-view-calendar-picker.directive';
 import { ResultDate } from '../models';
+import { LocalizeService } from 'src/app/shared/localize';
 
 @Component({
   selector: 'app-result-view-calendar',
@@ -29,6 +30,9 @@ export class ResultViewCalendarComponent {
   public readonly getColorByType = getColorByType;
 
   public readonly selectedDate = signal<ResultDate | undefined>(undefined);
+
+  private readonly localizeService = inject(LocalizeService);
+  public readonly localizeFormat$ = this.localizeService.localizationWithFormat$;
 
   constructor() {
     effect(() => {

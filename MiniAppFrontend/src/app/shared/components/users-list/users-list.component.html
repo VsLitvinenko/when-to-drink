@@ -2,6 +2,7 @@
   mode="ios"
   clear-icon="close-outline"
   [debounce]="300"
+  [placeholder]="LocalizeShared.Search | localize"
   (ionInput)="searchStr.set($event.detail.value)"
   (ionFocus)="searchFocused.emit(true)"
   (ionBlur)="searchFocused.emit(false)"

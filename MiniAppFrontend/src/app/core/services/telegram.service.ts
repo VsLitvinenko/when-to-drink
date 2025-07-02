@@ -12,6 +12,13 @@ export class TelegramService {
 
   public readonly colorScheme$ = this.miniApp$.pipe(
     map((miniApp) => miniApp.colorScheme as AppColorScheme),
+    filter(Boolean),
+    shareReplay(1)
+  );
+
+  public readonly languageCode$ = this.miniApp$.pipe(
+    map((miniApp) => miniApp.initDataUnsafe?.user?.language_code),
+    filter(Boolean),
     shareReplay(1)
   );
 
@@ -24,9 +31,8 @@ export class TelegramService {
   private getTelegramMiniApp(): Observable<any> {
     return !environment.isTelegramMiniApp
       ? EMPTY
-      : of((window as any).Telegram).pipe(
+      : of((window as any).Telegram?.WebApp).pipe(
           filter(Boolean),
-          map((tg) => tg.WebApp),
           shareReplay(1)
         );
   }
