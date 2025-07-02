@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { fakeCalendar } from 'src/app/core/mock-data';
 import { SmallToolsService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
+import { VoteCalendarLocalize } from './vote-calendar.localize';
 
 
 const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -44,6 +45,7 @@ export class VoteCalendarComponent {
 
   private readonly localizeService = inject(LocalizeService);
   public readonly localizeFormat$ = this.localizeService.localizationWithFormat$;
+  public readonly VoteCalendarLocalize = VoteCalendarLocalize;
 
   constructor() { }
 

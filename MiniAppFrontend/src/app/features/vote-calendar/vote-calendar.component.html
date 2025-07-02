@@ -3,21 +3,23 @@
     <div class="chips">
       <ion-chip color="primary" class="ion-activated">
         <ion-icon name="checkmark-outline"></ion-icon>
-        <ion-label> Ready </ion-label>
+        <ion-label> {{ VoteCalendarLocalize.Ready | localize }} </ion-label>
       </ion-chip>
       <ion-chip color="warning" class="ion-activated">
         <ion-icon name="help-outline"></ion-icon>
-        <ion-label> Maybe </ion-label>
+        <ion-label> {{ VoteCalendarLocalize.Maybe | localize }} </ion-label>
       </ion-chip>
       <ion-chip color="success" class="ion-activated">
         <ion-icon name="time-outline"></ion-icon>
-        <ion-label> Time </ion-label>
+        <ion-label> {{ VoteCalendarLocalize.Time | localize }} </ion-label>
       </ion-chip>
     </div>
      <span class="subtitle">
-      {{ isTouchDevice ? 'Hold' : 'Right click on' }}
-      date to select specific option  <br>
-      Don't forget to save changes
+      {{ (isTouchDevice
+            ? VoteCalendarLocalize.HoldDate
+            : VoteCalendarLocalize.RightClickDate) | localize }}
+      {{ VoteCalendarLocalize.SelectSpecificStatus | localize }} <br>
+      {{ VoteCalendarLocalize.DoNotForgetSave | localize }}
     </span>
   </div>
 
@@ -35,10 +37,16 @@
   ></ion-datetime>
 
   <ion-buttons class="vote-calendar-actions" mode="ios">
-    <ion-button color="medium" (click)="clearDates()"> Clear </ion-button>
+    <ion-button color="medium" (click)="clearDates()">
+      {{ VoteCalendarLocalize.Clear | localize }}
+    </ion-button>
     <div class="right">
-      <ion-button color="danger" (click)="resetDates()"> Reset </ion-button>
-      <ion-button color="primary" (click)="saveDates(appIonDateSpecify.voteDates)"> Save </ion-button>
+      <ion-button color="danger" (click)="resetDates()">
+        {{ VoteCalendarLocalize.Reset | localize }}
+      </ion-button>
+      <ion-button color="primary" (click)="saveDates(appIonDateSpecify.voteDates)">
+        {{ VoteCalendarLocalize.Save | localize }}
+      </ion-button>
     </div>
   </ion-buttons>
 </div>
@@ -64,19 +72,26 @@
     <div class="time-modal-content">
       <div class="time-pickers">
         <div class="pick">
-          <ion-label> Start Time </ion-label>
+          <ion-label> {{ VoteCalendarLocalize.StartTime | localize }} </ion-label>
           <ion-datetime [(ngModel)]="startTime" presentation="time" mode="ios"></ion-datetime>
         </div>
         <div class="pick">
-          <ion-label> End Time </ion-label>
+          <ion-label> {{ VoteCalendarLocalize.EndTime | localize }} </ion-label>
           <ion-datetime [(ngModel)]="endTime" presentation="time" mode="ios"></ion-datetime>
         </div>
       </div>
       <ion-button
         mode="ios"
         [disabled]="isTimeInvalid()"
-        (click)="timeModal.dismiss(); popover.dismiss({ time: true, start: startTime(), end: endTime() })"
-      > Select Time </ion-button>
+        (click)="
+          timeModal.dismiss();
+          popover.dismiss({
+            time: true,
+            start: startTime(),
+            end: endTime()
+          })">
+        {{ VoteCalendarLocalize.SpecifyTime | localize }}
+      </ion-button>
     </div>
   </ng-template>
 </ion-modal>
