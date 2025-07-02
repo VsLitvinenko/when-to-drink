@@ -2,7 +2,7 @@ import { Component, viewChild } from '@angular/core';
 import { IonChip, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { UsersListComponent } from 'src/app/shared/components';
-import { ResultDate } from '../../models';
+import { ResultDate, ResultUser } from '../../models';
 import { getColorByType, getIconByType } from '../../helpers';
 
 @Component({
@@ -28,6 +28,8 @@ export class ResultDateInfoModalComponent {
     const modal = this.ionModal();
     if (!modal) { return; }
     this.resultDate = resultDate;
+    resultDate.users = resultDate.users
+      .map((user, index) => ({ ...user, index}));
     modal.present();
   }
 
@@ -36,7 +38,8 @@ export class ResultDateInfoModalComponent {
     this.timeModeIndexes = new Set<number>();
   }
 
-  public toggleUserMode(index: number): void {
+  public toggleUserMode(user: ResultUser): void {
+    const index = (user as any).index;
     if (this.timeModeIndexes.has(index)) {
       this.timeModeIndexes.delete(index);
     } else {

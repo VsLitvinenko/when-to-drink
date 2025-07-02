@@ -10,9 +10,9 @@ export interface UserItem {
   fullName: string;
 }
 
-export interface UserClickedEvent {
+export interface UserClickedEvent<TUser extends UserItem> {
   index: number;
-  user: UserItem;
+  user: TUser;
 }
 
 @Component({
@@ -29,9 +29,11 @@ export interface UserClickedEvent {
     IonSearchbar,
   ],
 })
-export class UsersListComponent {
+export class UsersListComponent<TUser extends UserItem> {
+  
   public readonly clickable = input(false);
-  public readonly users = input([...fakeUsers]);
+
+  public readonly users = input<TUser[]>([...fakeUsers] as any);
   public readonly searchStr = signal<string | null | undefined>(null);
 
   public readonly filteredUsers = computed(() => {
@@ -46,12 +48,13 @@ export class UsersListComponent {
   });
 
   public readonly searchFocused = output<boolean>();
-  public readonly userClicked = output<UserClickedEvent>();
+  public readonly userClicked = output<UserClickedEvent<TUser>>();
+
   @ContentChild('end', { static: true }) endTemplateRef?: TemplateRef<any>;
 
   public readonly UsersListLocalize = UsersListLocalize;
 
-  public onUserClicked(index: number, user: UserItem): void {
+  public onUserClicked(index: number, user: TUser): void {
     if (this.clickable()) {
       this.userClicked.emit({ index, user: {...user} });
     }

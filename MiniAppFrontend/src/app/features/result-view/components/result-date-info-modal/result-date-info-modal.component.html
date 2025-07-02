@@ -19,11 +19,11 @@
       <app-users-list
         [users]="resultDate.users"
         [clickable]="true"
-        (userClicked)="toggleUserMode($event.index)"
+        (userClicked)="toggleUserMode($event.user)"
         (searchFocused)="modal.backdropDismiss = !$event"
       >
-        <ng-template #end let-user let-index="index">
-          @if (timeModeIndexes.has(index)) {
+        <ng-template #end let-user>
+          @if (timeModeIndexes.has(user.index)) {
             <!-- time mode -->
            <ion-text [color]="getColorByType(user.type)" class="user-time-info">
               {{ user.start ? (user.start | date : 'HH:mm') : '00:00' }} - 
