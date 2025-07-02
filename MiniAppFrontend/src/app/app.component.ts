@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { TelegramService } from './core/services';
+import { TelegramService, ThemeService } from './core/services';
 import { addIcons } from 'ionicons';
 import {
   chevronForwardOutline,
@@ -14,6 +14,7 @@ import {
   listOutline,
   calendarClearOutline,
 } from 'ionicons/icons';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,9 @@ import {
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent implements OnInit {
+
   private readonly tg = inject(TelegramService);
+  private readonly theme = inject(ThemeService);
 
   constructor() {
     addIcons({
@@ -40,5 +43,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.tg.initApp();
+    this.tg.colorScheme$
+      .pipe(take(1))
+      .subscribe((cs) => this.theme.changeColorScheme(cs));
   }
 }
