@@ -13,7 +13,8 @@ enum LocalizeEnum {
   Save = 'Save',
   StartTime = 'StartTime',
   EndTime = 'EndTime',
-  SpecifyTime = 'SpecifyTime'
+  SpecifyTime = 'SpecifyTime',
+  HasBeenSaved = 'HasBeenSaved',
 }
 
 export const VoteCalendarLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -68,5 +69,9 @@ export const VoteCalendarLocalize: LocalizationPreset<LocalizeEnum> = {
   SpecifyTime: {
     en: 'Specify time',
     ru: 'Указать время',
+  },
+  HasBeenSaved: {
+    en: 'All changes have been saved successfully',
+    ru: 'Все изменения успешно сохранены',
   },
 };

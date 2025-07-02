@@ -10,7 +10,7 @@ export class ToastService {
     mode: 'ios',
     position: 'bottom',
     swipeGesture: 'vertical',
-    duration: 1500,
+    duration: 2000,
     animated: true,
   };
 

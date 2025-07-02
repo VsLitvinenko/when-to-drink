@@ -9,6 +9,7 @@ import { fakeCalendar } from 'src/app/core/mock-data';
 import { SmallToolsService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
 import { VoteCalendarLocalize } from './vote-calendar.localize';
+import { take } from 'rxjs';
 
 
 const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -74,7 +75,9 @@ export class VoteCalendarComponent {
 
   public saveDates(voteDates: VoteDate[]): void {
     console.log('Saved vote dates:', voteDates);
-    this.toast.info('Your vote has been saved');
+    this.localizeService.localize(VoteCalendarLocalize.HasBeenSaved)
+      .pipe(take(1))
+      .subscribe((message) => this.toast.info(message));
   }
   
 }
