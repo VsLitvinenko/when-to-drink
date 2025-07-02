@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectorRef, inject, Injector, OnDestroy, Pipe, PipeTransform,  } from '@angular/core';
 import { LocalizeService } from './localize.service';
-import { isLocalizationLeaf } from './localize.model';
+import { LocalizationPresetLeaf } from './localize.model';
 
 @Pipe({
   name: 'localize',
@@ -17,12 +17,7 @@ export class LocalizePipe implements PipeTransform, OnDestroy {
     this.asyncPipe.ngOnDestroy();
   }
 
-  transform(value: any): string | null {
-    if (isLocalizationLeaf(value)) {
-      return this.asyncPipe.transform(this.localizeService.localize(value));
-    } else {
-      console.error('LocalizePipe not correct localization value');
-      return null;
-    }
+  transform(value: LocalizationPresetLeaf): string | null {
+    return this.asyncPipe.transform(this.localizeService.localize(value));
   }
 }

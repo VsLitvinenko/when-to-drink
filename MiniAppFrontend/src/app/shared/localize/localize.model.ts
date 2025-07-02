@@ -5,7 +5,5 @@ export type LocalizationKey = (keyof typeof Localization);
 export type LocalizationPresetLeaf = Record<LocalizationKey, string>;
 
 export type LocalizationPreset<T extends string = string> = {
-  [K in T]: LocalizationPreset<T> | LocalizationPresetLeaf;
+  [K in T]: LocalizationPresetLeaf;
 };
-
-export const isLocalizationLeaf = (val: any): val is LocalizationPresetLeaf => Boolean(val.en);

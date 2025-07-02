@@ -2,8 +2,8 @@ import { Component, computed, ContentChild, input, output, signal, TemplateRef }
 import { IonAvatar, IonList, IonItem, IonLabel, IonSearchbar } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { fakeUsers } from '../../../core/mock-data';
-import { LocalizeShared } from '../../localize/presets/shared';
 import { LocalizePipe } from '../../localize';
+import { UsersListLocalize } from './users-list.localize';
 
 export interface UserItem {
   imgSrc: string;
@@ -49,7 +49,7 @@ export class UsersListComponent {
   public readonly userClicked = output<UserClickedEvent>();
   @ContentChild('end', { static: true }) endTemplateRef?: TemplateRef<any>;
 
-  public readonly LocalizeShared = LocalizeShared;
+  public readonly UsersListLocalize = UsersListLocalize;
 
   public onUserClicked(index: number, user: UserItem): void {
     if (this.clickable()) {

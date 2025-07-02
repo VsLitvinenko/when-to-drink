@@ -6,6 +6,7 @@ import { VoteCalendarComponent } from 'src/app/features/vote-calendar';
 import { PageCommonModule } from 'src/app/shared';
 import { ResultViewPickerComponent, ViewPick } from '../../features/result-view-picker';
 import { ResultViewCalendarComponent, ResultViewDirective, ResultViewListComponent } from 'src/app/features/result-view';
+import { VotePageLocalize } from './vote-event-page.localize';
 
 @Component({
   selector: 'app-vote-event-page',
@@ -31,6 +32,7 @@ import { ResultViewCalendarComponent, ResultViewDirective, ResultViewListCompone
 })
 export class VoteEventPageComponent  implements OnInit {
   public readonly ViewPick = ViewPick;
+  public readonly VotePageLocalize = VotePageLocalize;
 
   constructor() { }
 
