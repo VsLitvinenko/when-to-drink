@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonAccordion, IonAccordionGroup, IonCheckbox, IonRange } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
+import { ResultFiltersLocalize } from './result-filters.localize';
 
 @Component({
   selector: 'app-result-filters',
@@ -22,6 +23,8 @@ export class ResultFiltersComponent  implements OnInit {
   public readonly time = signal<boolean>(true);
   public readonly trimPast = signal<boolean>(true);
   public readonly membersCount = signal<number>(6);
+
+  public readonly ResultFiltersLocalize = ResultFiltersLocalize;
 
   constructor() { }
 

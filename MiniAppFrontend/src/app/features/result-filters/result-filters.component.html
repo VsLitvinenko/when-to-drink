@@ -3,29 +3,40 @@
   <ion-accordion value="filters" toggleIcon="remove-outline">
     
     <ion-item slot="header" class="header-item">
-      <ion-label> Filter results </ion-label>
+      <ion-label> {{ ResultFiltersLocalize.FilterResults | localize }} </ion-label>
     </ion-item>
 
     <ion-list slot="content" mode="ios">
       <ion-item>
         <ion-checkbox [(ngModel)]="maybe">
-          Consider <ion-text color="warning"> maybe </ion-text>
+          {{ ResultFiltersLocalize.Consider | localize }}
+          <ion-text color="warning">
+            {{ ResultFiltersLocalize.Maybe | localize }}
+          </ion-text>
         </ion-checkbox>
       </ion-item>
       <ion-item>
         <ion-checkbox [(ngModel)]="time">
-          Consider <ion-text color="success"> time </ion-text>
+          {{ ResultFiltersLocalize.Consider | localize }}
+          <ion-text color="success">
+            {{ ResultFiltersLocalize.Time | localize }}
+          </ion-text>
         </ion-checkbox>
       </ion-item>
       <ion-item>
         <ion-checkbox [(ngModel)]="trimPast">
-          Trim past dates
+          {{ ResultFiltersLocalize.IgnorePastDates | localize }}
         </ion-checkbox>
       </ion-item>
 
       <ion-item lines="none" >
-        <ion-label> Threshold count </ion-label>
-        <ion-note> {{ membersCount() }} member(s) </ion-note>
+        <ion-label>
+          {{ ResultFiltersLocalize.ThresholdMembersCount | localize }}
+        </ion-label>
+        <ion-note>
+          {{ membersCount() }}
+          {{ ResultFiltersLocalize.Members | localize }}
+        </ion-note>
       </ion-item>
       <ion-item lines="none" class="range-list-item">
         <ion-range
