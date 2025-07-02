@@ -10,24 +10,24 @@
 
       <ion-list slot="content" mode="ios">
         <ion-item button [detail]="false" (click)="usersModal.present()">
-          <ion-label> 6 member(s) </ion-label>
+          <ion-label> 6 {{ EventMainInfoLocalize.Members | localize }} </ion-label>
           <app-avatars-list></app-avatars-list>
         </ion-item>
         <ion-item>
-          <ion-label> Created by </ion-label>
+          <ion-label> {{ EventMainInfoLocalize.Initiator | localize }} </ion-label>
           <ion-note> Vyacheslav Litvinenko </ion-note>
         </ion-item>
 
         <ion-item>
-          <ion-label> Starts</ion-label>
+          <ion-label> {{ EventMainInfoLocalize.Starts | localize }} </ion-label>
           <ion-note> {{ now | date : 'dd.MM.yyyy'}} </ion-note>
         </ion-item>
         <ion-item>
-          <ion-label> Ends </ion-label>
+          <ion-label> {{ EventMainInfoLocalize.Ends | localize }} </ion-label>
           <ion-note> {{ now | date : 'dd.MM.yyyy'}} </ion-note>
         </ion-item>
         <ion-item class="notes-item" lines="none">
-          <ion-label> Notes </ion-label>
+          <ion-label> {{ EventMainInfoLocalize.Description | localize }} </ion-label>
           <ion-note>
             Join us for a fun evening of cold beers, great chats, and good vibes at pub.
             Let's unwind, laugh, and enjoy the night together!

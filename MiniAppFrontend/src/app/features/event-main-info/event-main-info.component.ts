@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonAccordion, IonAccordionGroup, IonAvatar, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { AvatarsListComponent, UsersListComponent } from 'src/app/shared/components';
+import { EventMainInfoLocalize } from './event-main-info.localize';
 
 @Component({
   selector: 'app-event-main-info',
@@ -19,6 +20,7 @@ import { AvatarsListComponent, UsersListComponent } from 'src/app/shared/compone
 })
 export class EventMainInfoComponent  implements OnInit {
   public readonly now = new Date();
+  public readonly EventMainInfoLocalize = EventMainInfoLocalize;
 
   constructor() { }
 
