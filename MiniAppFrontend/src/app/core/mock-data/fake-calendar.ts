@@ -1,8 +1,10 @@
+import { format } from 'date-fns';
 import { VoteDate, VoteType } from 'src/app/features/vote-calendar/models';
 
 function generateRandomVoteDates(): VoteDate[] {
   const voteTypes = [VoteType.Ready, VoteType.Maybe, VoteType.Time];
-  const results: VoteDate[] = [];
+  const results = new Map<string, VoteDate>();
+
   for (let i = 0; i < 10; i++) {
     const day = Math.floor(Math.random() * 31) + 1; // July has 31 days
     const type = voteTypes[Math.floor(Math.random() * voteTypes.length)];
@@ -17,9 +19,10 @@ function generateRandomVoteDates(): VoteDate[] {
       end = new Date(start);
       end.setHours(startHour + 2); // 2 hour window
     }
-    results.push({ date, type, start, end });
+    const key = format(date, 'yyyy-MM-dd');
+    results.set(key, { date, type, start, end });
   }
-  return results;
+  return Array.from(results.values());
 }
 
 export const fakeCalendar = generateRandomVoteDates();
