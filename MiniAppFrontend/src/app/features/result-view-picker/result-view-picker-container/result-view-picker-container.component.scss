@@ -1,0 +1,14 @@
+.result-view-picker-container-animated {
+  display: grid;
+  overflow: hidden;
+  place-items: start;
+}
+
+::ng-deep {
+  .result-view-picker-container-animated > * {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+  }
+}

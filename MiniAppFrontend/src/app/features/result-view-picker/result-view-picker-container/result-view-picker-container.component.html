@@ -1,0 +1,10 @@
+<div
+  class="result-view-picker-container-animated"
+  [@.disabled]="animationDisabled()"
+  [@openCloseResultView]="{
+    value: viewPick(),
+    params: animationParams()
+  }"
+>
+  <ng-content></ng-content>
+</div>

@@ -14,34 +14,26 @@
   <ion-segment-view mode="ios">
     <ion-segment-content id="info">
       <div class="segment-view-content">
-        <app-result-filters #filters></app-result-filters>
-        <app-result-view-picker #viewPicker></app-result-view-picker>
-        <div
+        <app-result-filters #filters/>
+        <app-result-view-picker-control #viewPicker/>
+        <app-result-view-picker-container
+          [viewPick]="viewPicker.value()"
           appResultView
           [min]="filters.membersCount()"
           [maybe]="filters.maybe()"
           [time]="filters.time()"
           [trimPast]="filters.trimPast()"
-          class="result-view"
-          [@openCloseResultView]="{
-            value: viewPicker.value(),
-            params: animationParams()
-          }"
         >
           @switch (viewPicker.value()) {
-            @case (ViewPick.List) {
-              <app-result-view-list></app-result-view-list>
-            }
-            @case (ViewPick.Calendar) {
-              <app-result-view-calendar></app-result-view-calendar>
-            }
+            @case (ViewPick.List) { <app-result-view-list/> }
+            @case (ViewPick.Calendar) { <app-result-view-calendar/> }
           }
-        </div>
+        </app-result-view-picker-container>
       </div>
     </ion-segment-content>
     <ion-segment-content id="vote">
       <div class="segment-view-content">
-        <app-vote-calendar></app-vote-calendar>
+        <app-vote-calendar/>
       </div>
     </ion-segment-content>
   </ion-segment-view>
