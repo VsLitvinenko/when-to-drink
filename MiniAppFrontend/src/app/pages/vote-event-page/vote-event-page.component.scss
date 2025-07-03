@@ -13,3 +13,17 @@ ion-segment-view {
   flex-direction: column;
   gap: 0.75rem;
 }
+
+.result-view {
+  display: grid;
+  overflow: hidden;
+  place-items: start;
+
+  app-result-view-list,
+  app-result-view-calendar {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+  }
+}
