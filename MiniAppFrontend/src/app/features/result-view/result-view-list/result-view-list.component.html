@@ -14,13 +14,14 @@
         {{ item.date | date : 'dd.MM.yyyy' }}
       </ion-label>
       <ion-note slot="end">
-        {{ item.users.length }} member(s)
+        {{ item.users.length }}
+        {{ ResultViewLocalize.Members | localize }}
       </ion-note>
     </ion-item>
   } @empty {
     <ion-item lines="none">
-      <ion-icon slot="start" name="calendar-clear-outline"></ion-icon>
-      <ion-note> No data, try to change filters </ion-note>
+      <ion-icon slot="start" name="calendar-clear-outline" color="medium"></ion-icon>
+      <ion-note class="no-data"> {{ ResultViewLocalize.NoData | localize }} </ion-note>
     </ion-item>
   }
 </ion-list>

@@ -9,6 +9,7 @@ import { getColorByType, getIconByType } from '../helpers';
 import { ResultViewCalendarPickerDirective } from './result-view-calendar-picker.directive';
 import { ResultDate } from '../models';
 import { LocalizeService } from 'src/app/shared/localize';
+import { ResultViewLocalize } from '../result-view.localize';
 
 @Component({
   selector: 'app-result-view-calendar',
@@ -28,6 +29,7 @@ export class ResultViewCalendarComponent {
 
   public readonly getIconByType = getIconByType;
   public readonly getColorByType = getColorByType;
+  public readonly ResultViewLocalize = ResultViewLocalize;
 
   public readonly selectedDate = signal<ResultDate | undefined>(undefined);
 
