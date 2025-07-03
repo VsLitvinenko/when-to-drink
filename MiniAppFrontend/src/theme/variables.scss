@@ -10,6 +10,8 @@
 
   --time-bg-color: rgba(40, 187, 80, 0.16);
   --time-text-color: rgba(40, 187, 80, 1);
+
+  --picker-box-shadow: 0 0 5px rgba(0, 0, 0, 0.16);
 }
 
 .ion-palette-dark {
@@ -21,4 +23,6 @@
 
   --time-bg-color: rgba(45, 213, 91, 0.16);
   --time-text-color: rgba(45, 213, 91, 1);
+
+  --picker-box-shadow: none;
 }
