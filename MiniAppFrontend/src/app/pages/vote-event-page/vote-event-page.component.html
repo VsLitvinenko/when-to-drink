@@ -16,22 +16,18 @@
       <div class="segment-view-content">
         <app-result-filters #filters></app-result-filters>
         <app-result-view-picker #viewPicker></app-result-view-picker>
-        <ng-container
+        <div
           appResultView
           [min]="filters.membersCount()"
           [maybe]="filters.maybe()"
           [time]="filters.time()"
           [trimPast]="filters.trimPast()"
+          [ngClass]="viewPicker.value()"
+          class="result-view-content"
         >
-          @switch (viewPicker.value()) {
-            @case (ViewPick.List) {
-              <app-result-view-list></app-result-view-list>
-            }
-            @case (ViewPick.Calendar) {
-              <app-result-view-calendar></app-result-view-calendar>
-            }
-          }
-        </ng-container>
+          <app-result-view-list></app-result-view-list>
+          <app-result-view-calendar></app-result-view-calendar>
+        </div>
       </div>
     </ion-segment-content>
     <ion-segment-content id="vote">
