@@ -10,8 +10,8 @@
         <ng-container *ngIf="(dateFormat$ | async) as format">
           <h3> {{ resultDate.date | date : format.dateFormat : undefined : format.localize }} </h3>
         </ng-container>
-        <ion-chip [color]="getColorByType(resultDate.type)" class="ion-activated">
-          <ion-icon [name]="getIconByType(resultDate.type)"></ion-icon>
+        <ion-chip [color]="Helpers.getColorByType(resultDate.type)" class="ion-activated">
+          <ion-icon [name]="Helpers.getIconByType(resultDate.type)"></ion-icon>
           <ion-label>
             {{ resultDate.start ? (resultDate.start | date : 'HH:mm') : '00:00' }} - 
             {{ resultDate.end ? (resultDate.end | date : 'HH:mm') : '23:59' }}
@@ -27,15 +27,15 @@
         <ng-template #end let-user>
           @if (timeModeIndexes.has(user.index)) {
             <!-- time mode -->
-           <ion-text [color]="getColorByType(user.type)" class="user-time-info">
+           <ion-text [color]="Helpers.getColorByType(user.type)" class="user-time-info">
               {{ user.start ? (user.start | date : 'HH:mm') : '00:00' }} - 
               {{ user.end ? (user.end | date : 'HH:mm') : '23:59' }}
            </ion-text>
           } @else {
             <!-- default mode -->
             <ion-icon
-              [color]="getColorByType(user.type)"
-              [icon]="getIconByType(user.type)"
+              [color]="Helpers.getColorByType(user.type)"
+              [icon]="Helpers.getIconByType(user.type)"
             ></ion-icon>
           }
 

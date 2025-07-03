@@ -5,9 +5,8 @@ import { ResultViewDirective } from '../result-view.directive';
 import { groupBy } from 'lodash';
 import { VoteType } from '../../vote-calendar/models';
 import { ResultDateInfoModalComponent } from '../components';
-import { getColorByType, getIconByType } from '../helpers';
 import { ResultViewCalendarPickerDirective } from './result-view-calendar-picker.directive';
-import { ResultDate } from '../models';
+import { ResultDate, ResultViewHelpers } from '../models';
 import { LocalizeService } from 'src/app/shared/localize';
 import { ResultViewLocalize } from '../result-view.localize';
 
@@ -27,8 +26,7 @@ export class ResultViewCalendarComponent {
   private readonly ionDateComponent = viewChild(IonDatetime);
   private readonly data = inject(ResultViewDirective);
 
-  public readonly getIconByType = getIconByType;
-  public readonly getColorByType = getColorByType;
+  public readonly Helpers = ResultViewHelpers;
   public readonly ResultViewLocalize = ResultViewLocalize;
 
   public readonly selectedDate = signal<ResultDate | undefined>(undefined);

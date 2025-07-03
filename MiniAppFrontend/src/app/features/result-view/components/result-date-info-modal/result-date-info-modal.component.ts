@@ -2,8 +2,7 @@ import { Component, inject, viewChild } from '@angular/core';
 import { IonChip, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { UsersListComponent } from 'src/app/shared/components';
-import { ResultDate, ResultUser } from '../../models';
-import { getColorByType, getIconByType } from '../../helpers';
+import { ResultDate, ResultUser, ResultViewHelpers } from '../../models';
 import { LocalizeService } from 'src/app/shared/localize';
 
 @Component({
@@ -21,9 +20,7 @@ export class ResultDateInfoModalComponent {
   private readonly ionModal = viewChild(IonModal);
   public resultDate?: ResultDate;
   public timeModeIndexes = new Set<number>();
-
-  public readonly getIconByType = getIconByType;
-  public readonly getColorByType = getColorByType;
+  public readonly Helpers = ResultViewHelpers;
 
   private readonly localizeService = inject(LocalizeService);
   public readonly dateFormat$ = this.localizeService.localizeLongDateFormat$;

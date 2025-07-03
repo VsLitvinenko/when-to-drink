@@ -7,8 +7,8 @@
     >
       <ion-icon
         slot="start"
-        [color]="getColorByType(item.type)"
-        [name]="getIconByType(item.type)"
+        [color]="Helpers.getColorByType(item.type)"
+        [name]="Helpers.getIconByType(item.type)"
       ></ion-icon>
       <ion-label>
         {{ item.date | date : 'dd.MM.yyyy' }}
