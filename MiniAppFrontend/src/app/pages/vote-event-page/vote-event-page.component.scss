@@ -13,33 +13,3 @@ ion-segment-view {
   flex-direction: column;
   gap: 0.75rem;
 }
-
-.result-view-content {
-  position: relative;
-  width: 100%;
-
-  app-result-view-list,
-  app-result-view-calendar {
-    width: 100%;
-    position: absolute;
-    transition: left 0.4s ease-in-out;
-  }
-
-  --side-padding: 2rem;
-  &.list {
-    app-result-view-list {
-      left: 0 !important;
-    }
-    app-result-view-calendar {
-      left: calc(100% + var(--side-padding)) !important;
-    }
-  }
-  &.calendar {
-    app-result-view-list {
-      left: calc(-100% - var(--side-padding)) !important;
-    }
-    app-result-view-calendar {
-      left: 0 !important;
-    }
-  }
-}

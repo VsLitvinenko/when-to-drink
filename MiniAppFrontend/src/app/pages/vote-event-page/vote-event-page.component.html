@@ -2,7 +2,7 @@
 <ion-content class="ion-padding">
   <app-event-main-info></app-event-main-info>
 
-  <ion-segment mode="ios" value="vote">
+  <ion-segment mode="ios" value="info">
     <ion-segment-button value="info" contentId="info">
       <ion-label> {{ VotePageLocalize.Results | localize }} </ion-label>
     </ion-segment-button>
@@ -16,18 +16,22 @@
       <div class="segment-view-content">
         <app-result-filters #filters></app-result-filters>
         <app-result-view-picker #viewPicker></app-result-view-picker>
-        <div
+        <ng-container
           appResultView
           [min]="filters.membersCount()"
           [maybe]="filters.maybe()"
           [time]="filters.time()"
           [trimPast]="filters.trimPast()"
-          [ngClass]="viewPicker.value()"
-          class="result-view-content"
         >
-          <app-result-view-list></app-result-view-list>
-          <app-result-view-calendar></app-result-view-calendar>
-        </div>
+          @switch (viewPicker.value()) {
+            @case (ViewPick.List) {
+              <app-result-view-list></app-result-view-list>
+            }
+            @case (ViewPick.Calendar) {
+              <app-result-view-calendar></app-result-view-calendar>
+            }
+          }
+        </ng-container>
       </div>
     </ion-segment-content>
     <ion-segment-content id="vote">
