@@ -22,6 +22,25 @@ export class LocalizeService {
     shareReplay(1)
   );
 
+  public readonly localizeLongDateFormat$ = this.localization$.pipe(
+    map((localize) => {
+      let dateFormat: string;
+      switch (localize) {
+        case Localization.en:
+          dateFormat = 'MMMM d, yyyy';
+          break;
+        case Localization.ru:
+          dateFormat = 'd MMMM, yyyy';
+          break;
+        default:
+          dateFormat = 'MMMM d, yyyy';
+          break;
+      }
+      return { localize, dateFormat };
+    }),
+    shareReplay(1),
+  );
+
   public localize(value: LocalizationPresetLeaf): Observable<string> {
     return this.localization$.pipe(map((localization) => value[localization] ?? value.en));
   }

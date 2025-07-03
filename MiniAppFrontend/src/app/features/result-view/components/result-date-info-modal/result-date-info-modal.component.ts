@@ -1,9 +1,10 @@
-import { Component, viewChild } from '@angular/core';
+import { Component, inject, viewChild } from '@angular/core';
 import { IonChip, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { UsersListComponent } from 'src/app/shared/components';
 import { ResultDate, ResultUser } from '../../models';
 import { getColorByType, getIconByType } from '../../helpers';
+import { LocalizeService } from 'src/app/shared/localize';
 
 @Component({
   selector: 'app-result-date-info-modal',
@@ -23,6 +24,9 @@ export class ResultDateInfoModalComponent {
 
   public readonly getIconByType = getIconByType;
   public readonly getColorByType = getColorByType;
+
+  private readonly localizeService = inject(LocalizeService);
+  public readonly dateFormat$ = this.localizeService.localizeLongDateFormat$;
 
   public present(resultDate: ResultDate): void {
     const modal = this.ionModal();

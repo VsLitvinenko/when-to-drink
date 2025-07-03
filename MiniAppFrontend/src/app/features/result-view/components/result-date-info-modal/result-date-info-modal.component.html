@@ -7,7 +7,9 @@
   <ng-template>
     @if (resultDate) {
       <div class="header">
-        <h3> {{ resultDate.date | date : 'MMMM d, yyyy' }} </h3>
+        <ng-container *ngIf="(dateFormat$ | async) as format">
+          <h3> {{ resultDate.date | date : format.dateFormat : undefined : format.localize }} </h3>
+        </ng-container>
         <ion-chip [color]="getColorByType(resultDate.type)" class="ion-activated">
           <ion-icon [name]="getIconByType(resultDate.type)"></ion-icon>
           <ion-label>
