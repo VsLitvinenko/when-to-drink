@@ -1,12 +1,13 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { IonDatetime, IonDatetimeButton, IonInput, IonModal, IonTextarea } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { EditEventFormLocalize } from './edit-event-form.localize';
 import { LocalizeService } from 'src/app/shared/localize';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { endOfMonth, format, startOfMonth } from 'date-fns';
-import { combineLatest } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ToastService } from 'src/app/core/services';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-edit-event-form',
@@ -22,7 +23,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     ReactiveFormsModule,
   ],
 })
-export class EditEventFormComponent  implements OnInit {
+export class EditEventFormComponent {
 
   private readonly startOfMonth = format(startOfMonth(new Date()), 'yyyy-MM-dd');
   private readonly endOfMonth = format(endOfMonth(new Date()), 'yyyy-MM-dd');
@@ -54,13 +55,25 @@ export class EditEventFormComponent  implements OnInit {
   public readonly localizeFormat$ = this.localizeService.localizationWithFormat$;
   public readonly EditEventFormLocalize = EditEventFormLocalize;
 
+  private readonly toast = inject(ToastService);
+
   constructor() { }
 
-  ngOnInit() {
+  public saveChanges(): void {
+    console.log('save changes', this.eventFormGroup.value);
+    this.localizeService.localize(EditEventFormLocalize.HasBeenSaved)
+      .pipe(take(1))
+      .subscribe((message) => this.toast.info(message, 'cloud-done-outline'));
   }
 
-  public saveChanges(): void {
-    console.log('save changes', this.eventFormGroup.value)
+  public copyToClipboard(): void {
+    this.localizeService.localize(EditEventFormLocalize.ClipboardLink)
+      .pipe(take(1))
+      .subscribe((message) => this.toast.light(message, 'clipboard-outline'));
+  }
+
+  public redirectToEvent(): void {
+
   }
 
 }

@@ -77,7 +77,7 @@ export class VoteCalendarComponent {
     console.log('Saved vote dates:', voteDates);
     this.localizeService.localize(VoteCalendarLocalize.HasBeenSaved)
       .pipe(take(1))
-      .subscribe((message) => this.toast.info(message));
+      .subscribe((message) => this.toast.info(message, 'cloud-done-outline'));
   }
   
 }

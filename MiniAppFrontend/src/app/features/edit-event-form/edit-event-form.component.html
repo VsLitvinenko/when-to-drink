@@ -68,11 +68,11 @@
 </ion-button>
 
 <div class="done-actions">
-  <ion-button mode="ios" size="small" color="light">
+  <ion-button mode="ios" size="small" color="light" (click)="copyToClipboard()">
     <ion-icon name="link-outline" slot="start"/>
     <span> {{ EditEventFormLocalize.Link | localize }} </span>
   </ion-button>
-  <ion-button mode="ios" size="small" color="light">
+  <ion-button mode="ios" size="small" color="light" (click)="redirectToEvent()">
     <ion-icon name="arrow-redo-outline" slot="end"/>
     <span> {{ EditEventFormLocalize.GoTo | localize }} </span>
   </ion-button>

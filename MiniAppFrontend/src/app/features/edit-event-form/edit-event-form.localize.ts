@@ -10,6 +10,8 @@ enum LocalizeEnum {
   SaveChanges = 'SaveChanges',
   Link = 'Link',
   GoTo = 'GoTo',
+  HasBeenSaved = 'HasBeenSaved',
+  ClipboardLink = 'ClipboardLink',
 }
 
 export const EditEventFormLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -48,5 +50,13 @@ export const EditEventFormLocalize: LocalizationPreset<LocalizeEnum> = {
   GoTo: {
     en: 'Go to',
     ru: 'Перейти',
+  },
+  HasBeenSaved: {
+    en: 'All changes have been saved successfully',
+    ru: 'Все изменения успешно сохранены',
+  },
+  ClipboardLink: {
+    en: 'Link to created event was copied to clipboard',
+    ru: 'Ссылка на созданное событие скопирована в буфер обмена',
   },
 };

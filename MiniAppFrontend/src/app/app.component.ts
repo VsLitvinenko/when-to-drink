@@ -13,8 +13,10 @@ import {
   calendarOutline,
   listOutline,
   calendarClearOutline,
+  clipboardOutline,
   arrowRedoOutline,
   linkOutline,
+  cloudDoneOutline,
 } from 'ionicons/icons';
 import { take } from 'rxjs';
 
@@ -40,9 +42,11 @@ export class AppComponent implements OnInit {
       calendarOutline,
       listOutline,
       calendarClearOutline,
+      clipboardOutline,
       arrowRedoOutline,
       linkOutline,
-    })
+      cloudDoneOutline,
+    });
   }
 
   ngOnInit(): void {
