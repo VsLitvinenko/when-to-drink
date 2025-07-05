@@ -4,8 +4,8 @@ export const routes: Routes = [
   {
     path: 'edit',
     loadComponent: () =>
-      import('./pages/update-event-page/update-event-page.component').then(
-        (c) => c.UpdateEventPageComponent
+      import('./pages/edit-event-page/edit-event-page.component').then(
+        (c) => c.EditEventPageComponent
       ),
   },
   {

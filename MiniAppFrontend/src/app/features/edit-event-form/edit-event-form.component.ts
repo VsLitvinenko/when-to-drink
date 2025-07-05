@@ -65,15 +65,4 @@ export class EditEventFormComponent {
       .pipe(take(1))
       .subscribe((message) => this.toast.info(message, 'cloud-done-outline'));
   }
-
-  public copyToClipboard(): void {
-    this.localizeService.localize(EditEventFormLocalize.ClipboardLink)
-      .pipe(take(1))
-      .subscribe((message) => this.toast.light(message, 'clipboard-outline'));
-  }
-
-  public redirectToEvent(): void {
-
-  }
-
 }

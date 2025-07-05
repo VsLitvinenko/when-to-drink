@@ -29,19 +29,6 @@ ion-input {
   margin: 0.5rem 1rem;
 }
 
-.done-actions {
-  margin: 0.5rem 1rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-  ion-button {
-    flex-grow: 1;
-    --padding-top: 0.6rem;
-    --padding-bottom: 0.6rem;
-    --border-radius: 0.75rem;
-  }
-}
-
 ::ng-deep {
   .event-datetime-modal {
     .ion-delegate-host {
