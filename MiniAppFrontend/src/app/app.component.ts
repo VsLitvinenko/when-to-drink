@@ -13,6 +13,8 @@ import {
   calendarOutline,
   listOutline,
   calendarClearOutline,
+  arrowRedoOutline,
+  linkOutline,
 } from 'ionicons/icons';
 import { take } from 'rxjs';
 
@@ -38,6 +40,8 @@ export class AppComponent implements OnInit {
       calendarOutline,
       listOutline,
       calendarClearOutline,
+      arrowRedoOutline,
+      linkOutline,
     })
   }
 

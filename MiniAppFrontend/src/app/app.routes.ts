@@ -2,12 +2,18 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'create',
-    loadComponent: () => import('./pages/create-event-page/create-event-page.component').then(m => m.CreateEventPageComponent),
+    path: 'edit',
+    loadComponent: () =>
+      import('./pages/update-event-page/update-event-page.component').then(
+        (m) => m.UpdateEventPageComponent
+      ),
   },
   {
     path: 'vote',
-    loadComponent: () => import('./pages/vote-event-page/vote-event-page.component').then(m => m.VoteEventPageComponent),
+    loadComponent: () =>
+      import('./pages/vote-event-page/vote-event-page.component').then(
+        (m) => m.VoteEventPageComponent
+      ),
   },
   {
     path: '',

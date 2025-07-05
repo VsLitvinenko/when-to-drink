@@ -1,0 +1,79 @@
+<ion-list [formGroup]="eventFormGroup" mode="ios">
+  <ion-item>
+    <ion-label> {{ EditEventFormLocalize.Name | localize }} </ion-label>
+    <ion-input
+      color="dark" slot="end"
+      formControlName="name"
+      [placeholder]="EditEventFormLocalize.NamePlaceholder | localize"
+    ></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label> {{ EditEventFormLocalize.Starts | localize }} </ion-label>
+    <ion-datetime-button datetime="datetimeStart"></ion-datetime-button>
+    <ion-modal
+      class="event-datetime-modal"
+      [keepContentsMounted]="true"
+      [initialBreakpoint]="1"
+      [breakpoints]="[0, 1]">
+      <ng-template>
+        <ion-datetime
+          id="datetimeStart"
+          formControlName="starts"
+          [firstDayOfWeek]="1"
+          [locale]="localizeFormat$ | async"
+          presentation="date"
+          mode="ios"
+        ></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+  <ion-item>
+    <ion-label> {{ EditEventFormLocalize.Ends | localize }} </ion-label>
+    <ion-datetime-button datetime="datetimeEnd"></ion-datetime-button>
+    <ion-modal
+      class="event-datetime-modal"
+      [keepContentsMounted]="true"
+      [initialBreakpoint]="1"
+      [breakpoints]="[0, 1]">
+      <ng-template>
+        <ion-datetime
+          id="datetimeEnd"
+          formControlName="ends"
+          [firstDayOfWeek]="1"
+          [locale]="localizeFormat$ | async"
+          presentation="date"
+          mode="ios"
+        ></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </ion-item>
+  <ion-item lines="none" class="notes-item">
+    <ion-label> {{ EditEventFormLocalize.Description | localize }} </ion-label>
+    <ion-textarea
+      color="dark" slot="end"
+      formControlName="description"
+      [autoGrow]="true"
+      [placeholder]="EditEventFormLocalize.DescriptionPlaceholder | localize"
+    ></ion-textarea>
+  </ion-item>
+</ion-list>
+
+<ion-button
+  mode="ios"
+  expand="block"
+  class="save-changes-button"
+  [disabled]="eventFormGroup.invalid || isDatesInvalid()"
+  (click)="saveChanges()">
+  {{ EditEventFormLocalize.SaveChanges | localize }}
+</ion-button>
+
+<div class="done-actions">
+  <ion-button mode="ios" size="small" color="light">
+    <ion-icon name="link-outline" slot="start"/>
+    <span> {{ EditEventFormLocalize.Link | localize }} </span>
+  </ion-button>
+  <ion-button mode="ios" size="small" color="light">
+    <ion-icon name="arrow-redo-outline" slot="end"/>
+    <span> {{ EditEventFormLocalize.GoTo | localize }} </span>
+  </ion-button>
+</div>

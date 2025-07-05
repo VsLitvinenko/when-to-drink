@@ -1,0 +1,52 @@
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: transparent;
+  ion-label {
+    margin: 1.25rem 0.5rem 1.25rem 0;
+  }
+}
+
+ion-textarea,
+ion-input {
+  text-align: end;
+  margin-right: 0.25rem;
+  width: 60% !important;
+}
+
+.notes-item {
+  ion-label {
+    margin-bottom: auto;
+  }
+  ion-textarea {
+    margin-top: 0.6rem;
+  }
+}
+
+.save-changes-button {
+  margin: 0.5rem 1rem;
+}
+
+.done-actions {
+  margin: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  ion-button {
+    flex-grow: 1;
+    --padding-top: 0.6rem;
+    --padding-bottom: 0.6rem;
+    --border-radius: 0.75rem;
+  }
+}
+
+::ng-deep {
+  .event-datetime-modal {
+    .ion-delegate-host {
+      padding: 0.75rem 0.25rem 2.5rem !important;
+      background-color: var(--ion-color-light, #f4f5f8) !important;
+    }
+  }
+}
