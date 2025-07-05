@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
     PageCommonModule,
     IonButton,
   ],
+  host: {
+    class: 'app-page-inner',
+  },
 })
 export class NotFoundPageComponent {
 

@@ -7,10 +7,11 @@
       [placeholder]="EditEventFormLocalize.NamePlaceholder | localize"
     ></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item (click)="startDateModal.present()">
     <ion-label> {{ EditEventFormLocalize.Starts | localize }} </ion-label>
     <ion-datetime-button datetime="datetimeStart"></ion-datetime-button>
     <ion-modal
+      #startDateModal
       class="event-datetime-modal"
       [keepContentsMounted]="true"
       [initialBreakpoint]="1"
@@ -27,10 +28,11 @@
       </ng-template>
     </ion-modal>
   </ion-item>
-  <ion-item>
+  <ion-item (click)="endDateModal.present()">
     <ion-label> {{ EditEventFormLocalize.Ends | localize }} </ion-label>
     <ion-datetime-button datetime="datetimeEnd"></ion-datetime-button>
     <ion-modal
+      #endDateModal
       class="event-datetime-modal"
       [keepContentsMounted]="true"
       [initialBreakpoint]="1"
