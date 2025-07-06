@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { IonAccordion, IonAccordionGroup, IonAvatar, IonModal } from '@ionic/angular/standalone';
+import { Component, inject } from '@angular/core';
+import { IonAccordion, IonAccordionGroup, IonAvatar, IonModal, IonPopover } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { AvatarsListComponent, UsersListComponent } from 'src/app/shared/components';
 import { EventMainInfoLocalize } from './event-main-info.localize';
+import { fakeUsers } from 'src/app/core/mock-data';
+import { Router } from '@angular/router';
+import { ToastService } from 'src/app/core/services';
+import { LocalizeService } from 'src/app/shared/localize';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-event-main-info',
@@ -14,16 +19,31 @@ import { EventMainInfoLocalize } from './event-main-info.localize';
     IonAccordion,
     IonAvatar,
     IonModal,
+    IonPopover,
     AvatarsListComponent,
     UsersListComponent,
   ],
 })
-export class EventMainInfoComponent  implements OnInit {
+export class EventMainInfoComponent {
   public readonly now = new Date();
+  public readonly imgSrc = fakeUsers[0].imgSrc;
+
+  private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
+  
+  private readonly localizeService = inject(LocalizeService);
   public readonly EventMainInfoLocalize = EventMainInfoLocalize;
 
   constructor() { }
 
-  ngOnInit() {}
+  public copyToClipboard(): void {
+    this.localizeService.localize(EventMainInfoLocalize.ClipboardLink)
+      .pipe(take(1))
+      .subscribe((message) => this.toast.light(message, 'clipboard-outline'));
+  }
+
+  public redirectToEdit(): void {
+    this.router.navigate(['edit']);
+  }
 
 }

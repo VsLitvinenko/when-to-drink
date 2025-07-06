@@ -17,6 +17,9 @@ import {
   arrowRedoOutline,
   linkOutline,
   cloudDoneOutline,
+  ellipsisVertical,
+  shareSocialOutline,
+  createOutline,
 } from 'ionicons/icons';
 import { take } from 'rxjs';
 
@@ -46,6 +49,9 @@ export class AppComponent implements OnInit {
       arrowRedoOutline,
       linkOutline,
       cloudDoneOutline,
+      ellipsisVertical,
+      shareSocialOutline,
+      createOutline,
     });
   }
 

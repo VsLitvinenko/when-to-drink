@@ -6,6 +6,10 @@ enum LocalizeEnum {
   Starts = 'Starts',
   Ends = 'Ends',
   Description = 'Description',
+  Share = 'Share',
+  Link = 'Link',
+  Edit = 'Edit',
+  ClipboardLink = 'ClipboardLink',
 }
 
 export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -28,5 +32,21 @@ export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
   Description: {
     en: 'Description',
     ru: 'Описание',
+  },
+  Share: {
+    en: 'Share',
+    ru: 'Поделиться',
+  },
+  Link: {
+    en: 'Link',
+    ru: 'Ссылка',
+  },
+  Edit: {
+    en: 'Edit',
+    ru: 'Изменить',
+  },
+  ClipboardLink: {
+    en: 'Link was copied to clipboard',
+    ru: 'Ссылка скопирована в буфер обмена',
   },
 };

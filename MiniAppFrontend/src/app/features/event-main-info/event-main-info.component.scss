@@ -2,12 +2,13 @@ ion-accordion-group {
   border-radius: 0.5rem;
 }
 
-ion-list {
+ion-list.info-list {
   margin-top: 0.5rem;
   background: transparent;
 }
 ion-item {
   --background: transparent;
+
   &.header-item {
     border-radius: 0.5rem;
     --padding-start: 0.75rem;
@@ -16,7 +17,20 @@ ion-item {
       width: 2.75rem !important;
       height: 2.75rem !important;
     }
+    .menu-button {
+      margin-right: -1rem;
+      ion-icon {
+        font-size: 1.25rem;
+      }
+    }
+    ::ng-deep {
+      .ion-accordion-toggle-icon {
+        position: absolute;
+        right: 3rem;
+      }
+    }
   }
+
   &.notes-item {
     ion-label {
       margin-bottom: auto;
@@ -26,6 +40,17 @@ ion-item {
       margin-left: max(20%, 2.5rem);
       text-align: end;
     }
+  }
+}
+
+ion-popover {
+  --offset-y: -0.25rem;
+  --offset-x: -0.6rem;
+  --width: auto;
+  .popover-menu-list {
+    padding: 0.25rem 0;
+    background-color: var(--ion-background-color-step-100);
+    white-space: nowrap;
   }
 }
 
