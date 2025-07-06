@@ -1,6 +1,7 @@
 import { AfterViewInit, Directive, effect, ElementRef, inject, Input, OnDestroy, Output, signal } from '@angular/core';
 import { fromEvent, map, merge, ReplaySubject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { IonDatetime, IonPopover } from '@ionic/angular/standalone';
+import { touchHoldEvent } from 'src/app/shared/helpers';
 import { VoteDate, VoteType } from '../models';
 import { groupBy } from 'lodash';
 import { format } from 'date-fns';
@@ -105,7 +106,10 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
         })),
         switchMap((dateButtons) => {
           const buttonClicks = dateButtons.map((target) => {
-            return fromEvent(target, 'contextmenu').pipe(
+            const menuEvent$ = fromEvent(target, 'contextmenu');
+            const touchEvent$ = touchHoldEvent(target);
+            // any of right click or touch events
+            return merge(menuEvent$, touchEvent$).pipe(
               tap((event) => event.preventDefault()),
               map((event) => ({ ...event, target, }))
             );
