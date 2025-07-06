@@ -9,7 +9,7 @@ enum LocalizeEnum {
   SelectSpecificStatus = 'SelectSpecificStatus',
   DoNotForgetSave = 'DoNotForgetSave',
   Clear = 'Clear',
-  Reset = 'Reset',
+  Cancel = 'Cancel',
   Save = 'Save',
   StartTime = 'StartTime',
   EndTime = 'EndTime',
@@ -50,9 +50,9 @@ export const VoteCalendarLocalize: LocalizationPreset<LocalizeEnum> = {
     en: 'Clear',
     ru: 'Очистить',
   },
-  Reset: {
-    en: 'Reset',
-    ru: 'Сброс',
+  Cancel: {
+    en: 'Cancel',
+    ru: 'Отмена',
   },
   Save: {
     en: 'Save',
