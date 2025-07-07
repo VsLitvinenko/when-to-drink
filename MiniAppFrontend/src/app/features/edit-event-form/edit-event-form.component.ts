@@ -4,7 +4,7 @@ import { SharedFeatureModule } from 'src/app/shared';
 import { EditEventFormLocalize } from './edit-event-form.localize';
 import { LocalizeService } from 'src/app/shared/localize';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { endOfMonth, format, startOfMonth } from 'date-fns';
+import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ToastService } from 'src/app/core/services';
 import { take } from 'rxjs';
@@ -25,24 +25,24 @@ import { take } from 'rxjs';
 })
 export class EditEventFormComponent {
 
-  private readonly startOfMonth = format(startOfMonth(new Date()), 'yyyy-MM-dd');
-  private readonly endOfMonth = format(endOfMonth(new Date()), 'yyyy-MM-dd');
+  private readonly startVal = format(new Date(), 'yyyy-MM-dd');
+  private readonly endVal = format(addMonths(new Date(), 1), 'yyyy-MM-dd');
 
   public readonly eventFormGroup = new FormGroup({
     name: new FormControl(null, Validators.required),
-    starts: new FormControl(this.startOfMonth, Validators.required),
-    ends: new FormControl(this.endOfMonth, Validators.required),
+    starts: new FormControl(this.startVal, Validators.required),
+    ends: new FormControl(this.endVal, Validators.required),
     description: new FormControl(null),
   });
 
   private readonly startDate = toSignal(
     this.eventFormGroup.controls.starts.valueChanges,
-    { initialValue: this.startOfMonth }
+    { initialValue: this.startVal }
   );
 
   private readonly endDate = toSignal(
     this.eventFormGroup.controls.ends.valueChanges,
-    { initialValue: this.endOfMonth }
+    { initialValue: this.endVal }
   );
 
   public readonly isDatesInvalid = computed(() => {
