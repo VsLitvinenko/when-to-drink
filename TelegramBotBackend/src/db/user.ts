@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
+export const UserSchema = new mongoose.Schema({
   tgId: {
     type: Number,
     required: true,
@@ -33,8 +33,3 @@ UserSchema.virtual('fullName').get(function() {
 });
 
 export const UserModel = mongoose.model('User', UserSchema);
-
-export const getUserById = (id: any) => UserModel.findById(id);
-export const getUserByTgId = (tgId: number) => UserModel.findOne({ tgId });
-export const createUser = (values: Record<string, any>) => new UserModel(values);
-export const updateUser = (id: any, values: Record<string, any>) => UserModel.findByIdAndUpdate(id, values);
