@@ -17,15 +17,15 @@ export const ResultFiltersLocalize: LocalizationPreset<LocalizeEnum> = {
   },
   Consider: {
     en: 'Consider',
-    ru: 'Исключить',
+    ru: 'Включить',
   },
   Maybe: {
     en: 'Maybe',
-    ru: 'возможно',
+    ru: 'Возможно',
   },
   Time: {
     en: 'Time',
-    ru: 'время',
+    ru: 'Время',
   },
   IgnorePastDates: {
     en: 'Ignore past dates',
