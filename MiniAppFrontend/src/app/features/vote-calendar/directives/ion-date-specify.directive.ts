@@ -103,6 +103,7 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
           b.style.boxShadow = 'none';
           b.style.fontWeight = '400';
           b.style.fontSize = '1.25rem';
+          b.style.transition = 'background-color 250ms, color 250ms';
         })),
         switchMap((dateButtons) => {
           const buttonClicks = dateButtons.map((target) => {
