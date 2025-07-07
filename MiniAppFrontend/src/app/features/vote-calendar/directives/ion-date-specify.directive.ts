@@ -1,12 +1,12 @@
 import { AfterViewInit, Directive, effect, ElementRef, inject, Input, OnDestroy, Output, signal } from '@angular/core';
-import { fromEvent, map, merge, ReplaySubject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { fromEvent, map, merge, ReplaySubject, switchMap, take, takeUntil, tap, throttleTime } from 'rxjs';
 import { IonDatetime, IonPopover } from '@ionic/angular/standalone';
 import { touchHoldEvent } from 'src/app/shared/helpers';
 import { VoteDate, VoteType } from '../models';
 import { groupBy } from 'lodash';
 import { format } from 'date-fns';
 
-const focusButtonBg = 'rgba(var(--ion-color-base-rgb), 0.2)';
+const focusButtonBg = 'var(--ion-background-color-step-50, #fff)';
 const formatVoteDate = (date: Date) => format(date, 'yyyy-MM-dd');
 
 @Directive({
@@ -111,7 +111,8 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
             // any of right click or touch events
             return merge(menuEvent$, touchEvent$).pipe(
               tap((event) => event.preventDefault()),
-              map((event) => ({ ...event, target, }))
+              map((event) => ({ ...event, target, })),
+              throttleTime(500),
             );
           });
           return merge(...buttonClicks);
