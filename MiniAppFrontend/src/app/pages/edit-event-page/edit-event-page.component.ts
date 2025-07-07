@@ -3,7 +3,7 @@ import { PageCommonModule } from 'src/app/shared';
 import { EditEventFormComponent } from 'src/app/features/edit-event-form';
 import { IonButton } from '@ionic/angular/standalone';
 import { LocalizeService } from 'src/app/shared/localize';
-import { ToastService } from 'src/app/core/services';
+import { TelegramService, ToastService } from 'src/app/core/services';
 import { EditEventPageLocalize } from './edit-event-page.localize';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
@@ -25,6 +25,7 @@ export class EditEventPageComponent {
 
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
+  private readonly tg = inject(TelegramService);
   
   private readonly localizeService = inject(LocalizeService);
   public readonly EditEventPageLocalize = EditEventPageLocalize;
@@ -35,6 +36,12 @@ export class EditEventPageComponent {
     this.localizeService.localize(EditEventPageLocalize.ClipboardLink)
       .pipe(take(1))
       .subscribe((message) => this.toast.light(message, 'clipboard-outline'));
+  }
+
+  public share(): void {
+    const url = 'vslitvinenko.github.io/when-to-drink';
+    const text = 'whoever reads this will die';
+    this.tg.share(url, text);
   }
 
   public redirectToEvent(): void {

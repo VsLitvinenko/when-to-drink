@@ -20,6 +20,7 @@ import {
   ellipsisVertical,
   shareSocialOutline,
   createOutline,
+  arrowForward,
 } from 'ionicons/icons';
 import { take } from 'rxjs';
 
@@ -52,6 +53,7 @@ export class AppComponent implements OnInit {
       ellipsisVertical,
       shareSocialOutline,
       createOutline,
+      arrowForward,
     });
   }
 

@@ -5,7 +5,7 @@ import { AvatarsListComponent, UsersListComponent } from 'src/app/shared/compone
 import { EventMainInfoLocalize } from './event-main-info.localize';
 import { fakeUsers } from 'src/app/core/mock-data';
 import { Router } from '@angular/router';
-import { ToastService } from 'src/app/core/services';
+import { TelegramService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
 import { take } from 'rxjs';
 
@@ -30,6 +30,7 @@ export class EventMainInfoComponent {
 
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
+  private readonly tg = inject(TelegramService);
   
   private readonly localizeService = inject(LocalizeService);
   public readonly EventMainInfoLocalize = EventMainInfoLocalize;
@@ -40,6 +41,12 @@ export class EventMainInfoComponent {
     this.localizeService.localize(EventMainInfoLocalize.ClipboardLink)
       .pipe(take(1))
       .subscribe((message) => this.toast.light(message, 'clipboard-outline'));
+  }
+
+  public share(): void {
+    const url = 'vslitvinenko.github.io/when-to-drink';
+    const text = 'whoever reads this will die';
+    this.tg.share(url, text);
   }
 
   public redirectToEdit(): void {

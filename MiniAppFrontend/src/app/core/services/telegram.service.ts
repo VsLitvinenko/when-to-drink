@@ -28,6 +28,11 @@ export class TelegramService {
     this.miniApp$.subscribe((val) => console.log(val));
   }
 
+  public share(url: string, text?: string): void {
+    const tgUrl = `https://t.me/share/url?url=${url}&text=${text}`;
+    this.miniApp$.subscribe((val) => val.openTelegramLink(tgUrl));
+  }
+
   private getTelegramMiniApp(): Observable<any> {
     return !environment.isTelegramMiniApp
       ? EMPTY
