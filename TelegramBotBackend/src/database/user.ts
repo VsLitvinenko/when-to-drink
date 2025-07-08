@@ -47,4 +47,8 @@ export type PUser = Partial<IUser>;
 export const getUserById = (id: any) => UserModel.findById(id);
 export const getUserByTgId = (tgId: number) => UserModel.findOne({ tgId });
 export const createUser = (val: IUser) => new UserModel(val).save().then((user) => user.toObject());
-export const updateUser = (id: any, val: PUser) => UserModel.findByIdAndUpdate(id, val);
+
+export const updateUser = (id: any, val: PUser) =>
+  UserModel.findByIdAndUpdate(id, val)
+    .then((user) => user.save())
+    .then((user) => user.toObject());

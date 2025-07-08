@@ -55,4 +55,8 @@ export type PEvent = Partial<IEvent>;
 
 export const getEventById = (id: any) => UEventModel.findById(id);
 export const createEvent = (val: IEvent) => new UEventModel(val).save().then((uEvent) => uEvent.toObject());
-export const updateEvent = (id: any, val: PEvent) => UEventModel.findByIdAndUpdate(id, val);
+
+export const updateEvent = (id: any, val: PEvent) =>
+  UEventModel.findByIdAndUpdate(id, val)
+    .then((event) => event.save())
+    .then((event) => event.toObject());
