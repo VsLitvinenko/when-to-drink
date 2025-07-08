@@ -1,4 +1,3 @@
-import { UVoteSchema } from './uvote';
 import mongoose from 'mongoose';
 
 export const UEventSchema = new mongoose.Schema({
@@ -20,9 +19,11 @@ export const UEventSchema = new mongoose.Schema({
     required: true,
   },
   votes: {
-    type: Map,
-    of: UVoteSchema,
-    default: () => {},
+    type: [{
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'UVote',
+    }],
+    default: () => ([] as any[]),
   },
   description: String,
   createdAt: {
@@ -60,9 +61,18 @@ export interface IEventDb extends IEvent {
 export type PEvent = Partial<IEvent>;
 
 export const getEventById = (id: any) => UEventModel.findById(id);
+export const isEventExist = (id: any) => UEventModel.exists({ _id: id }).then((exist) => exist?._id);
 export const createEvent = (val: IEvent) => new UEventModel(val).save().then((uEvent) => uEvent.toObject());
 
 export const updateEvent = (id: any, val: PEvent) =>
   UEventModel.findByIdAndUpdate(id, val)
     .then((event) => event.save())
     .then((event) => event.toObject());
+
+export const addVoteToEvent = (eventId: any, voteId: any) =>
+  UEventModel.updateOne(
+    { _id: eventId },
+    { $addToSet: { votes: voteId } }
+  );
+
+

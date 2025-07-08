@@ -1,6 +1,6 @@
 import { RequestHandler, Response } from 'express';
 import { getAuthData } from './auth.middleware';
-import { createUser, getUserByTgId, IUser, updateUser } from '../database';
+import { createUser, isTgUserExist, IUser, updateUser } from '../database';
 import { InitData } from '@telegram-apps/init-data-node';
 
 const userIdKey = 'dbUserId';
@@ -12,10 +12,10 @@ export const dbUserMiddleware: RequestHandler = async (req, res, next) => {
   }
   try {
     const authData = getAuthData(res);
-    const user = await getUserByTgId(authData.user.id);
+    const dbId = await isTgUserExist(authData.user.id);
     const iUser = formatIUser(authData);
-    console.log(!user ? 'CREATE DB USER' : 'UPDATE DB USER');
-    const userAsync = !user ? createUser(iUser) : updateUser(user._id, iUser);
+    console.log(!dbId ? 'CREATE DB USER' : 'UPDATE DB USER');
+    const userAsync = !dbId ? createUser(iUser) : updateUser(dbId, iUser);
     res.locals[userIdKey] = (await userAsync)._id;
     return next();
   } catch (e) {
