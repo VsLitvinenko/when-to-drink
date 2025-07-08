@@ -42,6 +42,12 @@ export interface IUser {
   photoUrl: string;
 };
 
+export interface IUserDb extends IUser {
+  _id: any;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export type PUser = Partial<IUser>;
 
 export const getUserById = (id: any) => UserModel.findById(id);

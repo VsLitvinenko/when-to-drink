@@ -51,6 +51,12 @@ export interface IEvent {
   description?: string;
 }
 
+export interface IEventDb extends IEvent {
+  _id: any;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export type PEvent = Partial<IEvent>;
 
 export const getEventById = (id: any) => UEventModel.findById(id);
