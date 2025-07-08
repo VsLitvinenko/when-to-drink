@@ -42,3 +42,17 @@ UEventSchema.pre('save', function(next) {
 });
 
 export const UEventModel = mongoose.model('UEvent', UEventSchema);
+
+export interface IEvent {
+  creator: any;
+  name: string;
+  starts: string;
+  ends: string;
+  description?: string;
+}
+
+export type PEvent = Partial<IEvent>;
+
+export const getEventById = (id: any) => UEventModel.findById(id);
+export const createEvent = (val: IEvent) => new UEventModel(val).save().then((uEvent) => uEvent.toObject());
+export const updateEvent = (id: any, val: PEvent) => UEventModel.findByIdAndUpdate(id, val);

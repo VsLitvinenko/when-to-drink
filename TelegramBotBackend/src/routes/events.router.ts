@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { eventGetOneHandle, eventPatchHandle, eventPostHandle } from 'handlers/events';
+import { eventGetOneHandle, eventPatchHandle, eventPostHandle } from '../handlers/events';
 
 export const eventsRouter = Router();
 

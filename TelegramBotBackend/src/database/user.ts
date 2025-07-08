@@ -1,4 +1,4 @@
-import mongoose, { Types } from 'mongoose';
+import mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema({
   tgId: {
@@ -44,7 +44,7 @@ export interface IUser {
 
 export type PUser = Partial<IUser>;
 
-export const getUserById = (id: Types.ObjectId) => UserModel.findById(id);
+export const getUserById = (id: any) => UserModel.findById(id);
 export const getUserByTgId = (tgId: number) => UserModel.findOne({ tgId });
-export const createUser = (values: IUser) => new UserModel(values).save().then((user) => user.toObject());
-export const updateUser = (id: any, values: PUser) => UserModel.findByIdAndUpdate(id, values);
+export const createUser = (val: IUser) => new UserModel(val).save().then((user) => user.toObject());
+export const updateUser = (id: any, val: PUser) => UserModel.findByIdAndUpdate(id, val);

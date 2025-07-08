@@ -12,7 +12,7 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
     return next(new Error('You are not authorized'));
   }
   try {
-    validate(authData, env.tgBotToken, { expiresIn: 3600 });
+    validate(authData, env.tgBotToken, { expiresIn: 3600 * 24 });
     res.locals[authDataKey] = parse(authData);
     return next();
   } catch (e) {
