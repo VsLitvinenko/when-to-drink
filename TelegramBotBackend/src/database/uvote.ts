@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { IUserDb } from './user';
 
 export const UVoteSchema = new mongoose.Schema({
   user: {
@@ -54,6 +55,10 @@ export interface IVoteDb extends IVote {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export interface IVoteUserDb extends IVoteDb {
+  user: IUserDb;
+}
 
 export type PVote = Omit<IVote, 'user' | 'event'>;
 
