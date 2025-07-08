@@ -1,5 +1,5 @@
 import { authMiddleware, dbUserMiddleware, errorHandleMiddleware, getAuthData, getDbUserId } from './middlewares';
-import { eventsRouter, votesRouter } from './routes';
+import { eventsRouter, resultsRouter, votesRouter } from './routes';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
@@ -17,16 +17,17 @@ export const initServer = () => {
   app.use(dbUserMiddleware);
 
   // health check
-  app.get('/health', (req, res) => {
+  app.post('/health', (req, res) => {
     const authData = getAuthData(res);
     const dbUserId = getDbUserId(res);
     console.log('TG AUTH DATA', authData);
-    res.json({ id: dbUserId }).end();
+    res.json({ tgAuth: authData, dbId: dbUserId });
   });
 
   // routes
   app.use('/api/events', eventsRouter);
   app.use('/api/votes', votesRouter);
+  app.use('/api/results', resultsRouter);
 
   // error handler
   app.use(errorHandleMiddleware);
