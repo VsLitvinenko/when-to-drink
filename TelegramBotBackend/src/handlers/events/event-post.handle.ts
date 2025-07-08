@@ -2,6 +2,9 @@ import { getDbUserId } from '../../middlewares';
 import { createEvent } from '../../database';
 import { Request, Response } from 'express';
 
+
+/*-------------------------types-------------------------*/
+
 type ReqBody = {
   name: string;
   starts: string;
@@ -12,6 +15,8 @@ type ReqBody = {
 type ReqRes = {
   id: string;
 };
+
+/*-------------------------request-------------------------*/
 
 export async function eventPostHandle(
   req: Request<{}, ReqRes, ReqBody>,
@@ -27,6 +32,5 @@ export async function eventPostHandle(
     throw new Error('Cannot get request creator');
   }
   const event = await createEvent({ ...body, creator});
-  console.log(event);
   res.status(200).json({ id: String(event._id) });
 }

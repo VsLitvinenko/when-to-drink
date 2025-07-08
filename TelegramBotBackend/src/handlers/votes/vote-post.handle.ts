@@ -2,6 +2,9 @@ import { addVoteToEvent, createVote, isEventExist, isVoteExist, updateVote } fro
 import { getDbUserId } from '../../middlewares';
 import { Request, Response } from 'express';
 
+
+/*-------------------------types-------------------------*/
+
 type ReqQuery = {
   eventId: string;
 }
@@ -16,6 +19,8 @@ type ReqBody = {
 };
 
 type ReqRes = ReqBody;
+
+/*-------------------------request-------------------------*/
 
 export async function votePostHandle(
   req: Request<{}, ReqRes, ReqBody, ReqQuery>,
@@ -45,6 +50,5 @@ export async function votePostHandle(
     start: d.start ? d.start.toISOString() : undefined,
     end: d.end ? d.end.toISOString() : undefined,
   }));
-  console.log(vote);
   res.status(200).json({ dates });
 }

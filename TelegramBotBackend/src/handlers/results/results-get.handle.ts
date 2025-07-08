@@ -68,7 +68,6 @@ export async function resultGetHandle(
     }));
     return { date, voteType, start, end, users };
   });
-  console.log(votes);
   // json result
   res.status(200).json({
     eventId: String(event),

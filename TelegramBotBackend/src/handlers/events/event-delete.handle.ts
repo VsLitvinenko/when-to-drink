@@ -2,16 +2,22 @@ import { getDbUserId } from './../../middlewares';
 import { getEventById } from '../../database';
 import { Request, Response } from 'express';
 
+
+/*-------------------------types-------------------------*/
+
 type ReqPar = {
   id: string;
 };
 
 type ReqRes = { id: string };
 
+/*-------------------------request-------------------------*/
+
 export async function eventDeleteHandle(
   req: Request<ReqPar, ReqRes>,
   res: Response<ReqRes>
 ) {
+  // TODO remove votes when delete event
   const creator = getDbUserId(res);
   const event = await getEventById(req.params.id);
   if (!event) {
@@ -22,6 +28,5 @@ export async function eventDeleteHandle(
     throw new Error('You have no rights to delete this event');
   }
   await event.deleteOne();
-  console.log(event);
   res.status(200).json({ id: String(event._id) });
 }

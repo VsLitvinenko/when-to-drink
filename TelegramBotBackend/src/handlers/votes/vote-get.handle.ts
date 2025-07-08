@@ -2,6 +2,9 @@ import { getVoteById, isEventExist, isTgUserExist, isVoteExist } from '../../dat
 import { getAuthData } from '../../middlewares';
 import { Request, Response } from 'express';
 
+
+/*-------------------------types-------------------------*/
+
 type ReqQuery = {
   eventId: string;
 }
@@ -14,6 +17,8 @@ type ReqRes = {
     end?: string;
   }>;
 };
+
+/*-------------------------request-------------------------*/
 
 export async function voteGetHandle(
   req: Request<{}, ReqRes, {}, ReqQuery>,
@@ -29,7 +34,6 @@ export async function voteGetHandle(
   const voteId = await isVoteExist(user, event);
   if (!voteId) {
     // user has not voted yet
-    console.log('user has not voted yet');
     res.status(200).json({ dates: [] });
     return;
   }
@@ -40,6 +44,5 @@ export async function voteGetHandle(
     start: d.start ? d.start.toISOString() : undefined,
     end: d.end ? d.end.toISOString() : undefined,
   }));
-  console.log(vote);
   res.status(200).json({ dates });
 }

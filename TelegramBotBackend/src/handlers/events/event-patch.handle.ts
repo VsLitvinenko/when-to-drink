@@ -2,6 +2,9 @@ import { getDbUserId } from './../../middlewares';
 import { getEventById, updateEvent } from '../../database';
 import { Request, Response } from 'express';
 
+
+/*-------------------------types-------------------------*/
+
 type ReqPar = {
   id: string;
 };
@@ -14,6 +17,8 @@ type ReqBody = {
 };
 
 type ReqRes = ReqBody & { id: string };
+
+/*-------------------------request-------------------------*/
 
 export async function eventPatchHandle(
   req: Request<ReqPar, ReqRes, ReqBody>,
@@ -30,7 +35,6 @@ export async function eventPatchHandle(
     throw new Error('You have no rights to modify this event');
   }
   const newEvent = await updateEvent(event._id, body);
-  console.log(newEvent);
   res.status(200).json({
     id: String(newEvent._id),
     name: newEvent.name,

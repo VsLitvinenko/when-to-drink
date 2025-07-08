@@ -1,6 +1,9 @@
 import { getEventById, isEventExist, IUserDb, IVoteUserDb } from '../../database';
 import { Request, Response } from 'express';
 
+
+/*-------------------------types-------------------------*/
+
 type ReqPar = {
   id: string;
 };
@@ -21,6 +24,8 @@ type ReqRes = {
   }>;
 };
 
+/*-------------------------request-------------------------*/
+
 export async function eventGetHandle(
   req: Request<ReqPar, ReqRes>,
   res: Response<ReqRes>
@@ -39,7 +44,6 @@ export async function eventGetHandle(
         model: 'User',
       },
     });
-  console.log(event);
   const creator = event.creator;
   const mappedUsers = event.votes.map((vote) => ({
     fullName: `${vote.user.firstName} ${vote.user.lastName}`,
