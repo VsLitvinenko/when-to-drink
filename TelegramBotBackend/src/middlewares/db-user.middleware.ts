@@ -3,13 +3,13 @@ import { getAuthData } from './auth.middleware';
 import { createUser, getUserByTgId, IUser, updateUser } from '../database';
 import { InitData } from '@telegram-apps/init-data-node';
 
-const userIdKey = 'initData';
+const userIdKey = 'dbUserId';
 const handleMethods = new Set(['POST', 'PUT', 'PATCH']);
 
 export const dbUserMiddleware: RequestHandler = async (req, res, next) => {
-  // if (!handleMethods.has(req.method)) {
-  //   return next();
-  // }
+  if (!handleMethods.has(req.method)) {
+    return next();
+  }
   try {
     const authData = getAuthData(res);
     const user = await getUserByTgId(authData.user.id);
