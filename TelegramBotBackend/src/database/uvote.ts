@@ -15,8 +15,12 @@ export const UVoteSchema = new mongoose.Schema({
   dates: {
     required: true,
     type: [{
+      voteType: {
+        type: String,
+        enum: ['ready', 'maybe', 'time'],
+        default: 'ready',
+      },
       date: { type: Date, required: true },
-      voteType: { type: String, required: true },
       start: Date,
       end: Date,
     }],
@@ -63,6 +67,7 @@ export interface IVoteUserDb extends IVoteDb {
 export type PVote = Omit<IVote, 'user' | 'event'>;
 
 export const getVoteById = (id: any) => UVoteModel.findById(id);
+export const getAllEventVotes = (event: any) => UVoteModel.find({ event });
 export const isVoteExist = (user: any, event: any) => UVoteModel.exists({ user, event }) .then((exist) => exist?._id);
 export const createVote = (val: IVote) => new UVoteModel(val).save().then((vote) => vote.toObject());
 
