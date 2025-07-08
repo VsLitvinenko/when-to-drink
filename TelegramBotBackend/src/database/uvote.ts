@@ -15,7 +15,7 @@ export const UVoteSchema = new mongoose.Schema({
     required: true,
     type: [{
       date: { type: Date, required: true },
-      type: { type: String, required: true },
+      voteType: { type: String, required: true },
       start: Date,
       end: Date,
     }],
@@ -37,3 +37,31 @@ UVoteSchema.pre('save', function(next) {
 });
 
 export const UVoteModel = mongoose.model('UVote', UVoteSchema);
+
+export interface IVote {
+  user: any;
+  event: any;
+  dates: Array<{
+    date: string;
+    voteType: string;
+    start?: string;
+    end?: string;
+  }>;
+};
+
+export interface IVoteDb extends IVote {
+  _id: any;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type PVote = Omit<IVote, 'user' | 'event'>;
+
+export const getVoteById = (id: any) => UVoteModel.findById(id);
+export const isVoteExist = (user: any, event: any) => UVoteModel.exists({ user, event }) .then((exist) => exist?._id);
+export const createVote = (val: IVote) => new UVoteModel(val).save().then((vote) => vote.toObject());
+
+export const updateVote = (id: any, val: PVote) =>
+  UVoteModel.findByIdAndUpdate(id, val)
+    .then((vote) => vote.save())
+    .then((vote) => vote.toObject());
