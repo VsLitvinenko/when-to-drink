@@ -2,7 +2,6 @@ import { RequestHandler, Response } from 'express';
 import { getAuthData } from './auth.middleware';
 import { createUser, getUserByTgId, IUser, updateUser } from '../database';
 import { InitData } from '@telegram-apps/init-data-node';
-import { ApiError } from '../common';
 
 const userIdKey = 'initData';
 const handleMethods = new Set(['POST', 'PUT', 'PATCH']);
@@ -20,9 +19,8 @@ export const dbUserMiddleware: RequestHandler = async (req, res, next) => {
     res.locals[userIdKey] = (await userAsync)._id;
     return next();
   } catch (e) {
-    const err = new ApiError(400, 'Update user error');
-    console.log(e);
-    return next(err);
+    res.status(400);
+    return next(e);
   }
 }
 

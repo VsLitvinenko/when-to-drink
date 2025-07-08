@@ -4,11 +4,11 @@ import cors from 'cors';
 import compression from 'compression';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import appSecrets from '../.appsecrets.json';
+import env from '../.environment.json';
 import TelegramBot from 'node-telegram-bot-api';
-import { authMiddleware, dbUserMiddleware, getAuthData, getDbUserId } from './middlewares';
+import { authMiddleware, dbUserMiddleware, errorHandleMiddleware, getAuthData, getDbUserId } from './middlewares';
 
-const bot = new TelegramBot(appSecrets.tgBotToken, { polling: true });
+const bot = new TelegramBot(env.tgBotToken, { polling: true });
 bot.on('message', async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
@@ -20,7 +20,7 @@ bot.on('message', async (msg) => {
           inline_keyboard: [
             [{
               text: 'Create New Event',
-              web_app: { url: appSecrets.webAppUrl },
+              web_app: { url: env.webAppUrl },
             }],
           ],
         },
@@ -50,10 +50,13 @@ app.get('/api', (req, res) => {
   res.json({ id: dbUserId }).end();
 });
 
+// error handler
+app.use(errorHandleMiddleware);
+
 const server = http.createServer(app);
 server.listen(8080);
 
 mongoose.Promise = Promise;
-mongoose.connect(appSecrets.dbConnection);
+mongoose.connect(env.dbConnection);
 mongoose.connection.on('connected', () => console.log('mongo connected'));
 mongoose.connection.on('error', (err: Error) => console.log(err));
