@@ -1,4 +1,5 @@
 import { authMiddleware, dbUserMiddleware, errorHandleMiddleware, getAuthData, getDbUserId } from './middlewares';
+import { eventsRouter } from './routes';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
@@ -22,6 +23,8 @@ export const initServer = () => {
     console.log('TG AUTH DATA', authData);
     res.json({ id: dbUserId }).end();
   });
+
+  app.use('/api/events', eventsRouter);
 
   // error handler
   app.use(errorHandleMiddleware);
