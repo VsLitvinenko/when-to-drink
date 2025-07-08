@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { EMPTY, filter, map, Observable, of, shareReplay } from 'rxjs';
 import { AppColorScheme } from './theme.service';
 import { environment } from 'src/environments/environment';
+import { Localization } from 'src/app/shared/localize';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,12 @@ export class TelegramService {
 
   private readonly miniApp$ = this.getTelegramMiniApp();
 
+  public readonly initData$ = this.miniApp$.pipe(
+    map((miniApp) => miniApp.initData as string),
+    filter(Boolean),
+    shareReplay(1)
+  );
+
   public readonly colorScheme$ = this.miniApp$.pipe(
     map((miniApp) => miniApp.colorScheme as AppColorScheme),
     filter(Boolean),
@@ -17,7 +24,7 @@ export class TelegramService {
   );
 
   public readonly languageCode$ = this.miniApp$.pipe(
-    map((miniApp) => miniApp.initDataUnsafe?.user?.language_code),
+    map((miniApp) => miniApp.initDataUnsafe?.user?.language_code as Localization),
     filter(Boolean),
     shareReplay(1)
   );
