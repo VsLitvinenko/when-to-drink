@@ -62,6 +62,6 @@ export const isVoteExist = (user: any, event: any) => UVoteModel.exists({ user, 
 export const createVote = (val: IVote) => new UVoteModel(val).save().then((vote) => vote.toObject());
 
 export const updateVote = (id: any, val: PVote) =>
-  UVoteModel.findByIdAndUpdate(id, val)
+  UVoteModel.findByIdAndUpdate(id, val, { new: true })
     .then((vote) => vote.save())
     .then((vote) => vote.toObject());

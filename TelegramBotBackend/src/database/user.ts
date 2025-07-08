@@ -56,6 +56,6 @@ export const isTgUserExist = (tgId: number) => UserModel.exists({ tgId }).then((
 export const createUser = (val: IUser) => new UserModel(val).save().then((user) => user.toObject());
 
 export const updateUser = (id: any, val: PUser) =>
-  UserModel.findByIdAndUpdate(id, val)
+  UserModel.findByIdAndUpdate(id, val, { new: true })
     .then((user) => user.save())
     .then((user) => user.toObject());
