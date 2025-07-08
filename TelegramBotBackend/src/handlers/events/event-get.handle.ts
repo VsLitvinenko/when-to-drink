@@ -1,4 +1,4 @@
-import { getEventById, isEventExist, IUserDb, IVoteUserDb } from './../../database';
+import { getEventById, isEventExist, IUserDb, IVoteUserDb } from '../../database';
 import { Request, Response } from 'express';
 
 type ReqPar = {
@@ -21,7 +21,7 @@ type ReqRes = {
   }>;
 };
 
-export async function eventGetOneHandle(
+export async function eventGetHandle(
   req: Request<ReqPar, ReqRes>,
   res: Response<ReqRes>
 ) {
