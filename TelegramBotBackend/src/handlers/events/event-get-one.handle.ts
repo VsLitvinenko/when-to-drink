@@ -22,6 +22,10 @@ export async function eventGetOneHandle(
   res: Response<ReqRes>
 ) {
   const event = await getEventById(req.params.id).populate<{ creator: IUserDb }>('creator');
+  if (!event) {
+    res.status(404);
+    throw new Error('Cannot find event');
+  }
   const creator = event.creator;
   console.log(event);
   res.status(200).json({

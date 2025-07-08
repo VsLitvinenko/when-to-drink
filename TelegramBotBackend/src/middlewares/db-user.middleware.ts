@@ -4,7 +4,7 @@ import { createUser, getUserByTgId, IUser, updateUser } from '../database';
 import { InitData } from '@telegram-apps/init-data-node';
 
 const userIdKey = 'dbUserId';
-const handleMethods = new Set(['POST', 'PUT', 'PATCH']);
+const handleMethods = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
 export const dbUserMiddleware: RequestHandler = async (req, res, next) => {
   if (!handleMethods.has(req.method)) {
