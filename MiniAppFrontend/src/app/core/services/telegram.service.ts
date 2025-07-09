@@ -32,7 +32,7 @@ export class TelegramService {
   constructor() { }
 
   public initApp(): void {
-    this.miniApp$.subscribe((val) => console.log(val));
+    this.miniApp$.subscribe((val) => console.log('TG AUTH', val.initData));
   }
 
   public share(url: string, text?: string): void {
