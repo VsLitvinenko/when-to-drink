@@ -21,8 +21,8 @@ export class ResultViewDirective {
     return this.dates().filter((date) =>
       date.users.length >= this.min()
       && (!this.trimPast() || date.date >= this.today)
-      && (this.maybe() || date.type !== VoteType.Maybe)
-      && (this.time() || date.type !== VoteType.Time)
+      && (this.maybe() || date.voteType !== VoteType.Maybe)
+      && (this.time() || date.voteType !== VoteType.Time)
     );
   });
 

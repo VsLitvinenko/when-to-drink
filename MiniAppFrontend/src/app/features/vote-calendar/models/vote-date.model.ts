@@ -6,7 +6,7 @@ export enum VoteType {
 
 export interface VoteDate {
   date: Date;
-  type: VoteType;
+  voteType: VoteType;
   start?: Date;
   end?: Date; 
 }

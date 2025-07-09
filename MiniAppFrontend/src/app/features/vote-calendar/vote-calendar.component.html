@@ -26,7 +26,7 @@
   <ion-datetime
     #appIonDateSpecify="appIonDateSpecify"
     appIonDateSpecify
-    [voteDates]="voteDates"
+    [voteDates]="(voteDates$ | async) ?? []"
     (focusedTimeChanges)="updateTime($event)"
     [popover]="popover"
     [multiple]="true"
@@ -37,11 +37,11 @@
   ></ion-datetime>
 
   <ion-buttons class="vote-calendar-actions" mode="ios">
-    <ion-button color="medium" (click)="clearDates()">
+    <ion-button color="medium" (click)="this.clearDates$.next(true)">
       {{ VoteCalendarLocalize.Clear | localize }}
     </ion-button>
     <div class="right">
-      <ion-button color="danger" (click)="resetDates()">
+      <ion-button color="danger" (click)="this.resetDates$.next(true)">
         {{ VoteCalendarLocalize.Cancel | localize }}
       </ion-button>
       <ion-button color="primary" (click)="saveDates(appIonDateSpecify.voteDates)">

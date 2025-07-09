@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView } from '@ionic/angular/standalone';
 import { EventMainInfoComponent } from 'src/app/features/event-main-info';
 import { ResultFiltersComponent } from 'src/app/features/result-filters';
@@ -32,6 +32,8 @@ import { VotePageLocalize } from './vote-event-page.localize';
   },
 })
 export class VoteEventPageComponent  implements OnInit {
+  public readonly eventId = input.required<string>();
+
   public readonly ViewPick = ViewPick;
   public readonly VotePageLocalize = VotePageLocalize;
 

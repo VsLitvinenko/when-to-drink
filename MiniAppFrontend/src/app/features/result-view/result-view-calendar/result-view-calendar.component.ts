@@ -44,7 +44,7 @@ export class ResultViewCalendarComponent {
         ionDate.highlightedDates = [];
         return;
       } else {
-        const grouped = groupBy(filteredDates, 'type');
+        const grouped = groupBy(filteredDates, 'voteType');
         const ready = grouped[VoteType.Ready] ?? [];
         const maybe = grouped[VoteType.Maybe] ?? [];
         const time = grouped[VoteType.Time] ?? [];

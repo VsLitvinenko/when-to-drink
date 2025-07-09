@@ -15,8 +15,8 @@
     <ion-item (click)="infoModal.present(sDate)" button lines="none">
       <ion-icon
         slot="start"
-        [color]="Helpers.getColorByType(sDate.type)"
-        [name]="Helpers.getIconByType(sDate.type)"
+        [color]="Helpers.getColorByType(sDate.voteType)"
+        [name]="Helpers.getIconByType(sDate.voteType)"
       ></ion-icon>
       <ion-label>
         {{ sDate.date | date : 'dd.MM.yyyy' }}

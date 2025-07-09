@@ -9,7 +9,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'vote',
+    path: 'vote/:eventId',
     loadComponent: () =>
       import('./pages/vote-event-page/vote-event-page.component').then(
         (c) => c.VoteEventPageComponent

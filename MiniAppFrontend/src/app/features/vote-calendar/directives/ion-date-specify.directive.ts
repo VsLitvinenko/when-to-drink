@@ -17,7 +17,7 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
   @Input({ required: true}) popover!: IonPopover;
 
   @Input() set voteDates(items: VoteDate[]) {
-    const grouped = groupBy(items, 'type');
+    const grouped = groupBy(items, 'voteType');
     const ready = grouped[VoteType.Ready] ?? [];
     const maybe = grouped[VoteType.Maybe] ?? [];
     const time = grouped[VoteType.Time] ?? [];
@@ -31,8 +31,8 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
     const maybe = this.maybeDates();
     const time = this.timeDates();
     return [
-      ...Array.from(ready).map((date) => ({ date: new Date(date), type: VoteType.Ready })),
-      ...Array.from(maybe).map((date) => ({ date: new Date(date), type: VoteType.Maybe })),
+      ...Array.from(ready).map((date) => ({ date: new Date(date), voteType: VoteType.Ready })),
+      ...Array.from(maybe).map((date) => ({ date: new Date(date), voteType: VoteType.Maybe })),
       ...Array.from(time.values())
     ];
   }
@@ -190,7 +190,7 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
       endDate.setFullYear(year, month - 1, day);
       const voteDate: VoteDate = {
         date: date,
-        type: VoteType.Time,
+        voteType: VoteType.Time,
         start: startDate,
         end: endDate,
       };

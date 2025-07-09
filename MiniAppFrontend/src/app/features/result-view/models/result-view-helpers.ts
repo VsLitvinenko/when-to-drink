@@ -2,8 +2,8 @@ import { VoteType } from '../../vote-calendar/models';
 
 export class ResultViewHelpers {
   
-  public static getColorByType(type: VoteType): string {
-    switch (type) {
+  public static getColorByType(voteType: VoteType): string {
+    switch (voteType) {
       case VoteType.Ready:
         return 'primary';
       case VoteType.Maybe:
@@ -13,8 +13,8 @@ export class ResultViewHelpers {
     }
   }
 
-  public static getIconByType(type: VoteType): string {
-    switch (type) {
+  public static getIconByType(voteType: VoteType): string {
+    switch (voteType) {
       case VoteType.Ready:
         return 'checkmark-outline';
       case VoteType.Maybe:

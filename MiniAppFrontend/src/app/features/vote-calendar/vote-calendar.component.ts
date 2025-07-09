@@ -1,15 +1,16 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { IonDateSpecifyDirective } from './directives';
 import { format } from 'date-fns';
 import { VoteDate } from './models';
 import { FormsModule } from '@angular/forms';
-import { fakeCalendar } from 'src/app/core/mock-data';
 import { SmallToolsService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
 import { VoteCalendarLocalize } from './vote-calendar.localize';
-import { take } from 'rxjs';
+import { VoteCalendarRequestService } from './vote-calendar-request.service';
+import { map, merge, Observable, shareReplay, startWith, Subject, switchMap, take } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 
 const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -29,7 +30,23 @@ const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
   ],
 })
 export class VoteCalendarComponent {
-  public voteDates: VoteDate[] = fakeCalendar;
+  public readonly eventId = input.required<string>();
+  // update vote dates event
+  public readonly resetDates$ = new Subject<boolean>();
+  public readonly clearDates$ = new Subject<boolean>();
+  // private readonly saveDates$ = new Subject<>
+  private readonly requestService = inject(VoteCalendarRequestService);
+
+  private readonly loadedVoteDates$ = toObservable(this.eventId).pipe(
+    switchMap((eventId) => this.requestService.getEventVote(eventId)),
+    shareReplay(1)
+  );
+
+  // main data obs
+  public readonly voteDates$: Observable<VoteDate[]> = merge(
+    this.resetDates$.pipe(startWith(true), switchMap(() => this.loadedVoteDates$)),
+    this.clearDates$.pipe(map(() => []))
+  );
 
   public readonly startTime = signal(format(new Date(), timeFormat));
   public readonly endTime = signal(format(new Date(), timeFormat));
@@ -61,16 +78,6 @@ export class VoteCalendarComponent {
       
     this.startTime.set(startValue);
     this.endTime.set(endValue);
-  }
-
-  public clearDates(): void {
-    console.log('Clear changes');
-    this.voteDates = [];
-  }
-
-  public resetDates(): void {
-    console.log('Reset changes');
-    this.voteDates = [...fakeCalendar];
   }
 
   public saveDates(voteDates: VoteDate[]): void {
