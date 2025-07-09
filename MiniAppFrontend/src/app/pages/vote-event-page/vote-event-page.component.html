@@ -14,11 +14,15 @@
   <ion-segment-view mode="ios">
     <ion-segment-content id="info">
       <div class="segment-view-content">
-        <app-result-filters #filters/>
+        <app-result-filters
+          #filters
+          [maxOverlap]="result.info()?.maxOverlap"
+        ></app-result-filters>
         <app-result-view-picker-control #viewPicker/>
         <app-result-view-picker-container
           [viewPick]="viewPicker.value()"
           appResultView
+          #result="appResultView"
           [eventId]="eventId()"
           [min]="filters.membersCount()"
           [maybe]="filters.maybe()"

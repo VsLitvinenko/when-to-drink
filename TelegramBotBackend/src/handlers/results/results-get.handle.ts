@@ -8,19 +8,23 @@ import { Request, Response } from 'express';
 type ReqQuery = {
   eventId: string;
 }
-type ReqRes = Array<{
-  date: string;
-  voteType: string;
-  start?: string;
-  end?: string;
-  users: Array<{
-    fullName: string;
-    photoUrl?: string;
+type ReqRes = {
+  eventId: string;
+  maxOverlap: number;
+  dates: Array<{
+    date: string;
     voteType: string;
     start?: string;
     end?: string;
+    users: Array<{
+      fullName: string;
+      photoUrl?: string;
+      voteType: string;
+      start?: string;
+      end?: string;
+    }>;
   }>;
-}>;
+}
 
 /*-------------------------request-------------------------*/
 
@@ -57,23 +61,32 @@ export async function resultGetHandle(
       }}
     )
     .sort('_id');
-  // convert answer 
-  const convertedData = dbData.map((val) => {
-    const date = val._id;
-    const voteType = aggregateVoteType(val.items);
-    const start = aggregateStartTime(val.items)?.toISOString();
-    const end = aggregateEndTime(val.items)?.toISOString();
-    const users = val.items.map((item) => ({
-      fullName: `${item.user.firstName} ${item.user.lastName}`,
-      photoUrl: item.user.photoUrl,
-      voteType: item.voteType,
-      start: item.start,
-      end: item.end,
-    }));
-    return { date, voteType, start, end, users };
-  });
+  // convert and filter dates with no time overlap
+  const convertedDates = dbData
+    .map((val) => {
+      const start = aggregateStartTime(val.items)?.toISOString();
+      const end = aggregateEndTime(val.items)?.toISOString();
+      return { ...val, start, end };
+    })
+    .filter((val) => (!val.end && !val.start) || (val.end > val.start))
+    .map((val) => {
+      const date = val._id;
+      const voteType = aggregateVoteType(val.items);
+      const users = val.items.map((item) => ({
+        fullName: `${item.user.firstName} ${item.user.lastName}`,
+        photoUrl: item.user.photoUrl,
+        voteType: item.voteType,
+        start: item.start,
+        end: item.end,
+      }));
+      return { ...val, date, voteType, users };
+    })
   // return result
-  res.status(200).json(convertedData);
+  res.status(200).json({
+    eventId: String(event),
+    dates: convertedDates,
+    maxOverlap: Math.max(...convertedDates.map((i) => i.users.length)),
+  });
 }
 
 /*-------------------------helpers-------------------------*/
@@ -86,7 +99,7 @@ type DateUser = {
 };
 
 const aggregateStartTime = (dates: DateUser[]): Date | undefined => {
-  const startDates = dates.filter((i) => !!i.start).map((i) => new Date(i.end));
+  const startDates = dates.filter((i) => !!i.start).map((i) => new Date(i.start));
   return startDates.length > 0 ? max(startDates) : undefined;
 }
 

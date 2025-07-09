@@ -6,8 +6,12 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { shareReplay, switchMap } from 'rxjs';
 import { ResultViewRequestService } from './result-view-request.service';
 
+
+const today = startOfDay(new Date());
+
 @Directive({
-  selector: '[appResultView]'
+  selector: '[appResultView]',
+  exportAs: 'appResultView',
 })
 export class ResultViewDirective {
   public readonly eventId = input.required<string>();
@@ -19,18 +23,18 @@ export class ResultViewDirective {
 
   private readonly request = inject(ResultViewRequestService);
 
-  private readonly dates$ = toObservable(this.eventId).pipe(
+  private readonly info$ = toObservable(this.eventId).pipe(
     switchMap((eventId) => this.request.getEventResults(eventId)),
     shareReplay(1)
   );
 
-  private readonly dates = toSignal(this.dates$, { initialValue: [] });
-  private readonly today = startOfDay(new Date());
+  public readonly info = toSignal(this.info$);
+  private readonly dates = computed(() => this.info()?.dates ?? []);
 
   public readonly filteredDates = computed(() => {
     return this.dates().filter((date) =>
       date.users.length >= this.min()
-      && (!this.trimPast() || date.date >= this.today)
+      && (!this.trimPast() || date.date >= today)
       && (this.maybe() || date.voteType !== VoteType.Maybe)
       && (this.time() || date.voteType !== VoteType.Time)
     );
