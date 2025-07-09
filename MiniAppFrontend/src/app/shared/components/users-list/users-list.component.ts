@@ -6,7 +6,7 @@ import { LocalizePipe } from '../../localize';
 import { UsersListLocalize } from './users-list.localize';
 
 export interface UserItem {
-  imgSrc: string;
+  photoUrl: string;
   fullName: string;
 }
 

@@ -11,7 +11,7 @@ export class VoteDateConverter {
     return "yyyy-MM-dd'T'HH:mm:ss"
   };
 
-  static toJsDates(item: VoteDate): VoteDate {
+  static toJsDates<T extends VoteDate>(item: T): T {
     return {
       ...item,
       date: new Date(item.date),

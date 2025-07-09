@@ -26,7 +26,7 @@ import { take } from 'rxjs';
 })
 export class EventMainInfoComponent {
   public readonly now = new Date();
-  public readonly imgSrc = fakeUsers[0].imgSrc;
+  public readonly photoUrl = fakeUsers[0].photoUrl;
 
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);

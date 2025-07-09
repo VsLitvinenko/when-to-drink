@@ -16,7 +16,7 @@
       (click)="onUserClicked($index, user)"
     >
       <ion-avatar slot="start">
-        <img [src]="user.imgSrc"/>
+        <img [src]="user.photoUrl"/>
       </ion-avatar>
       <ion-label> {{ user.fullName }} </ion-label>
       @if (endTemplateRef) {
