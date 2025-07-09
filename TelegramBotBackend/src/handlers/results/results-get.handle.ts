@@ -1,5 +1,5 @@
-import { getAllEventVotes, isEventExist, IUser } from '../../database';
-import { format, max, min } from 'date-fns';
+import { isEventExist, IUserDb, UVoteModel } from '../../database';
+import { max, min } from 'date-fns';
 import { Request, Response } from 'express';
 
 
@@ -8,23 +8,19 @@ import { Request, Response } from 'express';
 type ReqQuery = {
   eventId: string;
 }
-
-type ReqRes = {
-  eventId: string;
-  results: Array<{
-    date: string;
+type ReqRes = Array<{
+  date: string;
+  voteType: string;
+  start?: string;
+  end?: string;
+  users: Array<{
+    fullName: string;
+    photoUrl?: string;
     voteType: string;
     start?: string;
     end?: string;
-    users: Array<{
-      fullName: string;
-      photoUrl?: string;
-      voteType: string;
-      start?: string;
-      end?: string;
-    }>;
   }>;
-};
+}>;
 
 /*-------------------------request-------------------------*/
 
@@ -37,67 +33,65 @@ export async function resultGetHandle(
     res.status(404);
     throw new Error('Cannot find event with this id');
   }
-  const votes = await getAllEventVotes(event).populate<{ user: IUser }>('user');
-  const datesWithUser: DateUser[] = votes.flatMap((vote) =>
-    vote.dates.map((d) => ({
-      ...d.toObject(),
-      user: vote.user,
-    }))
-  );
-  // fill dates map
-  const datesMap = new Map<string, DateUser[]>();
-  datesWithUser.forEach((item) => {
-    const fDate = formatDate(item.date);
-    if (datesMap.has(fDate)) {
-      datesMap.get(fDate).push(item);
-    } else {
-      datesMap.set(fDate, [item]);
-    }
-  });
-  // aggregate values
-  const results = Array.from(datesMap.entries()).map(([date, values]) => {
-    const voteType = aggregateVoteType(values);
-    const start = aggregateStartTime(values)?.toISOString();
-    const end = aggregateEndTime(values)?.toISOString();
-    const users = values.map((item) => ({
+  // get and group data from db
+  const dbData = await UVoteModel
+    .aggregate<{ _id: string, items: DateUser[] }>()
+    .match({ event })
+    .lookup({
+      from: 'users',
+      localField: 'user',
+      foreignField: '_id',
+      as: 'user',
+    })
+    .unwind('$user')
+    .unwind('$dates')
+    .group({
+      _id: '$dates.date',
+      items: {
+        $push: {
+          voteType: '$dates.voteType',
+          start: '$dates.start',
+          end: '$dates.end',
+          user: '$user',
+        }
+      }}
+    )
+    .sort('_id');
+  // convert answer 
+  const convertedData = dbData.map((val) => {
+    const date = val._id;
+    const voteType = aggregateVoteType(val.items);
+    const start = aggregateStartTime(val.items)?.toISOString();
+    const end = aggregateEndTime(val.items)?.toISOString();
+    const users = val.items.map((item) => ({
       fullName: `${item.user.firstName} ${item.user.lastName}`,
       photoUrl: item.user.photoUrl,
       voteType: item.voteType,
-      start: item.start?.toISOString(),
-      end: item.end?.toISOString(),
+      start: item.start,
+      end: item.end,
     }));
     return { date, voteType, start, end, users };
   });
-  // json result
-  res.status(200).json({
-    eventId: String(event),
-    results: results.sort((a, b) => {
-      const aDate = new Date(a.date);
-      const bDate = new Date(b.date);
-      return aDate.getTime() - bDate.getTime();
-    }),
-  });
+  // return result
+  res.status(200).json(convertedData);
 }
 
 /*-------------------------helpers-------------------------*/
 
 type DateUser = {
-  date: Date;
+  user: IUserDb;
   voteType: 'ready' | 'maybe' | 'time';
-  start?: Date;
-  end?: Date;
-  user: IUser;
+  start?: string;
+  end?: string;
 };
 
-const formatDate = (date: Date) => format(date, 'yyyy-MM-dd');
-
 const aggregateStartTime = (dates: DateUser[]): Date | undefined => {
-  const startDates = dates.filter((i) => !!i.start).map((i) => i.start!);
+  const startDates = dates.filter((i) => !!i.start).map((i) => new Date(i.end));
   return startDates.length > 0 ? max(startDates) : undefined;
 }
 
 const aggregateEndTime = (dates: DateUser[]): Date | undefined => {
-  const endDates = dates.filter((i) => !!i.end).map((i) => i.end!);
+  const endDates = dates.filter((i) => !!i.end).map((i) => new Date(i.end));
   return endDates.length > 0 ? min(endDates) : undefined;
 }
 
