@@ -9,7 +9,7 @@ import { SmallToolsService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
 import { VoteCalendarLocalize } from './vote-calendar.localize';
 import { VoteCalendarRequestService } from './vote-calendar-request.service';
-import { map, merge, Observable, shareReplay, startWith, Subject, switchMap, take } from 'rxjs';
+import { map, merge, Observable, shareReplay, startWith, Subject, switchMap, take, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 
@@ -34,17 +34,31 @@ export class VoteCalendarComponent {
   // update vote dates event
   public readonly resetDates$ = new Subject<boolean>();
   public readonly clearDates$ = new Subject<boolean>();
-  // private readonly saveDates$ = new Subject<>
-  private readonly requestService = inject(VoteCalendarRequestService);
+  public readonly saveDates$ = new Subject<VoteDate[]>();
 
+  private readonly request = inject(VoteCalendarRequestService);
+  // get init data
   private readonly loadedVoteDates$ = toObservable(this.eventId).pipe(
-    switchMap((eventId) => this.requestService.getEventVote(eventId)),
+    switchMap((eventId) => this.request.getEventVote(eventId)),
+    shareReplay(1)
+  );
+  // update data
+  private readonly updatedVoteDates$ = this.saveDates$.pipe(
+    switchMap((dates) => this.request.updateEventVote(this.eventId(), dates)),
+    tap(() => {
+      const local = VoteCalendarLocalize.HasBeenSaved;
+      this.localizeService.localize(local)
+        .subscribe((m) => this.toast.info(m, 'cloud-done-outline'));
+    }),
     shareReplay(1)
   );
 
   // main data obs
   public readonly voteDates$: Observable<VoteDate[]> = merge(
-    this.resetDates$.pipe(startWith(true), switchMap(() => this.loadedVoteDates$)),
+    this.resetDates$.pipe(
+      startWith(true),
+      switchMap(() => merge(this.loadedVoteDates$, this.updatedVoteDates$))
+    ),
     this.clearDates$.pipe(map(() => []))
   );
 
@@ -80,11 +94,8 @@ export class VoteCalendarComponent {
     this.endTime.set(endValue);
   }
 
-  public saveDates(voteDates: VoteDate[]): void {
-    console.log('Saved vote dates:', voteDates);
-    this.localizeService.localize(VoteCalendarLocalize.HasBeenSaved)
-      .pipe(take(1))
-      .subscribe((message) => this.toast.info(message, 'cloud-done-outline'));
+  public toastOnSave(): void {
+
   }
   
 }

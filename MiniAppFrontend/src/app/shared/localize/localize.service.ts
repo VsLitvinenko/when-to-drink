@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, shareReplay, startWith } from 'rxjs';
 import { TelegramService } from 'src/app/core/services';
+import { first, map, Observable, shareReplay, startWith } from 'rxjs';
 import { Localization, LocalizationPresetLeaf, LocalizationSet } from './localize.model';
+
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,9 @@ export class LocalizeService {
   );
 
   public localize(value: LocalizationPresetLeaf): Observable<string> {
-    return this.localization$.pipe(map((localization) => value[localization] ?? value.en));
+    return this.localization$.pipe(
+      map((localization) => value[localization] ?? value.en),
+      first()
+    );
   }
 }

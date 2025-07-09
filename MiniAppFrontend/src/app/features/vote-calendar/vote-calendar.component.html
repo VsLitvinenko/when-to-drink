@@ -37,14 +37,14 @@
   ></ion-datetime>
 
   <ion-buttons class="vote-calendar-actions" mode="ios">
-    <ion-button color="medium" (click)="this.clearDates$.next(true)">
+    <ion-button color="medium" (click)="clearDates$.next(true)">
       {{ VoteCalendarLocalize.Clear | localize }}
     </ion-button>
     <div class="right">
-      <ion-button color="danger" (click)="this.resetDates$.next(true)">
+      <ion-button color="danger" (click)="resetDates$.next(true)">
         {{ VoteCalendarLocalize.Cancel | localize }}
       </ion-button>
-      <ion-button color="primary" (click)="saveDates(appIonDateSpecify.voteDates)">
+      <ion-button color="primary" (click)="saveDates$.next(appIonDateSpecify.voteDates)">
         {{ VoteCalendarLocalize.Save | localize }}
       </ion-button>
     </div>
