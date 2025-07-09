@@ -19,7 +19,7 @@ import { isNil } from 'lodash';
   ],
 })
 export class ResultFiltersComponent  implements OnInit {
-  
+  @Input({ required: true }) maxMembers!: number;
   @Input() set maxOverlap(n: number | null | undefined) {
     if (!isNil(n)) {
       this.membersCount.set(n);

@@ -41,10 +41,10 @@
       <ion-item lines="none" class="range-list-item">
         <ion-range
           [(ngModel)]="membersCount"
-          [ticks]="true"
           [snaps]="true"
-          [min]="0"
-          [max]="6"
+          [min]="1"
+          [max]="maxMembers"
+          [ticks]="maxMembers <= 10"
         ></ion-range>
       </ion-item>
     </ion-list>

@@ -1,7 +1,7 @@
 
 <ion-content class="ion-padding">
-  <app-event-main-info [eventId]="eventId()"/>
-
+  <app-event-main-info #eventMainInfo [eventId]="eventId()"/>
+  @let info = eventMainInfo.info();
   <ion-segment mode="ios" value="vote">
     <ion-segment-button value="info" contentId="info">
       <ion-label> {{ VotePageLocalize.Results | localize }} </ion-label>
@@ -16,6 +16,7 @@
       <div class="segment-view-content">
         <app-result-filters
           #filters
+          [maxMembers]="info?.users?.length ?? 0"
           [maxOverlap]="result.info()?.maxOverlap"
         ></app-result-filters>
         <app-result-view-picker-control #viewPicker/>
@@ -38,7 +39,11 @@
     </ion-segment-content>
     <ion-segment-content id="vote">
       <div class="segment-view-content">
-        <app-vote-calendar [eventId]="eventId()"/>
+        <app-vote-calendar
+          [eventId]="eventId()"
+          [minDate]="info?.starts"
+          [maxDate]="info?.ends"
+        ></app-vote-calendar>
       </div>
     </ion-segment-content>
   </ion-segment-view>

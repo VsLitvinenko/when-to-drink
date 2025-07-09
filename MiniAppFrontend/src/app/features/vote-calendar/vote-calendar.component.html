@@ -31,11 +31,13 @@
     [popover]="popover"
     [multiple]="true"
     [firstDayOfWeek]="1"
+    [min]="minDate() ?? undefined"
+    [max]="maxDate() ?? undefined"
     [locale]="localizeFormat$ | async"
     presentation="date"
     mode="ios"
   ></ion-datetime>
-
+  
   <ion-buttons class="vote-calendar-actions" mode="ios">
     <ion-button color="medium" (click)="clearDates$.next(true)">
       {{ VoteCalendarLocalize.Clear | localize }}

@@ -31,6 +31,8 @@ const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 })
 export class VoteCalendarComponent {
   public readonly eventId = input.required<string>();
+  public readonly minDate = input();
+  public readonly maxDate = input();
   // update vote dates event
   public readonly resetDates$ = new Subject<boolean>();
   public readonly clearDates$ = new Subject<boolean>();
