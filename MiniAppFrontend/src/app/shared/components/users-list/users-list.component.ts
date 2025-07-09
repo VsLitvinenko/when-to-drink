@@ -1,7 +1,6 @@
 import { Component, computed, ContentChild, input, output, signal, TemplateRef } from '@angular/core';
 import { IonAvatar, IonList, IonItem, IonLabel, IonSearchbar } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { fakeUsers } from '../../../core/mock-data';
 import { LocalizePipe } from '../../localize';
 import { UsersListLocalize } from './users-list.localize';
 
@@ -33,7 +32,7 @@ export class UsersListComponent<TUser extends UserItem> {
   
   public readonly clickable = input(false);
 
-  public readonly users = input<TUser[]>([...fakeUsers] as any);
+  public readonly users = input.required<TUser[]>();
   public readonly searchStr = signal<string | null | undefined>(null);
 
   public readonly filteredUsers = computed(() => {

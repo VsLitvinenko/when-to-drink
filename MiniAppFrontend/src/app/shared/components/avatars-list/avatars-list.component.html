@@ -1,5 +1,5 @@
-@for (img of sliced(); track $index) {
+@for (user of sliced(); track $index) {
   <ion-avatar [style.zIndex]="$count - $index">
-    <img [src]="img" alt="">
+    <img [src]="user.photoUrl" alt="">
   </ion-avatar>
 }

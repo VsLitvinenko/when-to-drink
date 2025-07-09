@@ -1,6 +1,6 @@
 
 <ion-content class="ion-padding">
-  <app-event-main-info></app-event-main-info>
+  <app-event-main-info [eventId]="eventId()"/>
 
   <ion-segment mode="ios" value="vote">
     <ion-segment-button value="info" contentId="info">

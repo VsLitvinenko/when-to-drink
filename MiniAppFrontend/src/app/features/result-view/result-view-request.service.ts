@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { ResultDate, ResultInfo } from './models';
+import { ResultInfo } from './models';
 import { VoteDateConverter } from 'src/app/shared/helpers';
 
 @Injectable({

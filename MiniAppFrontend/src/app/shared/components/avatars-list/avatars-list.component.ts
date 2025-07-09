@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { IonAvatar } from '@ionic/angular/standalone';
-import { avatars } from '../../../core/mock-data';
+import { UserItem } from '../users-list/users-list.component';
 
 @Component({
   selector: 'app-avatars-list',
@@ -13,8 +13,8 @@ import { avatars } from '../../../core/mock-data';
   ],
 })
 export class AvatarsListComponent {
-  public readonly imgs = input(avatars);
+  public readonly users = input.required<UserItem[]>();
   public readonly maxCount = input(8);
 
-  public readonly sliced = computed(() => this.imgs().slice(0, this.maxCount()));
+  public readonly sliced = computed(() => this.users().slice(0, this.maxCount()));
 }
