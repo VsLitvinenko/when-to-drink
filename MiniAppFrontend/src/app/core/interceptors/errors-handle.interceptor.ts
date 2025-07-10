@@ -12,7 +12,7 @@ export function errorsHandleInterceptor(
   const router = inject(Router);
   return next(req.clone()).pipe(
     catchError((err: HttpErrorResponse) => {
-      if (err.status === 404) {
+      if (err.status === 404 && err.error.processed) {
         router.navigate(['not-found']);
       } else {
         const message = err.error.message ?? err.message;
