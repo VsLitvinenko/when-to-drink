@@ -1,14 +1,14 @@
 import { LocalizationPreset } from '../../shared/localize';
 
 enum LocalizeEnum {
-  Members = 'Members',
+  Member = 'Member',
   NoData = 'NoData',
 }
 
 export const ResultViewLocalize: LocalizationPreset<LocalizeEnum> = {
-  Members: {
-    en: 'member(s)',
-    ru: 'участник(ов)',
+  Member: {
+    en: 'member',
+    ru: 'участник',
   },
   NoData: {
     en: 'No data, try to change filters',

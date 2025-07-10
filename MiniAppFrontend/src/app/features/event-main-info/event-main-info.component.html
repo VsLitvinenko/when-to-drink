@@ -42,8 +42,9 @@
     <ion-list class="info-list" slot="content" mode="ios">
       <ion-item button [detail]="false" (click)="usersModal.present()">
         <ion-label>
-          {{ eventInfo?.users?.length ?? 0 }}
-          {{ EventMainInfoLocalize.Members | localize }}
+          @let membersCount = eventInfo?.users?.length ?? 0;
+          {{ membersCount }}
+          {{ EventMainInfoLocalize.Member | localizeMany : membersCount }}
         </ion-label>
         <app-avatars-list [users]="eventInfo?.users ?? []"/>
       </ion-item>

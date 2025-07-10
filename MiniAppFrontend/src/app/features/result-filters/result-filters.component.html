@@ -35,7 +35,7 @@
         </ion-label>
         <ion-note>
           {{ membersCount() }}
-          {{ ResultFiltersLocalize.Members | localize }}
+          {{ ResultFiltersLocalize.Member | localizeMany : membersCount() }}
         </ion-note>
       </ion-item>
       <ion-item lines="none" class="range-list-item">

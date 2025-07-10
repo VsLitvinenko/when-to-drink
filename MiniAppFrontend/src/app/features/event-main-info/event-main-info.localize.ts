@@ -1,7 +1,7 @@
 import { LocalizationPreset } from '../../shared/localize';
 
 enum LocalizeEnum {
-  Members = 'Members',
+  Member = 'Member',
   Initiator = 'Initiator',
   Starts = 'Starts',
   Ends = 'Ends',
@@ -13,9 +13,9 @@ enum LocalizeEnum {
 }
 
 export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
-  Members: {
-    en: 'member(s)',
-    ru: 'участник(ов)',
+  Member: {
+    en: 'member',
+    ru: 'участник',
   },
   Initiator: {
     en: 'Initiator',

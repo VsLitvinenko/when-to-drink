@@ -15,7 +15,7 @@
     <ion-item (click)="infoModal.present(sDate)" button lines="none">
       <ion-icon
         slot="start"
-        [color]="Helpers.getColorByType(sDate.voteType)"
+        [color]="sDate.noTimeOverlap ? 'danger' : Helpers.getColorByType(sDate.voteType)"
         [name]="Helpers.getIconByType(sDate.voteType)"
       ></ion-icon>
       <ion-label>
@@ -23,7 +23,7 @@
       </ion-label>
       <ion-note slot="end">
         {{ sDate.users.length }}
-        {{ ResultViewLocalize.Members | localize }}
+        {{ ResultViewLocalize.Member | localizeMany : sDate.users.length }}
       </ion-note>
     </ion-item>
   </div>

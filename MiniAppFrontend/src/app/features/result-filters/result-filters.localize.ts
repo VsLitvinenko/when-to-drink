@@ -7,7 +7,7 @@ enum LocalizeEnum {
   Time = 'Time',
   IgnorePastDates = 'IgnorePastDates',
   AtLeast = 'AtLeast',
-  Members = 'Members',
+  Member = 'Member',
 }
 
 export const ResultFiltersLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -35,8 +35,8 @@ export const ResultFiltersLocalize: LocalizationPreset<LocalizeEnum> = {
     en: 'At least',
     ru: 'Как минимум',
   },
-  Members: {
-    en: 'member(s)',
-    ru: 'участник(ов)',
+  Member: {
+    en: 'member',
+    ru: 'участник',
   },
 };
