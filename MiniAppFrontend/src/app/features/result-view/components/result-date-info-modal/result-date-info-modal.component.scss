@@ -11,6 +11,9 @@ ion-modal {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
+  row-gap: 0.25rem;
 
   h3 {
     margin: 0;

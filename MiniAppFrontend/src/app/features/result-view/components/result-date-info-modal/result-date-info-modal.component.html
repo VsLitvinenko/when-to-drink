@@ -13,7 +13,7 @@
         @if (resultDate.noTimeOverlap) {
           <ion-chip color="danger">
             <ion-icon name="alert-circle-outline"/>
-            <ion-label> No time overlap  </ion-label>
+            <ion-label> {{ ResultViewLocalize.NoTimeOverlap | localize }} </ion-label>
           </ion-chip>
         } @else {
           <ion-chip [color]="Helpers.getColorByType(resultDate.voteType)" class="ion-activated">

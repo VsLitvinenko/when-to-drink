@@ -4,6 +4,7 @@ import { SharedFeatureModule } from 'src/app/shared';
 import { UsersListComponent } from 'src/app/shared/components';
 import { ResultDate, ResultUser, ResultViewHelpers } from '../../models';
 import { LocalizeService } from 'src/app/shared/localize';
+import { ResultViewLocalize } from '../../result-view.localize';
 
 @Component({
   selector: 'app-result-date-info-modal',
@@ -23,6 +24,7 @@ export class ResultDateInfoModalComponent {
   public readonly Helpers = ResultViewHelpers;
 
   private readonly localizeService = inject(LocalizeService);
+  public readonly ResultViewLocalize = ResultViewLocalize;
   public readonly dateFormat$ = this.localizeService.localizeLongDateFormat$;
 
   public present(resultDate: ResultDate): void {
