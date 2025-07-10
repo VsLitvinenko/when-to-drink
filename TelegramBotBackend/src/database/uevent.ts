@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { deleteVotesByEvent } from './uvote';
 
 export const UEventSchema = new mongoose.Schema({
   creator: {
@@ -42,6 +43,10 @@ UEventSchema.pre('save', function(next) {
   next();
 });
 
+UEventSchema.post('findOneAndDelete', function(doc, next) {
+  deleteVotesByEvent(doc._id).then(() => next());
+});
+
 export const UEventModel = mongoose.model('UEvent', UEventSchema);
 
 export interface IEvent {
@@ -63,6 +68,7 @@ export type PEvent = Partial<IEvent>;
 export const getEventById = (id: any) => UEventModel.findById(id);
 export const isEventExist = (id: any) => UEventModel.exists({ _id: id }).then((exist) => exist?._id);
 export const createEvent = (val: IEvent) => new UEventModel(val).save().then((uEvent) => uEvent.toObject());
+export const deleteEventById = (id: any) => UEventModel.findByIdAndDelete(id);
 
 export const updateEvent = (id: any, val: PEvent) =>
   UEventModel.findByIdAndUpdate(id, val)

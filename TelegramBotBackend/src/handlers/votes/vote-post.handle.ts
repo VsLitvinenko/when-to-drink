@@ -1,4 +1,4 @@
-import { addVoteToEvent, createVote, isEventExist, isVoteExist, updateVote } from '../../database';
+import { createVote, isEventExist, isVoteExist, updateVote } from '../../database';
 import { getDbUserId } from '../../middlewares';
 import { Request, Response } from 'express';
 
@@ -41,8 +41,6 @@ export async function votePostHandle(
   }
   const voteId = await isVoteExist(user, event);
   const vote = !voteId ? await createVote({ user, event, ...body}) : await updateVote(voteId, body);
-  // add vote push only unique ids
-  await addVoteToEvent(event, vote._id);
   // convert dates to response
   const dates = vote.dates.map((d) => ({
     date: d.date.toISOString(),
