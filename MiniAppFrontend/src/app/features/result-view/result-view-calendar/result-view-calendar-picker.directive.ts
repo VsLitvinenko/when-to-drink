@@ -33,7 +33,8 @@ export class ResultViewCalendarPickerDirective implements AfterViewInit, OnDestr
   private readonly voteDateSelected$ = this.dateButtons$.pipe(
     tap((dateButtons) => dateButtons.forEach((b) => {
       b.style.boxShadow = 'none';
-      b.style.transition = 'background-color 250ms, color 250ms';
+      b.style.fontWeight = '400';
+      b.style.fontSize = '1.25rem';
     })),
     switchMap((dateButtons) => {
       const buttonClicks = dateButtons.map((target) => {

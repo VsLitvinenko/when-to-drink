@@ -6,7 +6,7 @@ import { VoteDate, VoteType } from '../models';
 import { groupBy } from 'lodash';
 import { format } from 'date-fns';
 
-const focusButtonBg = 'var(--ion-background-color-step-50, #fff)';
+const focusButtonBg = 'rgba(var(--ion-color-base-rgb), 0.2)';
 const formatVoteDate = (date: Date) => format(date, 'yyyy-MM-dd');
 
 @Directive({
@@ -103,7 +103,6 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
           b.style.boxShadow = 'none';
           b.style.fontWeight = '400';
           b.style.fontSize = '1.25rem';
-          b.style.transition = 'background-color 250ms, color 250ms';
         })),
         switchMap((dateButtons) => {
           const buttonClicks = dateButtons.map((target) => {
