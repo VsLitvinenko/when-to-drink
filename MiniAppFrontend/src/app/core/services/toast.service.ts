@@ -14,31 +14,32 @@ export class ToastService {
     animated: true,
   };
 
-  public async success(message: string, icon: string, options?: ToastOptions): Promise<void> {
+  public async success(message: string, icon?: string, options?: ToastOptions): Promise<void> {
     const color = 'success';
     const toastOptions = { ...this.defaultOptions, ...options, color, icon, message };
     return this.toastController.create(toastOptions).then((t) => t.present());
   }
 
-  public async warning(message: string, icon: string, options?: ToastOptions): Promise<void> {
+  public async warning(message: string, icon?: string, options?: ToastOptions): Promise<void> {
     const color = 'warning';
     const toastOptions = { ...this.defaultOptions, ...options, color, icon, message };
     return this.toastController.create(toastOptions).then((t) => t.present());
   }
 
-  public async error(message: string, icon: string, options?: ToastOptions): Promise<void> {
+  public async error(message: string, icon?: string, options?: ToastOptions): Promise<void> {
     const color = 'danger';
-    const toastOptions = { ...this.defaultOptions, ...options, color, icon, message };
+    const duration = 3500;
+    const toastOptions = { ...this.defaultOptions, ...options, color, icon, message, duration };
     return this.toastController.create(toastOptions).then((t) => t.present());
   }
 
-  public async info(message: string, icon: string, options?: ToastOptions): Promise<void> {
+  public async info(message: string, icon?: string, options?: ToastOptions): Promise<void> {
     const color = 'primary';
     const toastOptions = { ...this.defaultOptions, ...options, color, icon, message };
     return this.toastController.create(toastOptions).then((t) => t.present());
   }
 
-  public async light(message: string, icon: string, options?: ToastOptions): Promise<void> {
+  public async light(message: string, icon?: string, options?: ToastOptions): Promise<void> {
     const color = 'light';
     const toastOptions = { ...this.defaultOptions, ...options, color, icon, message };
     return this.toastController.create(toastOptions).then((t) => t.present());

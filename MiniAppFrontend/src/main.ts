@@ -3,7 +3,7 @@ import { RouteReuseStrategy, provideRouter, withPreloading, PreloadAllModules, w
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalone';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { apiUrlInterceptor, authInterceptor } from './app/core/interceptors';
+import { apiUrlInterceptor, authInterceptor, errorsHandleInterceptor } from './app/core/interceptors';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { registerLocaleData } from '@angular/common';
@@ -29,6 +29,7 @@ bootstrapApplication(AppComponent, {
       withInterceptors([
         apiUrlInterceptor,
         authInterceptor,
+        errorsHandleInterceptor,
       ])
     )
   ],
