@@ -22,6 +22,7 @@ import {
   createOutline,
   arrowForward,
   alertCircleOutline,
+  trashOutline,
 } from 'ionicons/icons';
 import { take } from 'rxjs';
 
@@ -56,6 +57,7 @@ export class AppComponent implements OnInit {
       createOutline,
       arrowForward,
       alertCircleOutline,
+      trashOutline,
     });
   }
 

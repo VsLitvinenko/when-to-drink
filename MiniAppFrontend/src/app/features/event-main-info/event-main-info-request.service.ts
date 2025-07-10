@@ -26,4 +26,8 @@ export class EventMainInfoRequestService {
   public getEventInfo(eventId: string): Observable<EventInfo> {
     return this.http.get<EventInfo>(`${this.baseUrl}/${eventId}`);
   }
+
+  public deleteEvent(eventId: string): Observable<unknown> {
+    return this.http.delete(`${this.baseUrl}/${eventId}`);
+  }
 }

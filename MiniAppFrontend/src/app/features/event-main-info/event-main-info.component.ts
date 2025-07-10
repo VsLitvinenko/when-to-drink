@@ -6,7 +6,7 @@ import { EventMainInfoLocalize } from './event-main-info.localize';
 import { Router } from '@angular/router';
 import { TelegramService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
-import { shareReplay, switchMap, take } from 'rxjs';
+import { shareReplay, switchMap, take, tap } from 'rxjs';
 import { EventMainInfoRequestService } from './event-main-info-request.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
@@ -46,8 +46,7 @@ export class EventMainInfoComponent {
   constructor() { }
 
   public copyToClipboard(): void {
-    this.localizeService.localize(EventMainInfoLocalize.ClipboardLink)
-      .pipe(take(1))
+    this.localizeService.localize(EventMainInfoLocalize.ClipboardLink, true)
       .subscribe((message) => this.toast.light(message, 'clipboard-outline'));
   }
 
@@ -60,6 +59,16 @@ export class EventMainInfoComponent {
   public redirectToEdit(): void {
     const queryParams = { eventId: this.eventId() };
     this.router.navigate(['edit'], { queryParams });
+  }
+
+  public deleteEvent(): void {
+    const tMes = EventMainInfoLocalize.EventWasDeleted;
+    this.request.deleteEvent(this.eventId())
+      .pipe(
+        switchMap(() => this.localizeService.localize(tMes)),
+        tap((mes) => this.toast.success(mes, 'trash-outline')),
+        take(1)
+      ).subscribe(() => this.router.navigate(['edit']));
   }
 
 }

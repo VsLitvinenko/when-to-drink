@@ -9,7 +9,9 @@ enum LocalizeEnum {
   Share = 'Share',
   Link = 'Link',
   Edit = 'Edit',
+  Delete = 'Delete',
   ClipboardLink = 'ClipboardLink',
+  EventWasDeleted = 'EventWasDeleted',
 }
 
 export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -45,8 +47,16 @@ export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
     en: 'Edit',
     ru: 'Изменить',
   },
+  Delete: {
+    en: 'Delete',
+    ru: 'Удалить',
+  },
   ClipboardLink: {
     en: 'Link was copied to clipboard',
     ru: 'Ссылка скопирована в буфер обмена',
+  },
+  EventWasDeleted: {
+    en: 'Event was successfully deleted',
+    ru: 'Событие было успешно удалено',
   },
 };
