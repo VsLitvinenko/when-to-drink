@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { TelegramService } from 'src/app/core/services';
 import { first, map, Observable, shareReplay, startWith } from 'rxjs';
 import { Localization, LocalizationPresetLeaf, LocalizationSet } from './localize.model';
+import { inRange } from 'lodash';
 
 
 @Injectable({
@@ -42,10 +43,30 @@ export class LocalizeService {
     shareReplay(1),
   );
 
-  public localize(value: LocalizationPresetLeaf): Observable<string> {
-    return this.localization$.pipe(
-      map((localization) => value[localization] ?? value.en),
-      first()
-    );
+  public localize(value: LocalizationPresetLeaf, onlyFirst?: boolean): Observable<string> {
+    const res$ = this.localization$.pipe(map((loc) => value[loc] ?? value.en));
+    return onlyFirst ? res$.pipe(first()) : res$;
+  }
+
+  public localizeMany(value: LocalizationPresetLeaf, n: number, onlyFirst?: boolean): Observable<string> {
+    const res$ = this.localization$.pipe(map((loc) => value[loc] + this.getMany(loc, n)));
+    return onlyFirst ? res$.pipe(first()) : res$;
+  }
+
+  private getMany(loc: Localization, n: number): string {
+    switch (loc) {
+      case Localization.en:
+        return n === 1 ? '' : 's';
+      case Localization.ru:
+        if (n === 1) {
+          return '';
+        } else if (inRange(n, 1, 5)) {
+          return 'а';
+        } else {
+          return 'ов';
+        }
+      default:
+        return '';
+    }
   }
 }
