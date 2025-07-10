@@ -1,5 +1,4 @@
 import { isEventExist, IUserDb, UVoteModel } from '../../database';
-import { max, min } from 'date-fns';
 import { Request, Response } from 'express';
 
 
@@ -16,6 +15,7 @@ type ReqRes = {
     voteType: string;
     start?: string;
     end?: string;
+    noTimeOverlap?: boolean;
     users: Array<{
       fullName: string;
       photoUrl?: string;
@@ -39,7 +39,7 @@ export async function resultGetHandle(
   }
   // get and group data from db
   const dbData = await UVoteModel
-    .aggregate<{ _id: string, items: DateUser[] }>()
+    .aggregate<DateUserGroup>()
     .match({ event })
     .lookup({
       from: 'users',
@@ -51,6 +51,8 @@ export async function resultGetHandle(
     .unwind('$dates')
     .group({
       _id: '$dates.date',
+      start: { $max: '$dates.start' },
+      end: { $min: '$dates.end' },
       items: {
         $push: {
           voteType: '$dates.voteType',
@@ -61,16 +63,13 @@ export async function resultGetHandle(
       }}
     )
     .sort('_id');
-  // convert and filter dates with no time overlap
+  // convert result fields
   const convertedDates = dbData
     .map((val) => {
-      const start = aggregateStartTime(val.items)?.toISOString();
-      const end = aggregateEndTime(val.items)?.toISOString();
-      return { ...val, start, end };
-    })
-    .filter((val) => (!val.end && !val.start) || (val.end > val.start))
-    .map((val) => {
       const date = val._id;
+      const start = val.start ?? undefined;
+      const end = val.end ?? undefined;
+      const noTimeOverlap = (start && end) ? start > end : undefined;
       const voteType = aggregateVoteType(val.items);
       const users = val.items.map((item) => ({
         fullName: `${item.user.firstName} ${item.user.lastName}`,
@@ -79,13 +78,15 @@ export async function resultGetHandle(
         start: item.start,
         end: item.end,
       }));
-      return { ...val, date, voteType, users };
-    })
+      return { date, start, end, noTimeOverlap, voteType, users,  };
+    });
   // return result
   res.status(200).json({
     eventId: String(event),
     dates: convertedDates,
-    maxOverlap: Math.max(...convertedDates.map((i) => i.users.length)),
+    maxOverlap: convertedDates.length > 0
+      ? Math.max(...convertedDates.map((i) => i.users.length))
+      : 0,
   });
 }
 
@@ -98,15 +99,12 @@ type DateUser = {
   end?: string;
 };
 
-const aggregateStartTime = (dates: DateUser[]): Date | undefined => {
-  const startDates = dates.filter((i) => !!i.start).map((i) => new Date(i.start));
-  return startDates.length > 0 ? max(startDates) : undefined;
-}
-
-const aggregateEndTime = (dates: DateUser[]): Date | undefined => {
-  const endDates = dates.filter((i) => !!i.end).map((i) => new Date(i.end));
-  return endDates.length > 0 ? min(endDates) : undefined;
-}
+type DateUserGroup = {
+  _id: string;
+  start: string | null;
+  end: string | null;
+  items: DateUser[];
+};
 
 const aggregateVoteType = (dates: DateUser[]): string => {
   const voteTypes = dates.map((val) => val.voteType);

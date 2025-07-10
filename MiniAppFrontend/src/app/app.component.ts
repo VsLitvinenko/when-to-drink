@@ -21,6 +21,7 @@ import {
   shareSocialOutline,
   createOutline,
   arrowForward,
+  alertCircleOutline,
 } from 'ionicons/icons';
 import { take } from 'rxjs';
 
@@ -54,6 +55,7 @@ export class AppComponent implements OnInit {
       shareSocialOutline,
       createOutline,
       arrowForward,
+      alertCircleOutline,
     });
   }
 
