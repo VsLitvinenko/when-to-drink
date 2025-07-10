@@ -44,14 +44,16 @@
     </ion-item>
     <!-- content -->
     <ion-list class="info-list" slot="content" mode="ios">
-      <ion-item button [detail]="false" (click)="usersModal.present()">
-        <ion-label>
-          @let membersCount = eventInfo?.users?.length ?? 0;
-          {{ membersCount }}
-          {{ EventMainInfoLocalize.Member | localizeMany : membersCount }}
-        </ion-label>
-        <app-avatars-list [users]="eventInfo?.users ?? []"/>
-      </ion-item>
+      @let membersCount = eventInfo?.users?.length ?? 0;
+      @if (membersCount > 0) {
+        <ion-item button [detail]="false" (click)="usersModal.present()">
+          <ion-label>
+            {{ membersCount }}
+            {{ EventMainInfoLocalize.Member | localizeMany : membersCount }}
+          </ion-label>
+          <app-avatars-list [users]="eventInfo?.users ?? []"/>
+        </ion-item>
+      }
       <ion-item>
         <ion-label> {{ EventMainInfoLocalize.Initiator | localize }} </ion-label>
         <ion-note> Vyacheslav Litvinenko </ion-note>
@@ -61,14 +63,16 @@
         <ion-label> {{ EventMainInfoLocalize.Starts | localize }} </ion-label>
         <ion-note> {{ eventInfo?.starts | date : 'dd.MM.yyyy'}} </ion-note>
       </ion-item>
-      <ion-item>
+      <ion-item [lines]="eventInfo?.description ? '' : 'none'">
         <ion-label> {{ EventMainInfoLocalize.Ends | localize }} </ion-label>
         <ion-note> {{ eventInfo?.ends | date : 'dd.MM.yyyy'}} </ion-note>
       </ion-item>
-      <ion-item class="notes-item" lines="none">
-        <ion-label> {{ EventMainInfoLocalize.Description | localize }} </ion-label>
-        <ion-note> {{ eventInfo?.description ?? '-' }} </ion-note>
-      </ion-item>
+      @if (eventInfo?.description) {
+        <ion-item class="notes-item" lines="none">
+          <ion-label> {{ EventMainInfoLocalize.Description | localize }} </ion-label>
+          <ion-note> {{ eventInfo?.description }} </ion-note>
+        </ion-item>
+      }
     </ion-list>
   </ion-accordion>
 </ion-accordion-group>

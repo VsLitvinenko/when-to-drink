@@ -71,7 +71,7 @@ export const createEvent = (val: IEvent) => new UEventModel(val).save().then((uE
 export const deleteEventById = (id: any) => UEventModel.findByIdAndDelete(id);
 
 export const updateEvent = (id: any, val: PEvent) =>
-  UEventModel.findByIdAndUpdate(id, val)
+  UEventModel.findByIdAndUpdate(id, val, { new: true })
     .then((event) => event.save())
     .then((event) => event.toObject());
 
