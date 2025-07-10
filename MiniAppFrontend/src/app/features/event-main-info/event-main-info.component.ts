@@ -4,9 +4,9 @@ import { SharedFeatureModule } from 'src/app/shared';
 import { AvatarsListComponent, UsersListComponent } from 'src/app/shared/components';
 import { EventMainInfoLocalize } from './event-main-info.localize';
 import { Router } from '@angular/router';
-import { TelegramService, ToastService } from 'src/app/core/services';
+import { ConfirmService, TelegramService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
-import { shareReplay, switchMap, take, tap } from 'rxjs';
+import { filter, shareReplay, switchMap, take, tap } from 'rxjs';
 import { EventMainInfoRequestService } from './event-main-info-request.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
@@ -30,6 +30,7 @@ export class EventMainInfoComponent {
 
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
+  private readonly confirm = inject(ConfirmService);
   private readonly tg = inject(TelegramService);
   private readonly request = inject(EventMainInfoRequestService);
 
@@ -40,14 +41,14 @@ export class EventMainInfoComponent {
 
   public readonly info = toSignal(this.info$);
   
-  private readonly localizeService = inject(LocalizeService);
+  private readonly local = inject(LocalizeService);
   public readonly EventMainInfoLocalize = EventMainInfoLocalize;
 
   constructor() { }
 
   public copyToClipboard(): void {
-    this.localizeService.localize(EventMainInfoLocalize.ClipboardLink, true)
-      .subscribe((message) => this.toast.light(message, 'clipboard-outline'));
+    const toastMessage = this.local.localizeSync(EventMainInfoLocalize.ClipboardLink);
+    this.toast.light(toastMessage, 'clipboard-outline')
   }
 
   public share(): void {
@@ -62,13 +63,15 @@ export class EventMainInfoComponent {
   }
 
   public deleteEvent(): void {
-    const tMes = EventMainInfoLocalize.EventWasDeleted;
-    this.request.deleteEvent(this.eventId())
-      .pipe(
-        switchMap(() => this.localizeService.localize(tMes)),
-        tap((mes) => this.toast.success(mes, 'trash-outline')),
-        take(1)
-      ).subscribe(() => this.router.navigate(['edit']));
+    const header = this.local.localizeSync(EventMainInfoLocalize.DeleteQuestion);
+    const message = this.local.localizeSync(EventMainInfoLocalize.CannotBeUndone);
+    const toastMessage = this.local.localizeSync(EventMainInfoLocalize.EventWasDeleted);
+    this.confirm.createConfirm({ header, message }).pipe(
+      filter(Boolean),
+      switchMap(() => this.request.deleteEvent(this.eventId())),
+      tap(() => this.toast.info(toastMessage, 'trash-outline')),
+      take(1)
+    ).subscribe(() => this.router.navigate(['edit']))
   }
 
 }

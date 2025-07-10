@@ -3,6 +3,7 @@ import { TelegramService } from 'src/app/core/services';
 import { first, map, Observable, shareReplay, startWith } from 'rxjs';
 import { Localization, LocalizationPresetLeaf, LocalizationSet } from './localize.model';
 import { inRange } from 'lodash';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 
 @Injectable({
@@ -17,6 +18,11 @@ export class LocalizeService {
     map((local) => LocalizationSet.has(local) ? (local as Localization) : Localization.en),
     startWith((this.browserLocalization as Localization) ?? Localization.en),
     shareReplay(1)
+  );
+
+  public readonly localizationSignal = toSignal(
+    this.localization$,
+    { initialValue: Localization.en }
   );
 
   public readonly localizationWithFormat$ = this.localization$.pipe(
@@ -46,6 +52,10 @@ export class LocalizeService {
   public localize(value: LocalizationPresetLeaf, onlyFirst?: boolean): Observable<string> {
     const res$ = this.localization$.pipe(map((loc) => value[loc] ?? value.en));
     return onlyFirst ? res$.pipe(first()) : res$;
+  }
+
+  public localizeSync(value: LocalizationPresetLeaf): string {
+    return value[this.localizationSignal()] ?? value.en;
   }
 
   public localizeMany(value: LocalizationPresetLeaf, n: number, onlyFirst?: boolean): Observable<string> {

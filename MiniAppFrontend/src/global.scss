@@ -70,3 +70,7 @@ ion-searchbar {
 ion-toast {
   opacity: 0.85 !important;
 }
+
+ion-alert > ion-backdrop {
+  opacity: 0.5 !important;
+}

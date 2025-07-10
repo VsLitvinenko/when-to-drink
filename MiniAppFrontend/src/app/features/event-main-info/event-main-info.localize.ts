@@ -12,6 +12,8 @@ enum LocalizeEnum {
   Delete = 'Delete',
   ClipboardLink = 'ClipboardLink',
   EventWasDeleted = 'EventWasDeleted',
+  DeleteQuestion = 'DeleteQuestion',
+  CannotBeUndone = 'CannotBeUndone',
 }
 
 export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -58,5 +60,13 @@ export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
   EventWasDeleted: {
     en: 'Event was successfully deleted',
     ru: 'Событие было успешно удалено',
+  },
+  DeleteQuestion: {
+    en: 'Delete event?',
+    ru: 'Удалить событие?',
+  },
+  CannotBeUndone: {
+    en: 'This cannot be undone',
+    ru: 'Это нельзя отменить',
   },
 };
