@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { PageCommonModule } from 'src/app/shared';
 import { EditEventFormComponent } from 'src/app/features/edit-event-form';
 import { IonButton } from '@ionic/angular/standalone';
@@ -22,6 +22,8 @@ import { take } from 'rxjs';
   },
 })
 export class EditEventPageComponent {
+  // query param input
+  public readonly eventId = input<string | undefined>();
 
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
@@ -45,7 +47,7 @@ export class EditEventPageComponent {
   }
 
   public redirectToEvent(): void {
-    this.router.navigate(['vote']);
+    this.router.navigate(['vote', this.eventId()]);
   }
 
 }

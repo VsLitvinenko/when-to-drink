@@ -66,5 +66,7 @@
   class="save-changes-button"
   [disabled]="eventFormGroup.invalid || isDatesInvalid()"
   (click)="saveChanges()">
-  {{ EditEventFormLocalize.SaveChanges | localize }}
+  {{ (eventId()
+        ? EditEventFormLocalize.UpdateEvent
+        : EditEventFormLocalize.CreateEvent) | localize }}
 </ion-button>

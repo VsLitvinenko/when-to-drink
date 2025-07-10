@@ -1,13 +1,15 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, input, OnDestroy, OnInit } from '@angular/core';
 import { IonDatetime, IonDatetimeButton, IonInput, IonModal, IonTextarea } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { EditEventFormLocalize } from './edit-event-form.localize';
 import { LocalizeService } from 'src/app/shared/localize';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { addMonths, endOfMonth, format, startOfMonth } from 'date-fns';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { addMonths, format } from 'date-fns';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ToastService } from 'src/app/core/services';
-import { take } from 'rxjs';
+import { filter, of, shareReplay, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { EdiEventFormRequestService } from './edit-event-form-request.service';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-event-form',
@@ -23,16 +25,17 @@ import { take } from 'rxjs';
     ReactiveFormsModule,
   ],
 })
-export class EditEventFormComponent {
+export class EditEventFormComponent implements OnInit, OnDestroy {
+  public readonly eventId = input<string | undefined>();
 
   private readonly startVal = format(new Date(), 'yyyy-MM-dd');
   private readonly endVal = format(addMonths(new Date(), 1), 'yyyy-MM-dd');
 
   public readonly eventFormGroup = new FormGroup({
-    name: new FormControl(null, Validators.required),
+    name: new FormControl('', Validators.required),
     starts: new FormControl(this.startVal, Validators.required),
     ends: new FormControl(this.endVal, Validators.required),
-    description: new FormControl(null),
+    description: new FormControl(''),
   });
 
   private readonly startDate = toSignal(
@@ -51,18 +54,64 @@ export class EditEventFormComponent {
     return startDate >= endDate;
   });
 
-  private readonly localizeService = inject(LocalizeService);
-  public readonly localizeFormat$ = this.localizeService.localizationWithFormat$;
+  private readonly local = inject(LocalizeService);
+  public readonly localizeFormat$ = this.local.localizationWithFormat$;
   public readonly EditEventFormLocalize = EditEventFormLocalize;
 
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+
   private readonly toast = inject(ToastService);
+  private readonly request = inject(EdiEventFormRequestService);
+
+  private readonly eventInfo$ = toObservable(this.eventId).pipe(
+    switchMap((eventId) => !!eventId ? this.request.getEventInfo(eventId) : of(null)),
+    shareReplay(1)
+  );
+
+  private readonly destroyed$ = new Subject<void>();
 
   constructor() { }
 
+  ngOnInit(): void {
+    this.eventInfo$.pipe(
+      filter((info) => info !== null),
+      takeUntil(this.destroyed$)
+    ).subscribe((info) => {
+      this.eventFormGroup.patchValue({
+        name: info.name,
+        starts: info.starts,
+        ends: info.ends,
+        description: info.description,
+      });
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(void 0);
+    this.destroyed$.complete();
+  }
+
   public saveChanges(): void {
-    console.log('save changes', this.eventFormGroup.value);
-    this.localizeService.localize(EditEventFormLocalize.HasBeenSaved)
-      .pipe(take(1))
-      .subscribe((message) => this.toast.info(message, 'cloud-done-outline'));
+    const eventId = this.eventId();
+    const formValue = this.eventFormGroup.getRawValue() as any;
+    const request$ = eventId
+      ? this.request.updateEvent(eventId, formValue)
+      : this.request.createEvent(formValue);
+      
+    request$.pipe(take(1)).subscribe((id) => {
+      const mes = this.local.localizeSync(EditEventFormLocalize.HasBeenSaved);
+      this.toast.info(mes, 'cloud-done-outline')
+      this.updateIdQueryParam(id)
+    });
+  }
+
+  private updateIdQueryParam(eventId: string): void {
+    const options: NavigationExtras = {
+      queryParams: { eventId }, 
+      relativeTo: this.activatedRoute,
+      queryParamsHandling: 'merge',
+    };
+    this.router.navigate([], options);
   }
 }

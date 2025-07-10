@@ -1,6 +1,6 @@
 <ion-content class="ion-padding">
-  <app-edit-event-form></app-edit-event-form>
-  <div class="done-actions">
+  <app-edit-event-form [eventId]="eventId()"/>
+  <div *ngIf="eventId()" class="done-actions">
     <ion-button mode="ios" size="small" color="light" (click)="copyToClipboard()">
       <ion-icon name="link-outline" slot="start"/>
       <span> {{ EditEventPageLocalize.Link | localize }} </span>
