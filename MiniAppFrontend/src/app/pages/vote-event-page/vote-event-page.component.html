@@ -19,7 +19,10 @@
           [maxMembers]="info?.users?.length ?? 0"
           [maxOverlap]="result.info()?.maxOverlap"
         ></app-result-filters>
-        <app-result-view-picker-control #viewPicker/>
+        <app-result-view-picker-control
+          #viewPicker
+          (refresh)="result.refresh()"
+        ></app-result-view-picker-control>
         <app-result-view-picker-container
           [viewPick]="viewPicker.value()"
           appResultView
@@ -43,6 +46,7 @@
           [eventId]="eventId()"
           [minDate]="info?.starts"
           [maxDate]="info?.ends"
+          (voteUpdated)="result.refresh()"
         ></app-vote-calendar>
       </div>
     </ion-segment-content>

@@ -3,7 +3,7 @@ import { VoteType } from '../vote-calendar/models';
 import { format, startOfDay } from 'date-fns';
 import { ResultDate } from './models';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { shareReplay, switchMap } from 'rxjs';
+import { shareReplay, startWith, Subject, switchMap } from 'rxjs';
 import { ResultViewRequestService } from './result-view-request.service';
 
 
@@ -22,8 +22,12 @@ export class ResultViewDirective {
   public readonly trimPast = input.required<boolean>();
 
   private readonly request = inject(ResultViewRequestService);
-
-  private readonly info$ = toObservable(this.eventId).pipe(
+  private readonly refresh$ = new Subject<boolean>();
+  private readonly eventid$ = toObservable(this.eventId);
+  
+  private readonly info$ = this.refresh$.pipe(
+    startWith(true),
+    switchMap(() => this.eventid$),
     switchMap((eventId) => this.request.getEventResults(eventId)),
     shareReplay(1)
   );
@@ -46,6 +50,10 @@ export class ResultViewDirective {
   });
   
   constructor() { }
+
+  public refresh(): void {
+    this.refresh$.next(true);
+  }
 
   public formatVoteDate(date: Date) {
     return format(date, 'yyyy-MM-dd');

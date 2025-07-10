@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { IonDateSpecifyDirective } from './directives';
@@ -33,6 +33,7 @@ export class VoteCalendarComponent {
   public readonly eventId = input.required<string>();
   public readonly minDate = input();
   public readonly maxDate = input();
+  public readonly voteUpdated = output();
   // update vote dates event
   public readonly resetDates$ = new Subject<boolean>();
   public readonly clearDates$ = new Subject<boolean>();
@@ -49,9 +50,10 @@ export class VoteCalendarComponent {
     switchMap((dates) => this.request.updateEventVote(this.eventId(), dates)),
     tap(() => {
       const local = VoteCalendarLocalize.HasBeenSaved;
-      this.localizeService.localize(local)
+      this.localizeService.localize(local, true)
         .subscribe((m) => this.toast.info(m, 'cloud-done-outline'));
     }),
+    tap(() => this.voteUpdated.emit()),
     shareReplay(1)
   );
 
