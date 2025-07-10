@@ -61,7 +61,8 @@ export class VoteCalendarComponent {
   public readonly voteDates$: Observable<VoteDate[]> = merge(
     this.resetDates$.pipe(
       startWith(true),
-      switchMap(() => merge(this.loadedVoteDates$, this.updatedVoteDates$))
+      switchMap(() => merge(this.loadedVoteDates$, this.updatedVoteDates$)),
+      map((dates) => dates.slice())
     ),
     this.clearDates$.pipe(map(() => []))
   );
