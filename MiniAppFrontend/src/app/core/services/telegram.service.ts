@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, filter, map, Observable, of, shareReplay, take, tap } from 'rxjs';
+import { combineLatest, filter, finalize, map, Observable, of, shareReplay, switchMap, take, tap } from 'rxjs';
 import { AppColorScheme } from './theme.service';
 import { environment } from 'src/environments/environment';
 import { Localization } from 'src/app/shared/localize';
@@ -47,19 +47,24 @@ export class TelegramService {
 
   constructor() { }
 
-  public initApp(): Observable<string | undefined> {
+  public initApp(): Observable<any> {
     return this.miniApp$.pipe(
       take(1),
-      filter(() => window.location.pathname === '/'),
-      map((miniApp) => miniApp?.initDataUnsafe.start_param),
-      tap((command) => {
-        if (command?.startsWith('event')) {
-          const eventId = command.replace('event', '');
-          this.router.navigate(['vote', eventId]);
-        } else {
-          this.router.navigate(['edit']);
-        }
-      })
+      switchMap((miniApp) => of(window.location.pathname).pipe(
+        filter((path) => path === '/'),
+        // redirect if path is empty
+        tap(() => {
+          const command = miniApp?.initDataUnsafe.start_param;
+          if (command?.startsWith('event')) {
+            const eventId = command.replace('event', '');
+            this.router.navigate(['vote', eventId]);
+          } else {
+            this.router.navigate(['edit']);
+          }
+        }),
+        // mark telegram that app is ready
+        finalize(() => miniApp?.ready ? miniApp.ready() : null)
+      ))
     );
   }
 
