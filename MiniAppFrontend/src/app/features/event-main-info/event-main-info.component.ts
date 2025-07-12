@@ -6,10 +6,10 @@ import { EventMainInfoLocalize } from './event-main-info.localize';
 import { Router } from '@angular/router';
 import { ConfirmService, TelegramService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
-import { filter, shareReplay, switchMap, take, tap } from 'rxjs';
+import { filter, finalize, shareReplay, switchMap, tap } from 'rxjs';
 import { EventMainInfoRequestService } from './event-main-info-request.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { ImgLoadDirective } from 'src/app/shared/directives';
+import { FeatureLoadDirective, ImgLoadDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-event-main-info',
@@ -35,9 +35,14 @@ export class EventMainInfoComponent {
   private readonly confirm = inject(ConfirmService);
   private readonly tg = inject(TelegramService);
   private readonly request = inject(EventMainInfoRequestService);
+  private readonly featureLoad = inject(FeatureLoadDirective, { optional: true });
 
   private readonly info$ = toObservable(this.eventId).pipe(
-    switchMap((eventId) => this.request.getEventInfo(eventId)),
+    tap(() => this.featureLoad?.incrLoading()),
+    switchMap((eventId) =>
+      this.request.getEventInfo(eventId)
+        .pipe(finalize(() => this.featureLoad?.decrLoading()))
+    ),
     shareReplay(1)
   );
 
@@ -70,9 +75,10 @@ export class EventMainInfoComponent {
     const toastMessage = this.local.localizeSync(EventMainInfoLocalize.EventWasDeleted);
     this.confirm.createConfirm({ header, message }).pipe(
       filter(Boolean),
+      tap(() => this.featureLoad?.incrLoading()),
       switchMap(() => this.request.deleteEvent(this.eventId())),
       tap(() => this.toast.info(toastMessage, 'trash-outline')),
-      take(1)
+      finalize(() => this.featureLoad?.decrLoading())
     ).subscribe(() => this.router.navigate(['edit']))
   }
 

@@ -1,6 +1,11 @@
 
 <ion-content class="ion-padding">
-  <app-event-main-info #eventMainInfo [eventId]="eventId()"/>
+  <app-event-main-info
+    #eventMainInfo
+    appFeatureLoad
+    [eventId]="eventId()"
+  ></app-event-main-info>
+
   @let info = eventMainInfo.info();
   <ion-segment mode="ios" value="vote">
     <ion-segment-button value="info" contentId="info">
@@ -16,14 +21,19 @@
       <div class="segment-view-content">
         <app-result-filters
           #filters
+          [disabled]="resLoading.loading$ | async"
           [maxMembers]="info?.users?.length ?? 0"
           [maxOverlap]="result.info()?.maxOverlap"
         ></app-result-filters>
         <app-result-view-picker-control
           #viewPicker
+          [disabled]="resLoading.loading$ | async"
           (refresh)="result.refresh()"
         ></app-result-view-picker-control>
         <app-result-view-picker-container
+          appFeatureLoad
+          placeholderOpacity="0.5"
+          #resLoading="appFeatureLoad"
           [viewPick]="viewPicker.value()"
           appResultView
           #result="appResultView"
@@ -43,6 +53,8 @@
     <ion-segment-content id="vote">
       <div class="segment-view-content">
         <app-vote-calendar
+          appFeatureLoad
+          placeholderOpacity="0.5"
           [eventId]="eventId()"
           [minDate]="info?.starts"
           [maxDate]="info?.ends"

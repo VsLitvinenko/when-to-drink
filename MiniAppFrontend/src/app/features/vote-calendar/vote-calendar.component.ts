@@ -9,8 +9,9 @@ import { SmallToolsService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
 import { VoteCalendarLocalize } from './vote-calendar.localize';
 import { VoteCalendarRequestService } from './vote-calendar-request.service';
-import { map, merge, Observable, shareReplay, startWith, Subject, switchMap, take, tap } from 'rxjs';
+import { finalize, map, merge, Observable, shareReplay, startWith, Subject, switchMap, take, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { FeatureLoadDirective } from 'src/app/shared/directives';
 
 
 const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -40,18 +41,26 @@ export class VoteCalendarComponent {
   public readonly saveDates$ = new Subject<VoteDate[]>();
 
   private readonly request = inject(VoteCalendarRequestService);
+  private readonly featureLoad = inject(FeatureLoadDirective, { optional: true });
   // get init data
   private readonly loadedVoteDates$ = toObservable(this.eventId).pipe(
-    switchMap((eventId) => this.request.getEventVote(eventId)),
+    tap(() => this.featureLoad?.incrLoading()),
+    switchMap((eventId) =>
+      this.request.getEventVote(eventId)
+        .pipe(finalize(() => this.featureLoad?.decrLoading()))
+    ),
     shareReplay(1)
   );
   // update data
   private readonly updatedVoteDates$ = this.saveDates$.pipe(
-    switchMap((dates) => this.request.updateEventVote(this.eventId(), dates)),
+    tap(() => this.featureLoad?.incrLoading()),
+    switchMap((dates) =>
+      this.request.updateEventVote(this.eventId(), dates)
+        .pipe(finalize(() => this.featureLoad?.decrLoading()))
+    ),
     tap(() => {
-      const local = VoteCalendarLocalize.HasBeenSaved;
-      this.localizeService.localize(local, true)
-        .subscribe((m) => this.toast.info(m, 'cloud-done-outline'));
+      const message = this.loc.localizeSync(VoteCalendarLocalize.HasBeenSaved);
+      this.toast.info(message, 'cloud-done-outline');
     }),
     tap(() => this.voteUpdated.emit()),
     shareReplay(1)
@@ -80,8 +89,8 @@ export class VoteCalendarComponent {
   private readonly tools = inject(SmallToolsService);
   public readonly isTouchDevice = this.tools.isTouchDevice;
 
-  private readonly localizeService = inject(LocalizeService);
-  public readonly localizeFormat$ = this.localizeService.localizationWithFormat$;
+  private readonly loc = inject(LocalizeService);
+  public readonly localizeFormat$ = this.loc.localizationWithFormat$;
   public readonly VoteCalendarLocalize = VoteCalendarLocalize;
 
   constructor() { }
@@ -97,10 +106,6 @@ export class VoteCalendarComponent {
       
     this.startTime.set(startValue);
     this.endTime.set(endValue);
-  }
-
-  public toastOnSave(): void {
-
   }
   
 }

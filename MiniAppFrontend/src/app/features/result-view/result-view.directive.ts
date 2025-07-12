@@ -3,8 +3,9 @@ import { VoteType } from '../vote-calendar/models';
 import { format, startOfDay } from 'date-fns';
 import { ResultDate } from './models';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { shareReplay, startWith, Subject, switchMap } from 'rxjs';
+import { finalize, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
 import { ResultViewRequestService } from './result-view-request.service';
+import { FeatureLoadDirective } from 'src/app/shared/directives';
 
 
 const today = startOfDay(new Date());
@@ -22,13 +23,19 @@ export class ResultViewDirective {
   public readonly trimPast = input.required<boolean>();
 
   private readonly request = inject(ResultViewRequestService);
+  private readonly featureLoad = inject(FeatureLoadDirective, { optional: true });
+
   private readonly refresh$ = new Subject<boolean>();
   private readonly eventid$ = toObservable(this.eventId);
   
   private readonly info$ = this.refresh$.pipe(
     startWith(true),
     switchMap(() => this.eventid$),
-    switchMap((eventId) => this.request.getEventResults(eventId)),
+    tap(() => this.featureLoad?.incrLoading()),
+    switchMap((eventId) =>
+      this.request.getEventResults(eventId)
+        .pipe(finalize(() => this.featureLoad?.decrLoading()))
+    ),
     shareReplay(1)
   );
 

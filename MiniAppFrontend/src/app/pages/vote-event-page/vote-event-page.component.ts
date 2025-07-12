@@ -7,6 +7,7 @@ import { PageCommonModule } from 'src/app/shared';
 import { ResultViewPickerContainerComponent, ResultViewPickerControlComponent, ViewPick } from '../../features/result-view-picker';
 import { ResultViewCalendarComponent, ResultViewDirective, ResultViewListComponent } from 'src/app/features/result-view';
 import { VotePageLocalize } from './vote-event-page.localize';
+import { FeatureLoadDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-vote-event-page',
@@ -26,6 +27,7 @@ import { VotePageLocalize } from './vote-event-page.localize';
     IonSegmentButton,
     IonSegmentContent,
     IonSegmentView,
+    FeatureLoadDirective,
   ],
   host: {
     class: 'app-page-inner',
