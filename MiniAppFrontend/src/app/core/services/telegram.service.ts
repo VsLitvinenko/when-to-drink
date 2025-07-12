@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
-import { filter, map, Observable, of, shareReplay, take, tap } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, shareReplay, take, tap } from 'rxjs';
 import { AppColorScheme } from './theme.service';
 import { environment } from 'src/environments/environment';
 import { Localization } from 'src/app/shared/localize';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,13 @@ import { Router } from '@angular/router';
 export class TelegramService {
 
   private readonly router = inject(Router);
+  private readonly http = inject(HttpClient);
+
+  private readonly tgBotUrl$ = this.http.get<any>('utils/bot-url').pipe(
+    map((res) => res.botUrl),
+    shareReplay(1)
+  );
+
   private readonly miniApp$ = this.getTelegramMiniApp();
 
   public readonly initData$ = this.miniApp$.pipe(
@@ -55,9 +63,14 @@ export class TelegramService {
     );
   }
 
-  public share(url: string, text?: string): void {
-    const tgUrl = `https://t.me/share/url?url=${url}&text=${text}`;
-    this.miniApp$.subscribe((val) => val.openTelegramLink(tgUrl));
+  public shareEvent(eventId: string, eventName?: string): void {
+    combineLatest([this.tgBotUrl$, this.miniApp$])
+      .pipe(take(1))
+      .subscribe(([botUrl, miniApp]) => {
+        const eventUrl = `${botUrl}?startapp=event${eventId}`;
+        const url = `https://t.me/share/url?url=${eventUrl}&text=${eventName ?? ''}`;
+        miniApp.openTelegramLink(url);
+      });
   }
 
   private getTelegramMiniApp(): Observable<any> {

@@ -41,9 +41,9 @@ export class EditEventPageComponent {
   }
 
   public share(): void {
-    const url = 'vslitvinenko.github.io/when-to-drink';
-    const text = 'whoever reads this will die';
-    this.tg.share(url, text);
+    if (this.eventId()) {
+      this.tg.shareEvent(this.eventId() as string);
+    }
   }
 
   public redirectToEvent(): void {
