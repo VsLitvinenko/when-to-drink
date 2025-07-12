@@ -6,7 +6,7 @@ import { LocalizeService } from 'src/app/shared/localize';
 import { TelegramService, ToastService } from 'src/app/core/services';
 import { EditEventPageLocalize } from './edit-event-page.localize';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
+import { from, switchMap, take } from 'rxjs';
 
 @Component({
   selector: 'app-edit-event-page',
@@ -29,15 +29,21 @@ export class EditEventPageComponent {
   private readonly toast = inject(ToastService);
   private readonly tg = inject(TelegramService);
   
-  private readonly localizeService = inject(LocalizeService);
+  private readonly local = inject(LocalizeService);
   public readonly EditEventPageLocalize = EditEventPageLocalize;
 
   constructor() { }
 
   public copyToClipboard(): void {
-    this.localizeService.localize(EditEventPageLocalize.ClipboardLink)
-      .pipe(take(1))
-      .subscribe((message) => this.toast.light(message, 'clipboard-outline'));
+    this.tg.getEventTgLink(this.eventId()!)
+      .pipe(
+        switchMap((link) => from(navigator.clipboard.writeText(link))),
+        take(1)
+      )
+      .subscribe(() => {
+        const toastMessage = this.local.localizeSync(EditEventPageLocalize.ClipboardLink);
+        this.toast.light(toastMessage, 'clipboard-outline')
+      });
   }
 
   public share(): void {

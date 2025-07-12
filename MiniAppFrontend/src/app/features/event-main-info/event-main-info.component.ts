@@ -6,7 +6,7 @@ import { EventMainInfoLocalize } from './event-main-info.localize';
 import { Router } from '@angular/router';
 import { ConfirmService, TelegramService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
-import { filter, finalize, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
+import { filter, finalize, from, shareReplay, startWith, Subject, switchMap, take, tap } from 'rxjs';
 import { EventMainInfoRequestService } from './event-main-info-request.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FeatureLoadDirective, ImgLoadDirective } from 'src/app/shared/directives';
@@ -63,8 +63,15 @@ export class EventMainInfoComponent {
   }
 
   public copyToClipboard(): void {
-    const toastMessage = this.local.localizeSync(EventMainInfoLocalize.ClipboardLink);
-    this.toast.light(toastMessage, 'clipboard-outline')
+    this.tg.getEventTgLink(this.eventId())
+      .pipe(
+        switchMap((link) => from(navigator.clipboard.writeText(link))),
+        take(1)
+      )
+      .subscribe(() => {
+        const toastMessage = this.local.localizeSync(EventMainInfoLocalize.ClipboardLink);
+        this.toast.light(toastMessage, 'clipboard-outline')
+      });
   }
 
   public share(): void {

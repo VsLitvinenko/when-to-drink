@@ -68,13 +68,16 @@ export class TelegramService {
     );
   }
 
+  public getEventTgLink(eventId: string): Observable<string> {
+    return this.tgBotUrl$.pipe(map((botUrl) => `${botUrl}?startapp=event${eventId}`));
+  }
+
   public shareEvent(eventId: string, eventName?: string): void {
-    combineLatest([this.tgBotUrl$, this.miniApp$])
+    combineLatest([this.getEventTgLink(eventId), this.miniApp$])
       .pipe(take(1))
-      .subscribe(([botUrl, miniApp]) => {
-        const eventUrl = `${botUrl}?startapp=event${eventId}`;
+      .subscribe(([eventUrl, miniApp]) => {
         const url = `https://t.me/share/url?url=${eventUrl}&text=${eventName ?? ''}`;
-        miniApp.openTelegramLink(url);
+        miniApp?.openTelegramLink(url);
       });
   }
 

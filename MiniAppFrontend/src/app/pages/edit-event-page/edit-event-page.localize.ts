@@ -21,7 +21,7 @@ export const EditEventPageLocalize: LocalizationPreset<LocalizeEnum> = {
     ru: 'Перейти',
   },
   ClipboardLink: {
-    en: 'Link to created event was copied to clipboard',
-    ru: 'Ссылка на созданное событие скопирована в буфер обмена',
+    en: 'Link to event was copied to clipboard',
+    ru: 'Ссылка на событие скопирована в буфер обмена',
   },
 };
