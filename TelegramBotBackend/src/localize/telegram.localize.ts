@@ -3,7 +3,8 @@ import { LocalizationPreset } from './localize.model';
 enum LocalizeEnum {
   StartMessage = 'StartMessage',
   NoCreatedEvents = 'NoCreatedEvents',
-  AmountOfEvents = 'AmountOfEvents',
+  AmountOfCreated = 'AmountOfCreated',
+  AmountOfVoted = 'AmountOfVoted',
   Error = 'Error',
 }
 
@@ -16,9 +17,13 @@ export const TelegramLocalize: LocalizationPreset<LocalizeEnum> = {
     en: 'You have not created any events yet',
     ru: 'Вы все еще не создали ни одного события',
   },
-  AmountOfEvents: {
+  AmountOfCreated: {
     en: 'Amount of created events',
     ru: 'Всего создано событий',
+  },
+  AmountOfVoted: {
+    en: 'Amount of events you have voted',
+    ru: 'Количество событий, в которых вы участвуете',
   },
   Error: {
     en: 'Something went wrong, unexpected error',

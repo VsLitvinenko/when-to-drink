@@ -1,6 +1,5 @@
-
 import { Localization, TelegramLocalize } from './localize';
-import { getEventsByCreator, getUserByTgId } from './database';
+import { getEventsByCreator, getUserByTgId, getVotesByUser, IEventDb } from './database';
 import TelegramBot from 'node-telegram-bot-api';
 
 const bot = new TelegramBot(
@@ -10,17 +9,23 @@ const bot = new TelegramBot(
 
 export const initTgBot = () => {
   bot.on('message', async (msg) => {
-    const chatId = msg.chat.id;
-    const text = msg.text;
-    switch (text) {
-      case '/start':
-        await startCommand(chatId, msg.from);
-        break;
-      case '/created':
-        createdCommand(chatId, msg.from)
-        break;
-      case '/voted':
-        break;
+    try {
+      const chatId = msg.chat.id;
+      const text = msg.text;
+      switch (text) {
+        case '/start':
+          await startCommand(chatId, msg.from);
+          break;
+        case '/created':
+          await createdCommand(chatId, msg.from);
+          break;
+        case '/voted':
+          await votedCommand(chatId, msg.from);
+          break;
+      }
+    } catch (e) {
+      const loc = (msg.from?.language_code ?? 'en') as Localization;
+      await bot.sendMessage(msg.chat.id, TelegramLocalize.Error[loc]);
     }
   });
 };
@@ -49,20 +54,29 @@ const startCommand = async (chatId: number, user?: TelegramBot.User) => {
 const createdCommand = async(chatId: number, user?: TelegramBot.User) => {
   if (!user) { return; }
   const loc = (user?.language_code ?? 'en') as Localization;
-  try {
-    const botUrl = await getBotUrl();
-    const dbUser = await getUserByTgId(user.id);
-    const events = await getEventsByCreator(dbUser._id);
-    if (!events || events.length === 0) {
-      bot.sendMessage(chatId, TelegramLocalize.NoCreatedEvents[loc]);
-      return;
-    }
-    const options: TelegramBot.SendMessageOptions = { disable_web_page_preview: true };
-    const eventLinks = events.map((e) => `${e.name} - ${botUrl}?startapp=event${e._id}`);
-    const baseMessage = `${TelegramLocalize.AmountOfEvents[loc]} - ${events.length}:`;
-    const message = `${baseMessage}\n\n${eventLinks.join('\n\n')}`;
-    await bot.sendMessage(chatId, message, options);
-  } catch (e) {
-    await bot.sendMessage(chatId, TelegramLocalize.Error[loc]);
+  const botUrl = await getBotUrl();
+  const dbUser = await getUserByTgId(user.id);
+  const events = await getEventsByCreator(dbUser._id);
+  if (!events || events.length === 0) {
+    bot.sendMessage(chatId, TelegramLocalize.NoCreatedEvents[loc]);
+    return;
   }
+  const options: TelegramBot.SendMessageOptions = { disable_web_page_preview: true };
+  const eventLinks = events.map((e) => `${e.name} - ${botUrl}?startapp=event${e._id}`);
+  const baseMessage = `${TelegramLocalize.AmountOfCreated[loc]} - ${events.length}:`;
+  const message = `${baseMessage}\n\n${eventLinks.join('\n\n')}`;
+  await bot.sendMessage(chatId, message, options);
+}
+
+const votedCommand = async(chatId: number, user?: TelegramBot.User) => {
+  if (!user) { return; }
+  const loc = (user?.language_code ?? 'en') as Localization;
+  const botUrl = await getBotUrl();
+  const dbUser = await getUserByTgId(user.id);
+  const votes = await getVotesByUser(dbUser).populate<{ event: IEventDb }>('event');
+  const options: TelegramBot.SendMessageOptions = { disable_web_page_preview: true };
+  const eventLinks = votes.map((v) => `${v.event.name} - ${botUrl}?startapp=event${v.event._id}`);
+  const baseMessage = `${TelegramLocalize.AmountOfVoted[loc]} - ${votes.length}:`;
+  const message = `${baseMessage}\n\n${eventLinks.join('\n\n')}`;
+  await bot.sendMessage(chatId, message, options);
 }
