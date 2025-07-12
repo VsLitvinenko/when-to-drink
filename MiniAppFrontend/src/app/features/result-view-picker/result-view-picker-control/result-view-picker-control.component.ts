@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { SharedFeatureModule } from 'src/app/shared';
 import { ViewPick } from '../models/view-pick.enum';
 
@@ -9,6 +9,8 @@ import { ViewPick } from '../models/view-pick.enum';
   imports: [SharedFeatureModule],
 })
 export class ResultViewPickerControlComponent {
+  @Input() disabled: boolean | null = false;
+
   public readonly ViewPick = ViewPick;
   public readonly value = signal(ViewPick.List);
 

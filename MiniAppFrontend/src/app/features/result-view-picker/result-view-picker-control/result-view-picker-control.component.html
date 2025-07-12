@@ -1,5 +1,9 @@
 
-<div class="picker" [ngClass]="value()">
+<div
+  class="picker"
+  [ngClass]="value()"
+  [class.disabled]="disabled"
+>
   <div class="item" (click)="value.set(ViewPick.List)">
     <ion-icon name="list-outline"></ion-icon>
   </div>

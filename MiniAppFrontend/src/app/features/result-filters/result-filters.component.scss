@@ -1,3 +1,8 @@
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 ion-accordion {
   background: var(--ion-color-light, #f4f5f8);
   border-radius: 0.5rem;

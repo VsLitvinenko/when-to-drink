@@ -6,6 +6,11 @@
 }
 
 .picker {
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
   position: relative;
   display: flex;
   border-radius: 0.5rem;
