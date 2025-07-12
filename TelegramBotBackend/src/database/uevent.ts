@@ -66,6 +66,7 @@ export interface IEventDb extends IEvent {
 export type PEvent = Partial<IEvent>;
 
 export const getEventById = (id: any) => UEventModel.findById(id);
+export const getEventsByCreator = (creator: any) => UEventModel.find({ creator });
 export const isEventExist = (id: any) => UEventModel.exists({ _id: id }).then((exist) => exist?._id);
 export const createEvent = (val: IEvent) => new UEventModel(val).save().then((uEvent) => uEvent.toObject());
 export const deleteEventById = (id: any) => UEventModel.findByIdAndDelete(id);
