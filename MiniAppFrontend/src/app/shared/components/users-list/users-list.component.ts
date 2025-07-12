@@ -3,6 +3,7 @@ import { IonAvatar, IonList, IonItem, IonLabel, IonSearchbar } from '@ionic/angu
 import { CommonModule } from '@angular/common';
 import { LocalizePipe } from '../../localize';
 import { UsersListLocalize } from './users-list.localize';
+import { ImgLoadDirective } from '../../directives';
 
 export interface UserItem {
   photoUrl: string;
@@ -26,6 +27,7 @@ export interface UserClickedEvent<TUser extends UserItem> {
     IonAvatar,
     IonLabel,
     IonSearchbar,
+    ImgLoadDirective,
   ],
 })
 export class UsersListComponent<TUser extends UserItem> {

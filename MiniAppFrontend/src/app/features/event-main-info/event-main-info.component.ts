@@ -9,6 +9,7 @@ import { LocalizeService } from 'src/app/shared/localize';
 import { filter, shareReplay, switchMap, take, tap } from 'rxjs';
 import { EventMainInfoRequestService } from './event-main-info-request.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ImgLoadDirective } from 'src/app/shared/directives';
 
 @Component({
   selector: 'app-event-main-info',
@@ -23,6 +24,7 @@ import { toObservable, toSignal } from '@angular/core/rxjs-interop';
     IonPopover,
     AvatarsListComponent,
     UsersListComponent,
+    ImgLoadDirective,
   ],
 })
 export class EventMainInfoComponent {

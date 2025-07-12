@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { IonAvatar } from '@ionic/angular/standalone';
 import { UserItem } from '../users-list/users-list.component';
+import { ImgLoadDirective } from '../../directives';
 
 @Component({
   selector: 'app-avatars-list',
@@ -10,6 +11,7 @@ import { UserItem } from '../users-list/users-list.component';
   imports: [
     CommonModule,
     IonAvatar,
+    ImgLoadDirective,
   ],
 })
 export class AvatarsListComponent {

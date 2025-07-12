@@ -1,0 +1,19 @@
+.skeleton-placeholder {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-light) 20%,
+    var(--skeleton-dark) 50%,
+    var(--skeleton-light) 80%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s infinite linear;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

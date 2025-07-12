@@ -4,7 +4,7 @@
     <!-- header -->
     <ion-item slot="header" class="header-item">
       <ion-avatar slot="start">
-        <img [src]="eventInfo?.creator?.photoUrl"/>
+        <img appImgLoad [src]="eventInfo?.creator?.photoUrl"/>
       </ion-avatar>
       <ion-label> {{ eventInfo?.name ?? 'Event name' }} </ion-label>
       <ion-button
