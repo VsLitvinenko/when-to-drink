@@ -1,5 +1,5 @@
-import { Component, input, OnInit } from '@angular/core';
-import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView } from '@ionic/angular/standalone';
+import { Component, input, viewChild } from '@angular/core';
+import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, ViewWillEnter } from '@ionic/angular/standalone';
 import { EventMainInfoComponent } from 'src/app/features/event-main-info';
 import { ResultFiltersComponent } from 'src/app/features/result-filters';
 import { VoteCalendarComponent } from 'src/app/features/vote-calendar';
@@ -33,14 +33,21 @@ import { FeatureLoadDirective } from 'src/app/shared/directives';
     class: 'app-page-inner',
   },
 })
-export class VoteEventPageComponent  implements OnInit {
+export class VoteEventPageComponent  implements ViewWillEnter {
   public readonly eventId = input.required<string>();
+  private readonly mainInfoComponent = viewChild(EventMainInfoComponent);
+  private alreadyInit = false;
 
   public readonly ViewPick = ViewPick;
   public readonly VotePageLocalize = VotePageLocalize;
 
   constructor() { }
 
-  ngOnInit() {}
-
+  ionViewWillEnter(): void {
+    if (this.alreadyInit) {
+      this.mainInfoComponent()?.refresh();
+    } else {
+      this.alreadyInit = true;
+    }
+  }
 }

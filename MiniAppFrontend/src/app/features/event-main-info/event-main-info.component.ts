@@ -6,7 +6,7 @@ import { EventMainInfoLocalize } from './event-main-info.localize';
 import { Router } from '@angular/router';
 import { ConfirmService, TelegramService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
-import { filter, finalize, shareReplay, switchMap, tap } from 'rxjs';
+import { filter, finalize, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
 import { EventMainInfoRequestService } from './event-main-info-request.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FeatureLoadDirective, ImgLoadDirective } from 'src/app/shared/directives';
@@ -29,6 +29,7 @@ import { FeatureLoadDirective, ImgLoadDirective } from 'src/app/shared/directive
 })
 export class EventMainInfoComponent {
   public readonly eventId = input.required<string>();
+  private readonly eventId$ = toObservable(this.eventId);
 
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
@@ -37,7 +38,10 @@ export class EventMainInfoComponent {
   private readonly request = inject(EventMainInfoRequestService);
   private readonly featureLoad = inject(FeatureLoadDirective, { optional: true });
 
-  private readonly info$ = toObservable(this.eventId).pipe(
+  private refreshInfo$ = new Subject<boolean>();
+  private readonly info$ = this.refreshInfo$.pipe(
+    startWith(true),
+    switchMap(() => this.eventId$),
     tap(() => this.featureLoad?.incrLoading()),
     switchMap((eventId) =>
       this.request.getEventInfo(eventId)
@@ -52,6 +56,10 @@ export class EventMainInfoComponent {
   public readonly EventMainInfoLocalize = EventMainInfoLocalize;
 
   constructor() { }
+
+  public refresh(): void {
+    this.refreshInfo$.next(true);
+  }
 
   public copyToClipboard(): void {
     const toastMessage = this.local.localizeSync(EventMainInfoLocalize.ClipboardLink);
