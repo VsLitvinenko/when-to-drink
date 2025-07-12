@@ -15,6 +15,7 @@ type ReqRes = {
   ends: string;
   description?: string;
   creator: {
+    tgId: number;
     fullName: string;
     photoUrl?: string;
   };
@@ -57,6 +58,7 @@ export async function eventGetHandle(
     description: event.description,
     users: mappedUsers,
     creator: {
+      tgId: creator.tgId,
       fullName: `${creator.firstName} ${creator.lastName}`,
       photoUrl: creator.photoUrl,
     },

@@ -11,7 +11,7 @@ export interface EventInfo {
   ends: Date;
   description?: string;
   users: UserItem[];
-  creator: UserItem;
+  creator: UserItem & { tgId: number };
 }
 
 @Injectable({

@@ -51,6 +51,7 @@ export class EventMainInfoComponent {
   );
 
   public readonly info = toSignal(this.info$);
+  public readonly tgUserId$ = this.tg.userId$;
   
   private readonly local = inject(LocalizeService);
   public readonly EventMainInfoLocalize = EventMainInfoLocalize;
