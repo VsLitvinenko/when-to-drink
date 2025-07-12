@@ -1,4 +1,5 @@
-import { getDbUserId } from '../../middlewares';
+import { sendMessageOnCreateEvent } from './../../telegram';
+import { getAuthData, getDbUserId } from '../../middlewares';
 import { createEvent } from '../../database';
 import { Request, Response } from 'express';
 
@@ -32,5 +33,9 @@ export async function eventPostHandle(
     throw new Error('Cannot get request creator');
   }
   const event = await createEvent({ ...body, creator});
+  const userData = getAuthData(res);
+  if (userData) {
+    await sendMessageOnCreateEvent(userData, event as any);
+  }
   res.status(200).json({ id: String(event._id) });
 }

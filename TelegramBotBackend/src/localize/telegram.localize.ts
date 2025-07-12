@@ -5,6 +5,8 @@ enum LocalizeEnum {
   NoCreatedEvents = 'NoCreatedEvents',
   AmountOfCreated = 'AmountOfCreated',
   AmountOfVoted = 'AmountOfVoted',
+  EventCreated = 'EventCreated',
+  ShareWithFriends = 'ShareWithFriends',
   Error = 'Error',
 }
 
@@ -24,6 +26,14 @@ export const TelegramLocalize: LocalizationPreset<LocalizeEnum> = {
   AmountOfVoted: {
     en: 'Amount of events you have voted',
     ru: 'Количество событий, в которых вы участвуете',
+  },
+  EventCreated: {
+    en: 'You have created a new event',
+    ru: 'Вы создали новое событие',
+  },
+  ShareWithFriends: {
+    en: 'Do not forget to share it with your friends!',
+    ru: 'Не забудьте поделиться им с друзьями!'
   },
   Error: {
     en: 'Something went wrong, unexpected error',
