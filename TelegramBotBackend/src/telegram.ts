@@ -1,9 +1,7 @@
-import env from '../.environment.json';
 import TelegramBot from 'node-telegram-bot-api';
 
-
 const bot = new TelegramBot(
-  env.tgBotToken,
+  process.env.TELEGRAM_TOKEN,
   { polling: true }
 );
 
@@ -19,16 +17,12 @@ export const initTgBot = () => {
             inline_keyboard: [
               [{
                 text: 'Create New Event',
-                web_app: { url: env.webAppUrl },
+                web_app: { url: process.env.WEB_APP_URL },
               }],
             ],
           },
         };
         await bot.sendMessage(chatId, startMsg, options);
-        break;
-      default:
-        const defaultMsg = '';
-        await bot.sendMessage(chatId, defaultMsg);
         break;
     }
   });

@@ -51,4 +51,4 @@ yarn-error.log
 Thumbs.db
 
 # Secrets files
-.environment.json
+.env
