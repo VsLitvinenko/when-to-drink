@@ -1,9 +1,8 @@
 import { InitData, parse, validate } from '@telegram-apps/init-data-node';
+import { env } from '../env';
 import { RequestHandler, Response } from 'express';
 
 const authDataKey = 'initData';
-const tgToken = process.env.TELEGRAM_TOKEN;
-const expiresIn = Number(process.env.TELEGRAM_TOKEN_EXPIRES_IN);
 
 export const authMiddleware: RequestHandler = (req, res, next) => {
   const headerName = 'Authorization';
@@ -14,7 +13,7 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
   }
   try {
     // two weeks auth token expire (dev mode)
-    validate(authData, tgToken, { expiresIn });
+    validate(authData, env.tgToken, { expiresIn: env.tgTokenExpiresIn });
     res.locals[authDataKey] = parse(authData);
     return next();
   } catch (e) {

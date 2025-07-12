@@ -1,15 +1,13 @@
 import { Localization, TelegramLocalize } from './localize';
 import { InitData } from '@telegram-apps/init-data-node';
 import { getEventsByCreator, getUserByTgId, getVotesByUser, IEventDb } from './database';
+import { env } from './env';
 import TelegramBot from 'node-telegram-bot-api';
 
 
 /*-------------------------init bot-------------------------*/
 
-const bot = new TelegramBot(
-  process.env.TELEGRAM_TOKEN,
-  { polling: true }
-);
+const bot = new TelegramBot(env.tgToken, { polling: true });
 
 export const initTgBot = () => {
   bot.on('message', async (msg) => {
@@ -65,7 +63,7 @@ const startCommand = async (chatId: number, user?: TelegramBot.User) => {
       inline_keyboard: [
         [{
           text: 'Create New Event',
-          web_app: { url: process.env.WEB_APP_URL },
+          web_app: { url: env.webAppUrl },
         }],
       ],
     },

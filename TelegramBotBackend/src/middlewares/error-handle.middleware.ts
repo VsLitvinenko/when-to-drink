@@ -1,6 +1,5 @@
+import { env } from '../env';
 import { ErrorRequestHandler } from 'express';
-
-const prod = process.env.PRODUCTION === 'true';
 
 export const errorHandleMiddleware: ErrorRequestHandler = (err, req, res, next) => {
   const statusCode = res.statusCode >= 400 ? res.statusCode : 500;
@@ -10,6 +9,6 @@ export const errorHandleMiddleware: ErrorRequestHandler = (err, req, res, next) 
     status: res.statusCode,
     message: err.message,
     processed: true,
-    stack: prod ? undefined : err.stack,
+    stack: env.production ? undefined : err.stack,
   });
 }
