@@ -1,5 +1,5 @@
 import { authMiddleware, dbUserMiddleware, errorHandleMiddleware, getAuthData, getDbUserId } from './middlewares';
-import { eventsRouter, resultsRouter, votesRouter } from './routes';
+import { eventsRouter, resultsRouter, utilsRouter, votesRouter } from './routes';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
@@ -28,6 +28,7 @@ export const initServer = () => {
   app.use('/api/events', eventsRouter);
   app.use('/api/votes', votesRouter);
   app.use('/api/results', resultsRouter);
+  app.use('/api/utils', utilsRouter);
 
   // error handler
   app.use(errorHandleMiddleware);
