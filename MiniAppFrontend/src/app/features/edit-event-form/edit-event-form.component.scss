@@ -2,6 +2,13 @@ ion-list {
   background: transparent;
 }
 
+.form-disabled {
+  ion-label,
+  ion-datetime-button {
+    opacity: 0.5 !important;
+  }
+}
+
 ion-item {
   --background: transparent;
   ion-label {
@@ -27,6 +34,18 @@ ion-input {
 
 .save-changes-button {
   margin: 0.5rem 1rem;
+  ion-spinner {
+    margin-left: -0.25rem;
+    margin-inline-end: 0.5rem;
+  }
+  ion-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-inline-end: 0.5rem;
+  }
+  ion-label {
+    line-height: 1.75rem;
+  }
 }
 
 ::ng-deep {

@@ -1,4 +1,9 @@
-<ion-list [formGroup]="eventFormGroup" mode="ios">
+@let disabled = eventFormGroup.disabled;
+<ion-list
+  mode="ios"
+  [formGroup]="eventFormGroup"
+  [class.form-disabled]="disabled"
+>
   <ion-item>
     <ion-label> {{ EditEventFormLocalize.Name | localize }} </ion-label>
     <ion-input
@@ -64,9 +69,22 @@
   mode="ios"
   expand="block"
   class="save-changes-button"
-  [disabled]="eventFormGroup.invalid || isDatesInvalid()"
-  (click)="saveChanges()">
-  {{ (eventId()
-        ? EditEventFormLocalize.UpdateEvent
-        : EditEventFormLocalize.CreateEvent) | localize }}
+  [disabled]="disabled || eventFormGroup.invalid || isDatesInvalid()"
+  (click)="saveChanges()"
+>
+  @if (disabled) {
+    <ion-spinner mode="ios" slot="start"></ion-spinner>
+  } @else {
+    <ion-icon
+      slot="start"
+      [name]="eventId()
+        ? 'checkmark-outline'
+        : 'add-outline'"
+    />
+  }
+  <ion-label>
+    {{ (eventId()
+          ? EditEventFormLocalize.UpdateEvent
+          : EditEventFormLocalize.CreateEvent) | localize }}
+  </ion-label>
 </ion-button>

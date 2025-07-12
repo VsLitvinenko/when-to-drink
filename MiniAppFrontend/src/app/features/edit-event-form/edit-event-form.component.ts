@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, OnDestroy, OnInit } from '@angular/core';
-import { IonDatetime, IonDatetimeButton, IonInput, IonModal, IonTextarea } from '@ionic/angular/standalone';
+import { IonDatetime, IonDatetimeButton, IonInput, IonModal, IonSpinner, IonTextarea } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { EditEventFormLocalize } from './edit-event-form.localize';
 import { LocalizeService } from 'src/app/shared/localize';
@@ -7,7 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { addMonths, format } from 'date-fns';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ToastService } from 'src/app/core/services';
-import { filter, of, shareReplay, Subject, switchMap, take, takeUntil } from 'rxjs';
+import { filter, of, shareReplay, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { EdiEventFormRequestService } from './edit-event-form-request.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
@@ -22,6 +22,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
     IonDatetime,
     IonDatetimeButton,
     IonTextarea,
+    IonSpinner,
     ReactiveFormsModule,
   ],
 })
@@ -63,9 +64,12 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
 
   private readonly toast = inject(ToastService);
   private readonly request = inject(EdiEventFormRequestService);
+  public readonly loading$ = new Subject<boolean>();
 
   private readonly eventInfo$ = toObservable(this.eventId).pipe(
+    tap(() => this.eventFormGroup.disable()),
     switchMap((eventId) => !!eventId ? this.request.getEventInfo(eventId) : of(null)),
+    tap(() => this.eventFormGroup.enable()),
     shareReplay(1)
   );
 
@@ -98,8 +102,10 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
     const request$ = eventId
       ? this.request.updateEvent(eventId, formValue)
       : this.request.createEvent(formValue);
-      
+    
+    this.eventFormGroup.disable();
     request$.pipe(take(1)).subscribe((id) => {
+      this.eventFormGroup.enable();
       const mes = this.local.localizeSync(EditEventFormLocalize.HasBeenSaved);
       this.toast.info(mes, 'cloud-done-outline')
       this.updateIdQueryParam(id)
