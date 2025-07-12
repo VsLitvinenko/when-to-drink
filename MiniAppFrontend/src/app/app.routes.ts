@@ -23,6 +23,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'not-permitted',
+    loadComponent: () =>
+      import('./pages/not-permitted-page/not-permitted-page.component').then(
+        (c) => c.NotPermittedPageComponent
+      ),
+  },
+  {
     path: '',
     redirectTo: 'edit',
     pathMatch: 'full',
