@@ -5,10 +5,6 @@ export const UserSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  username: {
-    type: String,
-    required: true,
-  },
   createdAt: {
     type: Date,
     immutable: true,
@@ -18,6 +14,7 @@ export const UserSchema = new mongoose.Schema({
     type: Date,
     default: () => new Date(),
   },
+  username: String,
   firstName: String,
   lastName: String,
   photoUrl: String,
