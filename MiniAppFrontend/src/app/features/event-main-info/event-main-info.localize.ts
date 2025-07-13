@@ -6,6 +6,7 @@ enum LocalizeEnum {
   Starts = 'Starts',
   Ends = 'Ends',
   Description = 'Description',
+  Refresh = 'Refresh',
   Share = 'Share',
   Link = 'Link',
   Edit = 'Edit',
@@ -36,6 +37,10 @@ export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
   Description: {
     en: 'Description',
     ru: 'Описание',
+  },
+  Refresh: {
+    en: 'Refresh',
+    ru: 'Обновить',
   },
   Share: {
     en: 'Share',

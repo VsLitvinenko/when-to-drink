@@ -23,6 +23,10 @@
         [arrow]="false">
         <ng-template>
           <ion-list class="popover-menu-list" lines="none">
+            <ion-item button [detail]="false" (click)="refreshInfo(); refreshUsers()">
+              <ion-icon name="refresh-outline" slot="start" color="medium"/>
+              <ion-label> {{ EventMainInfoLocalize.Refresh | localize }} </ion-label>
+            </ion-item>
             <ion-item button [detail]="false" (click)="share()">
               <ion-icon name="share-social-outline" slot="start" color="medium"/>
               <ion-label> {{ EventMainInfoLocalize.Share | localize }} </ion-label>
