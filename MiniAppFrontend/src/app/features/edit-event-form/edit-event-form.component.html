@@ -1,5 +1,5 @@
 @let disabled = eventFormGroup.disabled;
-@let canEdit = (eventInfo$ | async)?.canEdit === true;
+@let canEdit = (eventInfo$ | async)?.canEdit !== false;
 <ion-list
   mode="ios"
   [formGroup]="eventFormGroup"

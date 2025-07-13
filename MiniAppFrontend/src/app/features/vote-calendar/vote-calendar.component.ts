@@ -8,8 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { SmallToolsService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
 import { VoteCalendarLocalize } from './vote-calendar.localize';
-import { VoteCalendarRequestService } from './vote-calendar-request.service';
-import { finalize, map, merge, Observable, shareReplay, startWith, Subject, switchMap, take, tap } from 'rxjs';
+import { EventVote, VoteCalendarRequestService } from './vote-calendar-request.service';
+import { finalize, map, merge, Observable, shareReplay, startWith, Subject, switchMap, tap } from 'rxjs';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { FeatureLoadDirective } from 'src/app/shared/directives';
 
@@ -34,7 +34,8 @@ export class VoteCalendarComponent {
   public readonly eventId = input.required<string>();
   public readonly minDate = input();
   public readonly maxDate = input();
-  public readonly voteUpdated = output();
+  public readonly voteUpdated = output<EventVote>();
+
   // update vote dates event
   public readonly resetDates$ = new Subject<boolean>();
   public readonly clearDates$ = new Subject<boolean>();
@@ -42,8 +43,9 @@ export class VoteCalendarComponent {
 
   private readonly request = inject(VoteCalendarRequestService);
   private readonly featureLoad = inject(FeatureLoadDirective, { optional: true });
+
   // get init data
-  private readonly loadedVoteDates$ = toObservable(this.eventId).pipe(
+  private readonly loadedEventVote$ = toObservable(this.eventId).pipe(
     tap(() => this.featureLoad?.incrLoading()),
     switchMap((eventId) =>
       this.request.getEventVote(eventId)
@@ -51,29 +53,30 @@ export class VoteCalendarComponent {
     ),
     shareReplay(1)
   );
+
   // update data
-  private readonly updatedVoteDates$ = this.saveDates$.pipe(
+  private readonly updatedEventVote$ = this.saveDates$.pipe(
     tap(() => this.featureLoad?.incrLoading()),
     switchMap((dates) =>
       this.request.updateEventVote(this.eventId(), dates)
         .pipe(finalize(() => this.featureLoad?.decrLoading()))
     ),
+    tap((eventVote) => this.voteUpdated.emit(eventVote)),
     tap(() => {
       const message = this.loc.localizeSync(VoteCalendarLocalize.HasBeenSaved);
       this.toast.info(message, 'cloud-done-outline');
     }),
-    tap(() => this.voteUpdated.emit()),
     shareReplay(1)
   );
 
   // main data obs
   public readonly voteDates$: Observable<VoteDate[]> = merge(
+    this.clearDates$.pipe(map(() => [])),
     this.resetDates$.pipe(
       startWith(true),
-      switchMap(() => merge(this.loadedVoteDates$, this.updatedVoteDates$)),
-      map((dates) => dates.slice())
+      switchMap(() => merge(this.loadedEventVote$, this.updatedEventVote$)),
+      map((eventVote) => eventVote.dates.slice())
     ),
-    this.clearDates$.pipe(map(() => []))
   );
 
   public readonly startTime = signal(format(new Date(), timeFormat));

@@ -10,6 +10,7 @@ type ReqQuery = {
 }
 
 type ReqRes = {
+  alreadyVoted: boolean;
   dates: Array<{
     date: string;
     voteType: string;
@@ -34,7 +35,7 @@ export async function voteGetHandle(
   const voteId = await isVoteExist(user, event);
   if (!voteId) {
     // user has not voted yet
-    res.status(200).json({ dates: [] });
+    res.status(200).json({ dates: [], alreadyVoted: false });
     return;
   }
   const vote = await getVoteById(voteId);
@@ -44,5 +45,5 @@ export async function voteGetHandle(
     start: d.start ? d.start.toISOString() : undefined,
     end: d.end ? d.end.toISOString() : undefined,
   }));
-  res.status(200).json({ dates });
+  res.status(200).json({ dates, alreadyVoted: true });
 }

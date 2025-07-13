@@ -19,7 +19,7 @@ type ReqBody = {
   }>;
 };
 
-type ReqRes = ReqBody;
+type ReqRes = ReqBody & { alreadyVoted: boolean };
 const logger = createLogChild('handler', 'vote');
 
 /*-------------------------request-------------------------*/
@@ -51,5 +51,5 @@ export async function votePostHandle(
     start: d.start ? d.start.toISOString() : undefined,
     end: d.end ? d.end.toISOString() : undefined,
   }));
-  res.status(200).json({ dates });
+  res.status(200).json({ dates, alreadyVoted: Boolean(voteId) });
 }
