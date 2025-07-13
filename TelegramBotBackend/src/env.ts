@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const env = {
+  logLevel: process.env.LOG_LEVEL?.toLowerCase(),
   port: Number(process.env.PORT),
   production: process.env.PRODUCTION === 'true',
   webAppUrl: process.env.WEB_APP_URL,
