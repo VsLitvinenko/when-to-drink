@@ -66,7 +66,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
   private readonly request = inject(EdiEventFormRequestService);
   public readonly loading$ = new Subject<boolean>();
 
-  private readonly eventInfo$ = toObservable(this.eventId).pipe(
+  public readonly eventInfo$ = toObservable(this.eventId).pipe(
     tap(() => this.eventFormGroup.disable()),
     switchMap((eventId) => !!eventId ? this.request.getEventInfo(eventId) : of(null)),
     tap(() => this.eventFormGroup.enable()),

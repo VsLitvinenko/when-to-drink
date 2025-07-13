@@ -1,4 +1,5 @@
 @let disabled = eventFormGroup.disabled;
+@let canEdit = (eventInfo$ | async)?.canEdit === true;
 <ion-list
   mode="ios"
   [formGroup]="eventFormGroup"
@@ -69,9 +70,13 @@
   mode="ios"
   expand="block"
   class="save-changes-button"
-  [disabled]="disabled || eventFormGroup.invalid || isDatesInvalid()"
   (click)="saveChanges()"
->
+  [disabled]="
+    !canEdit ||
+    disabled ||
+    eventFormGroup.invalid ||
+    isDatesInvalid()
+  ">
   @if (disabled) {
     <ion-spinner mode="ios" slot="start"></ion-spinner>
   } @else {

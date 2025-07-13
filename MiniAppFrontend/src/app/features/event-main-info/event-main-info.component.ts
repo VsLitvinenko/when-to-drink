@@ -39,6 +39,8 @@ export class EventMainInfoComponent {
   private readonly featureLoad = inject(FeatureLoadDirective, { optional: true });
 
   private refreshInfo$ = new Subject<boolean>();
+  private refreshUsers$ = new Subject<boolean>();
+
   private readonly info$ = this.refreshInfo$.pipe(
     startWith(true),
     switchMap(() => this.eventId$),
@@ -50,16 +52,33 @@ export class EventMainInfoComponent {
     shareReplay(1)
   );
 
+  private readonly users$ = this.refreshUsers$.pipe(
+    startWith(true),
+    switchMap(() => this.eventId$),
+    tap(() => this.featureLoad?.incrLoading()),
+    switchMap((eventId) =>
+      this.request.getEventUsers(eventId)
+        .pipe(finalize(() => this.featureLoad?.decrLoading()))
+    ),
+    shareReplay(1)
+  );
+
+
+
   public readonly info = toSignal(this.info$);
-  public readonly tgUserId$ = this.tg.userId$;
+  public readonly users = toSignal(this.users$);
   
   private readonly local = inject(LocalizeService);
   public readonly EventMainInfoLocalize = EventMainInfoLocalize;
 
   constructor() { }
 
-  public refresh(): void {
+  public refreshInfo(): void {
     this.refreshInfo$.next(true);
+  }
+
+  public refreshUsers(): void {
+    this.refreshUsers$.next(true);
   }
 
   public copyToClipboard(): void {

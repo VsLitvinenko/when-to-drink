@@ -10,8 +10,8 @@ export interface EventInfo {
   starts: Date;
   ends: Date;
   description?: string;
-  users: UserItem[];
-  creator: UserItem & { tgId: number };
+  creator: UserItem;
+  canEdit: boolean;
 }
 
 @Injectable({
@@ -24,7 +24,11 @@ export class EventMainInfoRequestService {
   constructor() { }
 
   public getEventInfo(eventId: string): Observable<EventInfo> {
-    return this.http.get<EventInfo>(`${this.baseUrl}/${eventId}`);
+    return this.http.get<EventInfo>(`${this.baseUrl}/info/${eventId}`);
+  }
+
+  public getEventUsers(eventId: string): Observable<UserItem[]> {
+    return this.http.get<UserItem[]>(`${this.baseUrl}/users/${eventId}`);
   }
 
   public deleteEvent(eventId: string): Observable<unknown> {

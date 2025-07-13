@@ -45,7 +45,7 @@ export class VoteEventPageComponent  implements ViewWillEnter {
 
   ionViewWillEnter(): void {
     if (this.alreadyInit) {
-      this.mainInfoComponent()?.refresh();
+      this.mainInfoComponent()?.refreshInfo();
     } else {
       this.alreadyInit = true;
     }

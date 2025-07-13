@@ -7,6 +7,7 @@
   ></app-event-main-info>
 
   @let info = eventMainInfo.info();
+  @let users = eventMainInfo.users();
   <ion-segment mode="ios" value="vote">
     <ion-segment-button value="info" contentId="info">
       <ion-label> {{ VotePageLocalize.Results | localize }} </ion-label>
@@ -22,7 +23,7 @@
         <app-result-filters
           #filters
           [disabled]="resLoading.loading$ | async"
-          [maxMembers]="info?.users?.length ?? 0"
+          [maxMembers]="users?.length ?? 0"
           [maxOverlap]="result.info()?.maxOverlap"
         ></app-result-filters>
         <app-result-view-picker-control

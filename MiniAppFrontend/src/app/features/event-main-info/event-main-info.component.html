@@ -1,4 +1,5 @@
 @let eventInfo = info();
+@let eventUsers = users();
 <ion-accordion-group mode="ios">
   <ion-accordion value="info">
     <!-- header -->
@@ -31,7 +32,7 @@
               <ion-label> {{ EventMainInfoLocalize.Link | localize }} </ion-label>
             </ion-item>
             <!-- creator only actions -->
-            @if ((tgUserId$ | async) === eventInfo?.creator?.tgId) {
+            @if (eventInfo?.canEdit) {
               <ion-item button [detail]="false" (click)="redirectToEdit()">
                 <ion-icon name="create-outline" slot="start" color="medium"/>
                 <ion-label> {{ EventMainInfoLocalize.Edit | localize }} </ion-label>
@@ -47,14 +48,14 @@
     </ion-item>
     <!-- content -->
     <ion-list class="info-list" slot="content" mode="ios">
-      @let membersCount = eventInfo?.users?.length ?? 0;
+      @let membersCount = eventUsers?.length ?? 0;
       @if (membersCount > 0) {
         <ion-item button [detail]="false" (click)="usersModal.present()">
           <ion-label>
             {{ membersCount }}
             {{ EventMainInfoLocalize.Member | localizeMany : membersCount }}
           </ion-label>
-          <app-avatars-list [users]="eventInfo?.users ?? []"/>
+          <app-avatars-list [users]="eventUsers ?? []"/>
         </ion-item>
       }
       <ion-item>
@@ -86,7 +87,7 @@
   [breakpoints]="[0, 1]">
   <ng-template>
     <app-users-list
-      [users]="eventInfo?.users ?? []"
+      [users]="eventUsers ?? []"
       (searchFocused)="usersModal.backdropDismiss = !$event"
     ></app-users-list>
   </ng-template>

@@ -74,6 +74,7 @@ export type PVote = Omit<IVote, 'user' | 'event'>;
 
 export const getVoteById = (id: any) => UVoteModel.findById(id);
 export const getVotesByUser = (user: any) => UVoteModel.find({ user });
+export const getVotesByEvent = (event: any) => UVoteModel.find({ event });
 export const isVoteExist = (user: any, event: any) => UVoteModel.exists({ user, event }) .then((exist) => exist?._id);
 export const createVote = (val: IVote) => new UVoteModel(val).save().then((vote) => vote.toObject());
 export const deleteVotesByEvent = (event: any) => UVoteModel.deleteMany({ event });

@@ -10,8 +10,8 @@ export interface EventInfo {
   starts: string;
   ends: string;
   description?: string;
-  users: UserItem[];
   creator: UserItem;
+  canEdit: boolean;
 }
 
 export type EventBody = Omit<EventInfo, 'id' | 'users' | 'creator'>;
@@ -26,7 +26,7 @@ export class EdiEventFormRequestService {
   constructor() { }
 
   public getEventInfo(eventId: string): Observable<EventInfo> {
-    return this.http.get<EventInfo>(`${this.baseUrl}/${eventId}`);
+    return this.http.get<EventInfo>(`${this.baseUrl}/info/${eventId}`);
   }
 
   public createEvent(body: EventBody): Observable<string> {
