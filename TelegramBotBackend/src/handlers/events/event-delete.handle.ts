@@ -1,6 +1,7 @@
 import { getDbUserId } from './../../middlewares';
 import { deleteEventById, getEventById } from '../../database';
 import { Request, Response } from 'express';
+import { createLogChild } from '../../logs';
 
 
 /*-------------------------types-------------------------*/
@@ -10,6 +11,7 @@ type ReqPar = {
 };
 
 type ReqRes = { id: string };
+const logger = createLogChild('handler', 'event');
 
 /*-------------------------request-------------------------*/
 
@@ -27,5 +29,6 @@ export async function eventDeleteHandle(
     throw new Error('You have no rights to delete this event');
   }
   await deleteEventById(event._id);
+  logger.info('event deleted', event);
   res.status(200).json({ id: String(event._id) });
 }

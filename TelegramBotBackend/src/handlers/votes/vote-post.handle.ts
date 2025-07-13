@@ -1,3 +1,4 @@
+import { createLogChild } from '../../logs';
 import { createVote, isEventExist, isVoteExist, updateVote } from '../../database';
 import { getDbUserId } from '../../middlewares';
 import { Request, Response } from 'express';
@@ -19,6 +20,7 @@ type ReqBody = {
 };
 
 type ReqRes = ReqBody;
+const logger = createLogChild('handler', 'vote');
 
 /*-------------------------request-------------------------*/
 
@@ -40,7 +42,8 @@ export async function votePostHandle(
     throw new Error('Cannot get sender user id');
   }
   const voteId = await isVoteExist(user, event);
-  const vote = !voteId ? await createVote({ user, event, ...body}) : await updateVote(voteId, body);
+  const vote = await (!voteId ?  createVote({ user, event, ...body}) : updateVote(voteId, body));
+  logger.info(`vote ${!voteId ? 'created' : 'updated'}`, vote);
   // convert dates to response
   const dates = vote.dates.map((d) => ({
     date: d.date.toISOString(),

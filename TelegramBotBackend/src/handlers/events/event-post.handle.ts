@@ -2,6 +2,7 @@ import { sendMessageOnCreateEvent } from './../../telegram';
 import { getAuthData, getDbUserId } from '../../middlewares';
 import { createEvent } from '../../database';
 import { Request, Response } from 'express';
+import { createLogChild } from '../../logs';
 
 
 /*-------------------------types-------------------------*/
@@ -13,9 +14,8 @@ type ReqBody = {
   description?: string;
 };
 
-type ReqRes = {
-  id: string;
-};
+type ReqRes = { id: string; };
+const logger = createLogChild('handler', 'event');
 
 /*-------------------------request-------------------------*/
 
@@ -33,6 +33,7 @@ export async function eventPostHandle(
     throw new Error('Cannot get request creator');
   }
   const event = await createEvent({ ...body, creator});
+  logger.info('event created', event);
   const userData = getAuthData(res);
   if (userData) {
     await sendMessageOnCreateEvent(userData, event as any);

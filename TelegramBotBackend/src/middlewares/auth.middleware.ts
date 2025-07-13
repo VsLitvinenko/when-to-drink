@@ -1,14 +1,17 @@
 import { InitData, parse, validate } from '@telegram-apps/init-data-node';
 import { env } from '../env';
 import { RequestHandler, Response } from 'express';
+import { createLogChild } from '../logs';
 
 const authDataKey = 'initData';
+const logger = createLogChild('middleware', 'auth');
 
 export const authMiddleware: RequestHandler = (req, res, next) => {
   const headerName = 'Authorization';
   const authData = req.header(headerName);
   if (!authData) {
     res.status(401);
+    logger.warn('Not authorized user', req);
     return next(new Error('You are not authorized'));
   }
   try {
@@ -18,6 +21,7 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
     return next();
   } catch (e) {
     res.status(403);
+    logger.warn('Forbidden user', req);
     return next(new Error('Your auth data is invalid'));
   }
 }

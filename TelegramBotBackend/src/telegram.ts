@@ -1,12 +1,13 @@
+import { env } from './env';
+import { createLogChild } from './logs';
 import { Localization, TelegramLocalize } from './localize';
 import { InitData } from '@telegram-apps/init-data-node';
 import { getEventsByCreator, getUserByTgId, getVotesByUser, IEventDb } from './database';
-import { env } from './env';
 import TelegramBot from 'node-telegram-bot-api';
 
 
 /*-------------------------init bot-------------------------*/
-
+const logger = createLogChild('telegram', 'bot');
 const bot = new TelegramBot(env.tgToken, { polling: true });
 
 export const initTgBot = () => {
@@ -27,6 +28,7 @@ export const initTgBot = () => {
       }
     } catch (e) {
       const loc = (msg.from?.language_code ?? 'en') as Localization;
+      logger.error('tg bot command error', msg, e);
       await bot.sendMessage(msg.chat.id, TelegramLocalize.Error[loc]);
     }
   });
@@ -50,6 +52,7 @@ export const sendMessageOnCreateEvent = async (data: InitData, event: IEventDb) 
     const message = `${baseMessage}:\n\n${eventLink}\n\n${shareMessage}`;
     await bot.sendMessage(data.user.id, message, options);
   } catch (e) {
+    logger.warn(`Cannot send message to event ${event._id} creator`, data, event);
     console.log(`Cannot send message to event ${event._id} creator`);
     return;
   }

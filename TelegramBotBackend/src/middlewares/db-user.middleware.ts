@@ -1,9 +1,11 @@
 import { RequestHandler, Response } from 'express';
 import { getAuthData } from './auth.middleware';
 import { createUser, isTgUserExist, IUser, updateUser } from '../database';
+import { createLogChild } from '../logs';
 
 const userIdKey = 'dbUserId';
 const handleMethods = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+const logger = createLogChild('middleware', 'dbUser');
 
 export const dbUserMiddleware: RequestHandler = async (req, res, next) => {
   if (!handleMethods.has(req.method)) {
@@ -19,10 +21,12 @@ export const dbUserMiddleware: RequestHandler = async (req, res, next) => {
       lastName: authData.user.last_name,
       photoUrl: authData.user.photo_url,
     };
-    const userAsync = !dbId ? createUser(iUser) : updateUser(dbId, iUser);
-    res.locals[userIdKey] = (await userAsync)._id;
+    const user = await (!dbId ? createUser(iUser) : updateUser(dbId, iUser));
+    logger.info(`database user ${!dbId ? 'created' : 'updated'}`, user);
+    res.locals[userIdKey] = user._id;
     return next();
   } catch (e) {
+    logger.error('Create user error', e);
     res.status(400);
     return next(e);
   }

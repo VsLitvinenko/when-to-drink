@@ -1,6 +1,7 @@
 import { getDbUserId } from './../../middlewares';
 import { getEventById, updateEvent } from '../../database';
 import { Request, Response } from 'express';
+import { createLogChild } from '../../logs';
 
 
 /*-------------------------types-------------------------*/
@@ -17,6 +18,7 @@ type ReqBody = {
 };
 
 type ReqRes = ReqBody & { id: string };
+const logger = createLogChild('handler', 'event');
 
 /*-------------------------request-------------------------*/
 
@@ -35,6 +37,7 @@ export async function eventPatchHandle(
     throw new Error('You have no rights to modify this event');
   }
   const newEvent = await updateEvent(event._id, body);
+  logger.info('event updated', event);
   res.status(200).json({
     id: String(newEvent._id),
     name: newEvent.name,
