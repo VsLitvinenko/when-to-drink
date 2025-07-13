@@ -51,7 +51,8 @@ export class TelegramService {
     return this.miniApp$.pipe(
       take(1),
       switchMap((miniApp) => of(window.location.pathname).pipe(
-        filter((path) => path === '/'),
+        tap(() => console.log('appInit', window.location)),
+        filter((path) => path === environment.baseHref),
         // redirect if path is empty
         tap(() => {
           const command = miniApp?.initDataUnsafe.start_param;
