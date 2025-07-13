@@ -10,13 +10,19 @@ mongoose.connect(env.dbConnection)
   .then(() => console.log('mongo connected'))
   .then(() => initTgBot())
   .then(() => initServer())
-  .then(() => logger.info('APP INIT SUCCESSFULLY'))
+  .then(() => {
+    console.log('!!!!!!!!!!!!!!!!!!!!!!');
+    console.log('!!!!!!!!!!!!!!!!!!!!!!');
+    logger.info('APP INIT SUCCESSFULLY');
+    console.log('APP INIT SUCCESSFULLY');
+    console.log('!!!!!!!!!!!!!!!!!!!!!!');
+    console.log('!!!!!!!!!!!!!!!!!!!!!!');
+  })
   .catch((err) => {
     console.log('!!!!!!!!!!!!!!!!!!!!!!');
     console.log('!!!!!!!!!!!!!!!!!!!!!!');
-    logger.error('connection error with env', env);
-    logger.error('APP INIT ERROR', env, err);
-    console.log(err);
+    logger.error('APP INIT ERROR', err);
+    console.log('APP INIT ERROR', err);
     console.log('!!!!!!!!!!!!!!!!!!!!!!');
     console.log('!!!!!!!!!!!!!!!!!!!!!!');
   });

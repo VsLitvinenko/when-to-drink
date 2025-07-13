@@ -1,5 +1,6 @@
 import { authMiddleware, dbUserMiddleware, errorHandleMiddleware, getAuthData, getDbUserId } from './middlewares';
 import { eventsRouter, resultsRouter, utilsRouter, votesRouter } from './routes';
+import { env } from './env';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
@@ -34,5 +35,5 @@ export const initServer = () => {
   app.use(errorHandleMiddleware);
 
   const server = http.createServer(app);
-  server.listen(8080);
+  server.listen(env.port);
 }
