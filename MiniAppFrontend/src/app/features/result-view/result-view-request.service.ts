@@ -17,7 +17,7 @@ export class ResultViewRequestService {
     const params = { eventId };
     return this.http.get<ResultInfo>(this.baseUrl, { params }).pipe(
       map((info) => {
-        const dates = info.dates.map((d) =>VoteDateConverter.toJsDates(d));
+        const dates = info.dates.map((d) => VoteDateConverter.toJsDates(d));
         return { ...info, dates };
       })
     );
