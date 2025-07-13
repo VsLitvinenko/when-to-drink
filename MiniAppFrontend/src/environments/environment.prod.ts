@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:8080/api',
+  apiUrl: 'https://wtdserver-tiltvinenko.amvera.io/api',
   isTelegramMiniApp: true,
 };
