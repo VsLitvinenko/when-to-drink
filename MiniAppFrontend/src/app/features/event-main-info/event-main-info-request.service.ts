@@ -14,6 +14,8 @@ export interface EventInfo {
   canEdit: boolean;
 }
 
+export type EventUser = UserItem & { username?: string }
+
 @Injectable({
   providedIn: 'root'
 })
@@ -27,7 +29,7 @@ export class EventMainInfoRequestService {
     return this.http.get<EventInfo>(`${this.baseUrl}/info/${eventId}`);
   }
 
-  public getEventUsers(eventId: string): Observable<UserItem[]> {
+  public getEventUsers(eventId: string): Observable<EventUser[]> {
     return this.http.get<UserItem[]>(`${this.baseUrl}/users/${eventId}`);
   }
 

@@ -8,19 +8,24 @@
 
     <ion-list slot="content" mode="ios">
       <ion-item>
-        <ion-checkbox [(ngModel)]="maybe">
-          {{ ResultFiltersLocalize.Consider | localize }}
+        <ion-checkbox [(ngModel)]="noMaybe">
+          {{ ResultFiltersLocalize.Exclude | localize }}
           <ion-text color="warning">
             {{ ResultFiltersLocalize.Maybe | localize }}
           </ion-text>
         </ion-checkbox>
       </ion-item>
       <ion-item>
-        <ion-checkbox [(ngModel)]="time">
-          {{ ResultFiltersLocalize.Consider | localize }}
+        <ion-checkbox [(ngModel)]="noTime">
+          {{ ResultFiltersLocalize.Exclude | localize }}
           <ion-text color="success">
             {{ ResultFiltersLocalize.Time | localize }}
           </ion-text>
+        </ion-checkbox>
+      </ion-item>
+      <ion-item>
+        <ion-checkbox [(ngModel)]="onlyWithMe">
+          {{ ResultFiltersLocalize.OnlyWithMe | localize }}
         </ion-checkbox>
       </ion-item>
       <ion-item>

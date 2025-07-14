@@ -7,6 +7,10 @@ ion-segment-view {
   height: auto;
 }
 
+ion-segment-content.hide {
+  display: none;
+}
+
 .segment-view-content {
   padding: 0.25rem 0.75rem 1.25rem;
   display: flex;

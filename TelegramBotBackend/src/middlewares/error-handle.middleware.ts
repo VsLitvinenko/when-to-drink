@@ -13,7 +13,7 @@ export const errorHandleMiddleware: ErrorRequestHandler = (err, req, res, next) 
     status: res.statusCode,
     message: err.message,
     processed: true,
-    stack: env.production ? undefined : err.stack,
+    stack: env.production() ? undefined : err.stack,
   });
   next();
 }

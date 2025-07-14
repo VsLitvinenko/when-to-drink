@@ -18,7 +18,17 @@
       <ion-avatar slot="start">
         <img appImgLoad [src]="user.photoUrl"/>
       </ion-avatar>
-      <ion-label> {{ user.fullName }} </ion-label>
+      @if (altLabelTemplateRef) {
+        <ng-container
+          [ngTemplateOutlet]="altLabelTemplateRef"
+          [ngTemplateOutletContext]="{
+            $implicit: user,
+            index: $index,
+          }"
+        ></ng-container>
+      } @else {
+        <ion-label> {{ user.fullName }} </ion-label>
+      }
       @if (endTemplateRef) {
         <ng-container
           [ngTemplateOutlet]="endTemplateRef"

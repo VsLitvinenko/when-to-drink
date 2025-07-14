@@ -2,10 +2,11 @@ import { LocalizationPreset } from '../../shared/localize';
 
 enum LocalizeEnum {
   FilterResults = 'FilterResults',
-  Consider = 'Consider',
+  Exclude = 'Exclude',
   Maybe = 'Maybe',
   Time = 'Time',
   IgnorePastDates = 'IgnorePastDates',
+  OnlyWithMe = 'OnlyWithMe',
   AtLeast = 'AtLeast',
   Member = 'Member',
 }
@@ -15,9 +16,9 @@ export const ResultFiltersLocalize: LocalizationPreset<LocalizeEnum> = {
     en: 'Filter results',
     ru: 'Фильтровать результаты',
   },
-  Consider: {
-    en: 'Consider',
-    ru: 'Учитывать',
+  Exclude: {
+    en: 'Exclude',
+    ru: 'Исключить ',
   },
   Maybe: {
     en: '"maybe"',
@@ -30,6 +31,10 @@ export const ResultFiltersLocalize: LocalizationPreset<LocalizeEnum> = {
   IgnorePastDates: {
     en: 'Ignore past dates',
     ru: 'Убрать прошедшие даты',
+  },
+  OnlyWithMe: {
+    en: 'Only with me',
+    ru: 'Только со мной',
   },
   AtLeast: {
     en: 'At least',

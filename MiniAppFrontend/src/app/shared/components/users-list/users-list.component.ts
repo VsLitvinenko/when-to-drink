@@ -51,6 +51,7 @@ export class UsersListComponent<TUser extends UserItem> {
   public readonly searchFocused = output<boolean>();
   public readonly userClicked = output<UserClickedEvent<TUser>>();
 
+  @ContentChild('altLabel', { static: true }) altLabelTemplateRef?: TemplateRef<any>;
   @ContentChild('end', { static: true }) endTemplateRef?: TemplateRef<any>;
 
   public readonly UsersListLocalize = UsersListLocalize;

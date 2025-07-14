@@ -1,4 +1,4 @@
-import { Component, input, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, viewChild } from '@angular/core';
 import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, ViewWillEnter } from '@ionic/angular/standalone';
 import { EventMainInfoComponent } from 'src/app/features/event-main-info';
 import { ResultFiltersComponent } from 'src/app/features/result-filters';
@@ -13,6 +13,7 @@ import { FeatureLoadDirective } from 'src/app/shared/directives';
   selector: 'app-vote-event-page',
   templateUrl: './vote-event-page.component.html',
   styleUrls: ['./vote-event-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     PageCommonModule,
     VoteCalendarComponent,
@@ -36,12 +37,15 @@ import { FeatureLoadDirective } from 'src/app/shared/directives';
 export class VoteEventPageComponent  implements ViewWillEnter {
   public readonly eventId = input.required<string>();
   private readonly mainInfoComponent = viewChild(EventMainInfoComponent);
+  public hideIonContent = true;
   private alreadyInit = false;
 
   public readonly ViewPick = ViewPick;
   public readonly VotePageLocalize = VotePageLocalize;
 
-  constructor() { }
+  constructor() {
+    setTimeout(() => this.hideIonContent = false, 250);
+  }
 
   ionViewWillEnter(): void {
     if (this.alreadyInit) {

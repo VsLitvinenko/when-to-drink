@@ -35,5 +35,5 @@ export const initServer = () => {
   app.use(errorHandleMiddleware);
 
   const server = http.createServer(app);
-  server.listen(env.port);
+  server.listen(env.port());
 }

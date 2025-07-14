@@ -11,6 +11,7 @@ type ReqPar = {
 type ReqRes = Array<{
   fullName: string;
   photoUrl?: string;
+  username?: string;
 }>
 
 /*-------------------------request-------------------------*/
@@ -32,6 +33,7 @@ export async function eventGetUsersHandle(
   const mappedUsers = votes.map((vote) => ({
     fullName: `${vote.user.firstName} ${vote.user.lastName}`,
     photoUrl: vote.user.photoUrl,
+    username: vote.user.username,
   }));
   res.status(200).json(mappedUsers);
 }

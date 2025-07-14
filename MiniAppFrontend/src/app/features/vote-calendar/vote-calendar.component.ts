@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { IonDateSpecifyDirective } from './directives';
@@ -20,6 +20,7 @@ const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
   selector: 'app-vote-calendar',
   templateUrl: './vote-calendar.component.html',
   styleUrls: ['./vote-calendar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedFeatureModule,
     IonDateSpecifyDirective,

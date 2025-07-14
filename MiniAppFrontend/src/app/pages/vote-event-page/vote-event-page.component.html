@@ -18,7 +18,7 @@
   </ion-segment>
 
   <ion-segment-view mode="ios">
-    <ion-segment-content id="info">
+    <ion-segment-content id="info" [class.hide]="hideIonContent">
       <div class="segment-view-content">
         <app-result-filters
           #filters
@@ -40,8 +40,9 @@
           #result="appResultView"
           [eventId]="eventId()"
           [min]="filters.membersCount()"
-          [maybe]="filters.maybe()"
-          [time]="filters.time()"
+          [noMaybe]="filters.noMaybe()"
+          [noTime]="filters.noTime()"
+          [onlyWithMe]="filters.onlyWithMe()"
           [trimPast]="filters.trimPast()"
         >
           @switch (viewPicker.value()) {

@@ -8,7 +8,7 @@ import TelegramBot from 'node-telegram-bot-api';
 
 /*-------------------------init bot-------------------------*/
 const logger = createLogChild('telegram', 'bot');
-const bot = new TelegramBot(env.tgToken, { polling: true });
+const bot = new TelegramBot(env.tgToken(), { polling: true });
 
 export const initTgBot = () => {
   bot.on('message', async (msg) => {
@@ -66,7 +66,7 @@ const startCommand = async (chatId: number, user?: TelegramBot.User) => {
       inline_keyboard: [
         [{
           text: 'Create New Event',
-          web_app: { url: env.webAppUrl },
+          web_app: { url: env.webAppUrl() },
         }],
       ],
     },
