@@ -16,7 +16,7 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
   }
   try {
     // two weeks auth token expire (dev mode)
-    validate(authData, env.tgToken, { expiresIn: env.tgTokenExpiresIn });
+    validate(authData, env.tgToken(), { expiresIn: env.tgTokenExpiresIn() });
     res.locals[authDataKey] = parse(authData);
     return next();
   } catch (e) {

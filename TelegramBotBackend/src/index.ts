@@ -6,7 +6,7 @@ import { env } from './env';
 
 
 mongoose.Promise = Promise;
-mongoose.connect(env.dbConnection)
+mongoose.connect(env.dbConnection())
   .then(() => console.log('mongo connected'))
   .then(() => initTgBot())
   .then(() => initServer())
