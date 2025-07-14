@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { IonAccordion, IonAccordionGroup, IonAvatar, IonModal, IonPopover } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { AvatarsListComponent, UsersListComponent } from 'src/app/shared/components';
@@ -15,6 +15,7 @@ import { FeatureLoadDirective, ImgLoadDirective } from 'src/app/shared/directive
   selector: 'app-event-main-info',
   templateUrl: './event-main-info.component.html',
   styleUrls: ['./event-main-info.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedFeatureModule,
     IonAccordionGroup,
