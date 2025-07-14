@@ -40,8 +40,9 @@
           #result="appResultView"
           [eventId]="eventId()"
           [min]="filters.membersCount()"
-          [maybe]="filters.maybe()"
-          [time]="filters.time()"
+          [noMaybe]="filters.noMaybe()"
+          [noTime]="filters.noTime()"
+          [onlyWithMe]="filters.onlyWithMe()"
           [trimPast]="filters.trimPast()"
         >
           @switch (viewPicker.value()) {

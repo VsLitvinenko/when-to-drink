@@ -27,8 +27,9 @@ export class ResultFiltersComponent  implements OnInit {
     }
   } 
 
-  public readonly maybe = signal<boolean>(true);
-  public readonly time = signal<boolean>(true);
+  public readonly noMaybe = signal<boolean>(false);
+  public readonly noTime = signal<boolean>(false);
+  public readonly onlyWithMe = signal<boolean>(false);
   public readonly trimPast = signal<boolean>(true);
   public readonly membersCount = signal<number>(1);
 

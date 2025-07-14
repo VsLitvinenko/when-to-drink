@@ -18,8 +18,9 @@ export class ResultViewDirective {
   public readonly eventId = input.required<string>();
   // filters
   public readonly min = input.required<number>();
-  public readonly maybe = input.required<boolean>();
-  public readonly time = input.required<boolean>();
+  public readonly noMaybe = input.required<boolean>();
+  public readonly noTime = input.required<boolean>();
+  public readonly onlyWithMe = input.required<boolean>();
   public readonly trimPast = input.required<boolean>();
 
   private readonly request = inject(ResultViewRequestService);
@@ -46,8 +47,9 @@ export class ResultViewDirective {
     return this.dates().filter((date) =>
       date.users.length >= this.min()
       && (!this.trimPast() || date.date >= today)
-      && (this.maybe() || date.voteType !== VoteType.Maybe)
-      && (this.time() || date.voteType !== VoteType.Time)
+      && (!this.noMaybe() || date.voteType !== VoteType.Maybe)
+      && (!this.noTime() || date.voteType !== VoteType.Time)
+      && (!this.onlyWithMe() || date.isWithMe)
     );
   });
 

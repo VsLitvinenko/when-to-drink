@@ -1,3 +1,4 @@
+import { getAuthData } from '../../middlewares';
 import { isEventExist, IUserDb, UVoteModel } from '../../database';
 import { Request, Response } from 'express';
 
@@ -13,6 +14,7 @@ type ReqRes = {
   dates: Array<{
     date: string;
     voteType: string;
+    isWithMe: boolean;
     start?: string;
     end?: string;
     noTimeOverlap?: boolean;
@@ -37,6 +39,8 @@ export async function resultGetHandle(
     res.status(404);
     throw new Error('Cannot find event with this id');
   }
+  const tgAuthData = getAuthData(res);
+  const tgUserId = tgAuthData.user?.id;
   // get and group data from db
   const dbData = await UVoteModel
     .aggregate<DateUserGroup>()
@@ -62,13 +66,14 @@ export async function resultGetHandle(
         }
       }}
     )
-    .sort('_id');
+    .sort('_id'); 
   // convert result fields
   const convertedDates = dbData
     .map((val) => {
       const date = val._id;
       const start = val.start ?? undefined;
       const end = val.end ?? undefined;
+      const isWithMe = val.items.some((i) => i.user.tgId === tgUserId);
       const noTimeOverlap = (start && end) ? start > end : undefined;
       const voteType = aggregateVoteType(val.items);
       const users = val.items.map((item) => ({
@@ -78,7 +83,7 @@ export async function resultGetHandle(
         start: item.start,
         end: item.end,
       }));
-      return { date, start, end, noTimeOverlap, voteType, users,  };
+      return { date, start, end, isWithMe, noTimeOverlap, voteType, users };
     });
   // return result
   res.status(200).json({
