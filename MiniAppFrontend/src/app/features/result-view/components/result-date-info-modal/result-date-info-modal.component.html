@@ -31,6 +31,17 @@
         (userClicked)="toggleUserMode($event.user)"
         (searchFocused)="modal.backdropDismiss = !$event"
       >
+        <ng-template #altLabel let-user>
+          <ion-label>
+            @if (timeModeIndexes.has(user.index)) {
+              <ion-text color="medium">
+                {{ user.username ? ('@' + user.username) : user.fullName }}
+              </ion-text>
+            }
+            @else { {{ user.fullName }} }
+          </ion-label>
+        </ng-template>
+
         <ng-template #end let-user>
           @if (timeModeIndexes.has(user.index)) {
             <!-- time mode -->

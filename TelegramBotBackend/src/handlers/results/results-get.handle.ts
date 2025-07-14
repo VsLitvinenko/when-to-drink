@@ -21,6 +21,7 @@ type ReqRes = {
     users: Array<{
       fullName: string;
       photoUrl?: string;
+      username?: string;
       voteType: string;
       start?: string;
       end?: string;
@@ -79,6 +80,7 @@ export async function resultGetHandle(
       const users = val.items.map((item) => ({
         fullName: `${item.user.firstName} ${item.user.lastName}`,
         photoUrl: item.user.photoUrl,
+        username: item.user.username,
         voteType: item.voteType,
         start: item.start,
         end: item.end,

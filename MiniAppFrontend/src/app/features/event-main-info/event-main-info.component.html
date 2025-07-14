@@ -93,7 +93,13 @@
     <app-users-list
       [users]="eventUsers ?? []"
       (searchFocused)="usersModal.backdropDismiss = !$event"
-    ></app-users-list>
+    >
+      <ng-template #end let-user>
+        <ion-note *ngIf="user.username" class="username">
+          {{ '@' + user.username }}
+        </ion-note>
+      </ng-template>
+    </app-users-list>
   </ng-template>
 </ion-modal>
 
