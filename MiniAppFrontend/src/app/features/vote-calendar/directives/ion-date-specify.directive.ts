@@ -120,16 +120,20 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
         takeUntil(this.destroyed$)
       )
       .subscribe((event: any) => this.showPopover(event));
+
     // sync dates signals with ion-datetime value
     this.ionDateComponent.ionChange
       .pipe(takeUntil(this.destroyed$))
       .subscribe((event) => {
-        this.readyDates().clear();
         const value = event.detail.value as (string[] | undefined);
+        const readyDates = this.readyDates();
+        const maybeDates = this.maybeDates();
+        const timeDates = this.timeDates();
+        readyDates.clear();
         value?.forEach((date) => {
-          this.readyDates().add(date);
-          this.maybeDates().delete(date);
-          this.timeDates().delete(date);
+          if (maybeDates.has(date)) { maybeDates.delete(date); }
+          else if (timeDates.has(date)) { timeDates.delete(date); }
+          else { readyDates.add(date); }  
         });
         this.emitAllDatesSignals();
       });
