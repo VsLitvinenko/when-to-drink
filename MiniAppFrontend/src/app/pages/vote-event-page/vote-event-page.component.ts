@@ -37,15 +37,12 @@ import { FeatureLoadDirective } from 'src/app/shared/directives';
 export class VoteEventPageComponent  implements ViewWillEnter {
   public readonly eventId = input.required<string>();
   private readonly mainInfoComponent = viewChild(EventMainInfoComponent);
-  public hideIonContent = true;
   private alreadyInit = false;
 
   public readonly ViewPick = ViewPick;
   public readonly VotePageLocalize = VotePageLocalize;
 
-  constructor() {
-    setTimeout(() => this.hideIonContent = false, 250);
-  }
+  constructor() { }
 
   ionViewWillEnter(): void {
     if (this.alreadyInit) {
