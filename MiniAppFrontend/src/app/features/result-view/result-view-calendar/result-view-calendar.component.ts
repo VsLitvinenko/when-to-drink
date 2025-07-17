@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, signal, viewChild } from '@angular/core';
 import { IonDatetime } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { ResultViewDirective } from '../result-view.directive';
@@ -23,6 +23,9 @@ import { ResultViewLocalize } from '../result-view.localize';
   ],
 })
 export class ResultViewCalendarComponent {
+  public readonly minDate = input();
+  public readonly maxDate = input();
+
   private readonly ionDateComponent = viewChild(IonDatetime);
   private readonly data = inject(ResultViewDirective);
 

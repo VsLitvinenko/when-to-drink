@@ -4,6 +4,8 @@
     appResultViewCalendarPicker
     (dateSelected)="selectedDate.set($event)"
     [firstDayOfWeek]="1"
+    [min]="minDate() ?? undefined"
+    [max]="maxDate() ?? undefined"
     [locale]="localizeFormat$ | async"
     presentation="date"
     mode="ios"

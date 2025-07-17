@@ -46,8 +46,15 @@
           [trimPast]="filters.trimPast()"
         >
           @switch (viewPicker.value()) {
-            @case (ViewPick.List) { <app-result-view-list/> }
-            @case (ViewPick.Calendar) { <app-result-view-calendar/> }
+            @case (ViewPick.List) {
+              <app-result-view-list/>
+            }
+            @case (ViewPick.Calendar) {
+              <app-result-view-calendar
+                [minDate]="info?.starts"
+                [maxDate]="info?.ends"
+              ></app-result-view-calendar>
+            }
           }
         </app-result-view-picker-container>
       </div>
