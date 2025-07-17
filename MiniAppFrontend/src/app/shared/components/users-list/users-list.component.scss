@@ -17,3 +17,9 @@ ion-list {
 ion-item {  
   --background: transparent;
 }
+
+ion-label {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
