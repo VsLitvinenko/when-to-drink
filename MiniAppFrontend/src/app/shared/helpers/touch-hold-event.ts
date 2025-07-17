@@ -1,4 +1,4 @@
-import { Observable, switchMap, takeUntil, timer, merge, fromEvent, map, tap, firstValueFrom } from 'rxjs';
+import { Observable, switchMap, takeUntil, timer, merge, fromEvent, map } from 'rxjs';
 
 export const touchHoldEvent = (
   target: HTMLElement,
@@ -14,8 +14,5 @@ export const touchHoldEvent = (
         takeUntil(merge(touchEnd$, touchMove$)),
       );
     }),
-    tap(() => firstValueFrom(touchEnd$)
-      .then((e) => e.preventDefault())
-    )
   );
 };
