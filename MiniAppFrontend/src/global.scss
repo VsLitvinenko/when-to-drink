@@ -33,16 +33,27 @@ body {
   }
 }
 
+/* calendar fixes */
 ion-datetime.datetime-presentation-date {
   max-width: 100%;
+  &::part(month-year-button) {
+    pointer-events: none;
+  }
+  &::part(calendar-day) {
+    box-shadow: none !important;
+    font-weight: 400 !important;
+    font-size: 1.25rem !important;
+  }
 }
 
+/* modal backdrop scroll fix */
 ion-app:has(> ion-modal.modal-sheet) {
   ion-content {
     --overflow: hidden;
   }
 }
 
+/* searchbar fixes*/
 ion-searchbar {
   .searchbar-search-icon {
     margin-left: 0.25rem !important;

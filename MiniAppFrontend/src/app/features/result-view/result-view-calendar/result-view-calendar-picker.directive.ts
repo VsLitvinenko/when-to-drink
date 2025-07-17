@@ -31,11 +31,6 @@ export class ResultViewCalendarPickerDirective implements AfterViewInit, OnDestr
   private readonly dateButtons$ = new ReplaySubject<HTMLButtonElement[]>(1);
 
   private readonly voteDateSelected$ = this.dateButtons$.pipe(
-    tap((dateButtons) => dateButtons.forEach((b) => {
-      b.style.boxShadow = 'none';
-      b.style.fontWeight = '400';
-      b.style.fontSize = '1.25rem';
-    })),
     switchMap((dateButtons) => {
       const buttonClicks = dateButtons.map((target) => {
         return fromEvent(target, 'click', { capture: true }).pipe(
