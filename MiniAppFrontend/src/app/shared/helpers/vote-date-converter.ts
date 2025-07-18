@@ -3,13 +3,6 @@ import { VoteDate } from 'src/app/features/vote-calendar/models';
 
 
 export class VoteDateConverter {
-  static get dayFormat(): string {
-    return 'yyyy-MM-dd';
-  }
-
-  static get timeFormat(): string {
-    return "yyyy-MM-dd'T'HH:mm:ss"
-  };
 
   static toJsDates<T extends VoteDate>(item: T): T {
     return {
@@ -23,9 +16,10 @@ export class VoteDateConverter {
   static toStringDates(item: VoteDate): any {
     return {
       ...item,
-      date: format(item.date, this.dayFormat),
-      start: item.start ? format(item.start, this.timeFormat) : undefined,
-      end: item.end ? format(item.end, this.timeFormat) : undefined,
+      date: format(item.date, 'yyyy-MM-dd'),
+      start: item.start ? format(item.start, "yyyy-MM-dd'T'HH:mm:ss") : undefined,
+      end: item.end ? format(item.end, "yyyy-MM-dd'T'HH:mm:ss") : undefined,
     };
   }
+  
 }

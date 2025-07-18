@@ -2,6 +2,7 @@ import { createLogChild } from '../../logs';
 import { createVote, isEventExist, isVoteExist, updateVote } from '../../database';
 import { getDbUserId } from '../../middlewares';
 import { Request, Response } from 'express';
+import { format } from 'date-fns';
 
 
 /*-------------------------types-------------------------*/
@@ -45,11 +46,13 @@ export async function votePostHandle(
   const vote = await (!voteId ?  createVote({ user, event, ...body}) : updateVote(voteId, body));
   logger.info(`vote ${!voteId ? 'created' : 'updated'}`, vote);
   // convert dates to response
+  const dFormat = 'yyyy-MM-dd';
+  const tFormat = "yyyy-MM-dd'T'HH:mm:ss";
   const dates = vote.dates.map((d) => ({
-    date: d.date.toISOString(),
+    date: format(d.date, dFormat),
     voteType: d.voteType,
-    start: d.start ? d.start.toISOString() : undefined,
-    end: d.end ? d.end.toISOString() : undefined,
+    start: d.start ? format(d.start, tFormat) : undefined,
+    end: d.end ? format(d.end, tFormat) : undefined,
   }));
   res.status(200).json({ dates, alreadyVoted: Boolean(voteId) });
 }

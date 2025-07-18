@@ -2,6 +2,7 @@ import { getDbUserId } from './../../middlewares';
 import { getEventById, updateEvent } from '../../database';
 import { Request, Response } from 'express';
 import { createLogChild } from '../../logs';
+import { format } from 'date-fns';
 
 
 /*-------------------------types-------------------------*/
@@ -41,8 +42,8 @@ export async function eventPatchHandle(
   res.status(200).json({
     id: String(newEvent._id),
     name: newEvent.name,
-    starts: newEvent.starts.toISOString(),
-    ends: newEvent.ends.toISOString(),
+    starts: format(newEvent.starts, 'yyyy-MM-dd'),
+    ends: format(newEvent.ends, 'yyyy-MM-dd'),
     description: newEvent.description,
   }); 
 }

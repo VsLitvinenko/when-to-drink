@@ -3,6 +3,7 @@ import { getAuthData, getDbUserId } from '../../middlewares';
 import { createEvent } from '../../database';
 import { Request, Response } from 'express';
 import { createLogChild } from '../../logs';
+import { format } from 'date-fns';
 
 
 /*-------------------------types-------------------------*/
@@ -14,7 +15,13 @@ type ReqBody = {
   description?: string;
 };
 
-type ReqRes = { id: string; };
+type ReqRes = {
+  id: string;
+  name: string;
+  starts: string;
+  ends: string;
+  description?: string;
+};
 const logger = createLogChild('handler', 'event');
 
 /*-------------------------request-------------------------*/
@@ -38,5 +45,11 @@ export async function eventPostHandle(
   if (userData) {
     await sendMessageOnCreateEvent(userData, event as any);
   }
-  res.status(200).json({ id: String(event._id) });
+  res.status(200).json({
+    id: String(event._id),
+    name: event.name,
+    starts: format(event.starts, 'yyyy-MM-dd'),
+    ends: format(event.ends, 'yyyy-MM-dd'),
+    description: event.description,
+  });
 }

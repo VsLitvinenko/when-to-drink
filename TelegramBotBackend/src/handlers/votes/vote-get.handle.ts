@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { getVoteById, isEventExist, isTgUserExist, isVoteExist } from '../../database';
 import { getAuthData } from '../../middlewares';
 import { Request, Response } from 'express';
@@ -39,11 +40,14 @@ export async function voteGetHandle(
     return;
   }
   const vote = await getVoteById(voteId);
+  // convert dates
+  const dFormat = 'yyyy-MM-dd';
+  const tFormat = "yyyy-MM-dd'T'HH:mm:ss";
   const dates = vote.dates.map((d) => ({
-    date: d.date.toISOString(),
+    date: format(d.date, dFormat),
     voteType: d.voteType,
-    start: d.start ? d.start.toISOString() : undefined,
-    end: d.end ? d.end.toISOString() : undefined,
+    start: d.start ? format(d.start, tFormat) : undefined,
+    end: d.end ? format(d.end, tFormat) : undefined,
   }));
   res.status(200).json({ dates, alreadyVoted: true });
 }

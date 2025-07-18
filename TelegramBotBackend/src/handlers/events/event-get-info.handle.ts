@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { getEventById, isEventExist, IUserDb } from '../../database';
 import { getAuthData } from '../../middlewares';
 import { Request, Response } from 'express';
@@ -40,8 +41,8 @@ export async function eventGetInfoHandle(
     id: String(event.id),
     canEdit: requestUserTgId === creator.tgId,
     name: event.name,
-    starts: event.starts.toISOString(),
-    ends: event.ends.toISOString(),
+    starts: format(event.starts, 'yyyy-MM-dd'),
+    ends: format(event.ends, 'yyyy-MM-dd'),
     description: event.description,
     creator: {
       fullName: `${creator.firstName} ${creator.lastName}`,

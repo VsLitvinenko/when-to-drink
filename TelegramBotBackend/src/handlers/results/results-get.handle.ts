@@ -1,6 +1,7 @@
 import { getAuthData } from '../../middlewares';
 import { getEventById, isEventExist, IUserDb, UVoteModel } from '../../database';
 import { Request, Response } from 'express';
+import { format } from 'date-fns';
 
 
 /*-------------------------types-------------------------*/
@@ -79,9 +80,11 @@ export async function resultGetHandle(
   // convert result fields
   const convertedDates = dbData
     .map((val) => {
-      const date = val._id;
-      const start = val.start ?? undefined;
-      const end = val.end ?? undefined;
+      const dFormat = 'yyyy-MM-dd';
+      const tFormat = "yyyy-MM-dd'T'HH:mm:ss";
+      const date = format(new Date(val._id), dFormat);
+      const start = val.start ? format(val.start, tFormat) : undefined;
+      const end = val.end ? format(val.end, tFormat) : undefined;
       const isWithMe = val.items.some((i) => i.user.tgId === tgUserId);
       const noTimeOverlap = (start && end) ? start > end : undefined;
       const voteType = aggregateVoteType(val.items);
@@ -116,8 +119,8 @@ type DateUser = {
 
 type DateUserGroup = {
   _id: string;
-  start: string | null;
-  end: string | null;
+  start: Date | null;
+  end: Date | null;
   items: DateUser[];
 };
 
