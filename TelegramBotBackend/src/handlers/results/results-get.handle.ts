@@ -1,5 +1,5 @@
 import { getAuthData } from '../../middlewares';
-import { isEventExist, IUserDb, UVoteModel } from '../../database';
+import { getEventById, isEventExist, IUserDb, UVoteModel } from '../../database';
 import { Request, Response } from 'express';
 
 
@@ -35,17 +35,26 @@ export async function resultGetHandle(
   req: Request<{}, ReqRes, {}, ReqQuery>,
   res: Response<ReqRes>
 ) {
-  const event = await isEventExist(req.query.eventId);
-  if (!event) {
+  const eventId = await isEventExist(req.query.eventId);
+  if (!eventId) {
     res.status(404);
     throw new Error('Cannot find event with this id');
   }
   const tgAuthData = getAuthData(res);
   const tgUserId = tgAuthData.user?.id;
+  // get event start & end dates
+  const event = await getEventById(eventId);
   // get and group data from db
   const dbData = await UVoteModel
     .aggregate<DateUserGroup>()
-    .match({ event })
+    .match({ event: eventId })
+    .unwind('$dates')
+    .match({
+      'dates.date': { 
+        $gte: event.starts,
+        $lte: event.ends,
+      },
+    })
     .lookup({
       from: 'users',
       localField: 'user',
@@ -53,7 +62,6 @@ export async function resultGetHandle(
       as: 'user',
     })
     .unwind('$user')
-    .unwind('$dates')
     .group({
       _id: '$dates.date',
       start: { $max: '$dates.start' },
@@ -89,7 +97,7 @@ export async function resultGetHandle(
     });
   // return result
   res.status(200).json({
-    eventId: String(event),
+    eventId: String(eventId),
     dates: convertedDates,
     maxOverlap: convertedDates.length > 0
       ? Math.max(...convertedDates.map((i) => i.users.length))
