@@ -2,6 +2,7 @@
 @let canEdit = (eventInfo$ | async)?.canEdit !== false;
 <ion-list
   mode="ios"
+  [inset]="true"
   [formGroup]="eventFormGroup"
   [class.form-disabled]="disabled"
 >
@@ -88,8 +89,6 @@
     />
   }
   <ion-label>
-    {{ (eventId()
-          ? EditEventFormLocalize.UpdateEvent
-          : EditEventFormLocalize.CreateEvent) | localize }}
+    {{ EditEventFormLocalize.SaveEvent | localize }}
   </ion-label>
 </ion-button>

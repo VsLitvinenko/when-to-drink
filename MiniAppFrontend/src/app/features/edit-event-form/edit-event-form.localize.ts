@@ -7,8 +7,7 @@ enum LocalizeEnum {
   Description = 'Description',
   NamePlaceholder = 'NamePlaceholder',
   DescriptionPlaceholder = 'DescriptionPlaceholder',
-  CreateEvent = 'CreateEvent',
-  UpdateEvent = 'UpdateEvent',
+  SaveEvent = 'SaveEvent',
   HasBeenSaved = 'HasBeenSaved',
 }
 
@@ -37,13 +36,9 @@ export const EditEventFormLocalize: LocalizationPreset<LocalizeEnum> = {
     en: 'Enter description',
     ru: 'Введите описание',
   },
-  CreateEvent: {
-    en: 'Create event',
-    ru: 'Создать событие',
-  },
-  UpdateEvent: {
-    en: 'Update event',
-    ru: 'Обновить событие',
+  SaveEvent: {
+    en: 'Save event',
+    ru: 'Сохранить событие',
   },
   HasBeenSaved: {
     en: 'All changes have been saved successfully',

@@ -1,5 +1,7 @@
 ion-list {
-  background: transparent;
+  // background: transparent;
+  padding: 0.5rem 0.25rem 0.75rem;
+  background: var(--ion-color-light, #f4f5f8);
 }
 
 .form-disabled {

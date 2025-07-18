@@ -1,4 +1,9 @@
 <ion-content class="ion-padding">
+  <h3 class="title">
+    {{ (eventId()
+          ? EditEventPageLocalize.EditEvent
+          : EditEventPageLocalize.CreateEvent) | localize }}
+  </h3>
   <app-edit-event-form #form [eventId]="eventId()"/>
   <div
     *ngIf="eventId()"
