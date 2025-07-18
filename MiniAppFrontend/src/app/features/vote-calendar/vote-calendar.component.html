@@ -29,7 +29,6 @@
     [voteDates]="(voteDates$ | async) ?? []"
     (focusedTimeChanges)="updateTime($event)"
     [popover]="popover"
-    [multiple]="true"
     [firstDayOfWeek]="1"
     [min]="minDate() ?? undefined"
     [max]="maxDate() ?? undefined"

@@ -44,6 +44,9 @@ ion-datetime.datetime-presentation-date {
     font-weight: 400 !important;
     font-size: 1.25rem !important;
   }
+  &::part(calendar-day today) {
+    color: var(--ion-text-color) !important;
+  }
 }
 
 /* modal backdrop scroll fix */

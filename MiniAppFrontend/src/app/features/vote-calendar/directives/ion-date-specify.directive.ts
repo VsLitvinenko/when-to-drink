@@ -6,7 +6,6 @@ import { VoteDate, VoteType } from '../models';
 import { groupBy } from 'lodash';
 import { format } from 'date-fns';
 
-const focusButtonBg = 'rgba(var(--ion-color-base-rgb), 0.2)';
 const formatVoteDate = (date: Date) => format(date, 'yyyy-MM-dd');
 
 @Directive({
@@ -70,15 +69,16 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      const readyDates = this.readyDates();
-      this.ionDateComponent.value = Array.from(readyDates);
-    });
-
-    effect(() => {
       // highlight dates in ion-datetime
+      const readyDates = this.readyDates();
       const maybeDates = this.maybeDates();
       const timeDates = this.timeDates();
       this.ionDateComponent.highlightedDates = [
+        ...Array.from(readyDates).map((date) => ({
+          date: date,
+          textColor: 'var(--ready-text-color)',
+          backgroundColor: 'var(--ready-bg-color)',
+        })),
         ...Array.from(maybeDates).map((date) => ({
           date: date,
           textColor: 'var(--maybe-text-color)',
@@ -96,7 +96,48 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     // update dateButtons$ array
     this.rootObs.observe(this.rootEl, { childList: true, subtree: true });
-    // get date buttons hold events
+    this.buttonsClickSubscribe();
+    this.buttonsPopoverSubscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next();
+    this.destroyed$.complete();
+    this.dateButtons$.complete();
+    this.rootObs.disconnect();
+  }
+
+  private buttonsClickSubscribe(): void {
+    this.dateButtons$
+      .pipe(
+        switchMap((dateButtons) => {
+          const buttonClicks = dateButtons.map((target) => {
+            return fromEvent(target, 'click', { capture: true }).pipe(
+              tap((event) => event.stopPropagation()),
+              map(() => (target))
+            );
+          });
+          return merge(...buttonClicks);
+        }),
+        takeUntil(this.destroyed$)
+      )
+      .subscribe((buttonEl) => {
+        const { day, month, year } = this.getDataFromButton(buttonEl);
+        const date = formatVoteDate(new Date(year, month - 1, day));
+        if (this.readyDates().has(date)) {
+          this.readyDates().delete(date);
+        } else if (this.maybeDates().has(date)) {
+          this.maybeDates().delete(date);
+        } else if (this.timeDates().has(date)) {
+          this.timeDates().delete(date);
+        } else {
+          this.readyDates().add(date);
+        }
+        this.emitAllDatesSignals();
+      });
+  }
+
+  private buttonsPopoverSubscribe(): void {
     this.dateButtons$
       .pipe(
         switchMap((dateButtons) => {
@@ -115,53 +156,26 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
         takeUntil(this.destroyed$)
       )
       .subscribe((event: any) => this.showPopover(event));
-
-    // sync dates signals with ion-datetime value
-    this.ionDateComponent.ionChange
-      .pipe(takeUntil(this.destroyed$))
-      .subscribe((event) => {
-        const value = event.detail.value as (string[] | undefined);
-        const readyDates = this.readyDates();
-        const maybeDates = this.maybeDates();
-        const timeDates = this.timeDates();
-        readyDates.clear();
-        value?.forEach((date) => {
-          if (maybeDates.has(date)) { maybeDates.delete(date); }
-          else if (timeDates.has(date)) { timeDates.delete(date); }
-          else { readyDates.add(date); }  
-        });
-        this.emitAllDatesSignals();
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroyed$.next();
-    this.destroyed$.complete();
-    this.dateButtons$.complete();
-    this.rootObs.disconnect();
   }
 
   private showPopover(event: PointerEvent): void {
     const buttonEl = event.target as HTMLButtonElement;
     this.popover.present(event);
     // add style
-    const prevButtonBgColor = buttonEl.style.backgroundColor ?? '';
     this.popover.willPresent
       .pipe(take(1))
       .subscribe(() => {
         this.lastFocusedDateButton$.next(buttonEl);
-        buttonEl.style.backgroundColor = focusButtonBg;
+        buttonEl.style.opacity = '0.65';
       });
     // remove style and handle buttons if needed
     this.popover.willDismiss
       .pipe(take(1))
       .subscribe((event) => {
         this.lastFocusedDateButton$.next(undefined);
-        buttonEl.style.backgroundColor = prevButtonBgColor;
+        buttonEl.style.opacity = '';
         if (event.detail.data) {
-          const day = Number(buttonEl.getAttribute('data-day'));
-          const month = Number(buttonEl.getAttribute('data-month'));
-          const year = Number(buttonEl.getAttribute('data-year'));
+          const { day, month, year } = this.getDataFromButton(buttonEl);
           this.handlePopoverButtons(event.detail.data, year, month, day);
         }
       });
@@ -204,5 +218,12 @@ export class IonDateSpecifyDirective implements AfterViewInit, OnDestroy {
     this.readyDates.set(new Set(this.readyDates()));
     this.maybeDates.set(new Set(this.maybeDates()));
     this.timeDates.set(new Map(this.timeDates()));
+  }
+
+  private getDataFromButton(buttonEl: HTMLElement): any {
+    const day = Number(buttonEl.getAttribute('data-day'));
+    const month = Number(buttonEl.getAttribute('data-month'));
+    const year = Number(buttonEl.getAttribute('data-year'));
+    return { day, month, year };
   }
 }
