@@ -24,11 +24,12 @@
   </div>
 
   <ion-datetime
-    #appIonDateSpecify="appIonDateSpecify"
-    appIonDateSpecify
+    appVoteData
+    #appVoteData="appVoteData"
+    appVoteHandleClick
+    [appVoteHandlePopover]="popover"
     [voteDates]="(voteDates$ | async) ?? []"
     (focusedTimeChanges)="updateTime($event)"
-    [popover]="popover"
     [firstDayOfWeek]="1"
     [min]="minDate() ?? undefined"
     [max]="maxDate() ?? undefined"
@@ -45,7 +46,7 @@
       <ion-button color="danger" (click)="resetDates$.next(true)">
         {{ VoteCalendarLocalize.Cancel | localize }}
       </ion-button>
-      <ion-button color="primary" (click)="saveDates$.next(appIonDateSpecify.voteDates)">
+      <ion-button color="primary" (click)="saveDates$.next(appVoteData.voteDates)">
         {{ VoteCalendarLocalize.Save | localize }}
       </ion-button>
     </div>
@@ -54,7 +55,7 @@
 
 <ion-popover
   #popover
-  appPreventPopoverContext
+  appPreventContext
   mode="ios" side="top"
   alignment="center"
   [arrow]="true"

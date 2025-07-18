@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
+import { PreventContextDirective, VoteDataDirective, VoteHandleClickDirective, VoteHandlePopoverDirective } from './directives';
 import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
-import { IonDateSpecifyDirective, PreventPopoverContextDirective } from './directives';
 import { format } from 'date-fns';
 import { VoteDate } from './models';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +13,6 @@ import { finalize, map, merge, Observable, shareReplay, startWith, Subject, swit
 import { toObservable } from '@angular/core/rxjs-interop';
 import { FeatureLoadDirective } from 'src/app/shared/directives';
 
-
 const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
 
 @Component({
@@ -23,13 +22,15 @@ const timeFormat = "yyyy-MM-dd'T'HH:mm:ss";
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedFeatureModule,
-    IonDateSpecifyDirective,
-    PreventPopoverContextDirective,
     IonDatetime,
     IonChip,
     IonPopover,
     IonModal,
     FormsModule,
+    VoteDataDirective,
+    VoteHandleClickDirective,
+    VoteHandlePopoverDirective,
+    PreventContextDirective,
   ],
 })
 export class VoteCalendarComponent {

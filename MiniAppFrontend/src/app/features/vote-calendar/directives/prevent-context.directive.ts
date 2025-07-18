@@ -3,9 +3,9 @@ import { IonPopover } from '@ionic/angular/standalone';
 import { filter, fromEvent, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Directive({
-  selector: '[appPreventPopoverContext]'
+  selector: '[appPreventContext]'
 })
-export class PreventPopoverContextDirective implements OnInit, OnDestroy {
+export class PreventContextDirective implements OnInit, OnDestroy {
 
   private readonly popover = inject(IonPopover);
   private readonly destroyed$ = new Subject<void>();
