@@ -81,9 +81,11 @@ export class VoteCalendarComponent {
       map((eventVote) => eventVote.dates.slice())
     ),
   );
-
+  
   public readonly startTime = signal(format(new Date(), timeFormat));
   public readonly endTime = signal(format(new Date(), timeFormat));
+  public lastAppliedStartTime = this.startTime();
+  public lastAppliedEndTime = this.endTime();
   
   public readonly isTimeInvalid = computed(() => {
     const startDate = new Date(this.startTime());
@@ -102,13 +104,12 @@ export class VoteCalendarComponent {
   constructor() { }
 
   public updateTime(voteDate?: VoteDate): void {
-    const nowTime = format(new Date(), timeFormat);
     const startValue = voteDate?.start
       ? format(voteDate.start, timeFormat)
-      : nowTime;
+      : this.lastAppliedStartTime;
     const endValue = voteDate?.end
       ? format(voteDate.end, timeFormat)
-      : nowTime;
+      : this.lastAppliedEndTime;
       
     this.startTime.set(startValue);
     this.endTime.set(endValue);

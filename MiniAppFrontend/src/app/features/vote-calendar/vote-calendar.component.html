@@ -93,6 +93,8 @@
         [disabled]="isTimeInvalid()"
         (click)="
           timeModal.dismiss();
+          lastAppliedStartTime = startTime();
+          lastAppliedEndTime = endTime();
           popover.dismiss({
             time: true,
             start: startTime(),
