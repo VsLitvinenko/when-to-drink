@@ -15,8 +15,8 @@ export class VoteDateConverter {
     return {
       ...item,
       date: new Date(item.date),
-      start: item.start ? new Date(String(item.start).split('.')[0]) : undefined,
-      end: item.end ? new Date(String(item.end).split('.')[0]) : undefined,
+      start: item.start ? new Date(item.start) : undefined,
+      end: item.end ? new Date(item.end) : undefined,
     }
   }
 
