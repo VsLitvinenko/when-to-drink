@@ -14,7 +14,7 @@ export class ImgLoadDirective {
     }
   }
 
-  @Input() imgPlaceholder: string = '/assets/no-avatar.png'
+  @Input() imgPlaceholder: string = 'assets/no-avatar.png'
 
   private readonly elRef = inject(ElementRef);
   private get img(): HTMLImageElement {
