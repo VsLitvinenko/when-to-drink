@@ -38,6 +38,7 @@ export async function eventPatchHandle(
     throw new Error('You have no rights to modify this event');
   }
   const newEvent = await updateEvent(event._id, body);
+  console.log('event updated', newEvent);
   logger.info('event updated', newEvent);
   res.status(200).json({
     id: String(newEvent._id),

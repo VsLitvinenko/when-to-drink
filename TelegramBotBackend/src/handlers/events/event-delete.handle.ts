@@ -29,6 +29,7 @@ export async function eventDeleteHandle(
     throw new Error('You have no rights to delete this event');
   }
   await deleteEventById(event._id);
+  console.log('event deleted', event);
   logger.info('event deleted', event);
   res.status(200).json({ id: String(event._id) });
 }

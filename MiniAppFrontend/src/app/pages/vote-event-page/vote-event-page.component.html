@@ -3,6 +3,7 @@
   <app-event-main-info
     #eventMainInfo
     appFeatureLoad
+    placeholderOpacity="0.85"
     [eventId]="eventId()"
   ></app-event-main-info>
 
@@ -22,7 +23,7 @@
       <div class="segment-view-content">
         <app-vote-calendar
           appFeatureLoad
-          placeholderOpacity="0.5"
+          placeholderOpacity="0.75"
           [eventId]="eventId()"
           [minDate]="info?.starts"
           [maxDate]="info?.ends"
@@ -47,7 +48,7 @@
         ></app-result-view-picker-control>
         <app-result-view-picker-container
           appFeatureLoad
-          placeholderOpacity="0.5"
+          placeholderOpacity="0.75"
           #resLoading="appFeatureLoad"
           [viewPick]="viewPicker.value()"
           appResultView

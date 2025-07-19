@@ -40,6 +40,7 @@ export async function eventPostHandle(
     throw new Error('Cannot get request creator');
   }
   const event = await createEvent({ ...body, creator});
+  console.log('event created', event);
   logger.info('event created', event);
   const userData = getAuthData(res);
   if (userData) {

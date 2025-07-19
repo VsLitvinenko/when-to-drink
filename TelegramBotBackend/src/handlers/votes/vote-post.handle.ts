@@ -44,6 +44,7 @@ export async function votePostHandle(
   }
   const voteId = await isVoteExist(user, event);
   const vote = await (!voteId ?  createVote({ user, event, ...body}) : updateVote(voteId, body));
+  console.log(`vote ${!voteId ? 'created' : 'updated'}`, vote);
   logger.info(`vote ${!voteId ? 'created' : 'updated'}`, vote);
   // convert dates to response
   const dFormat = 'yyyy-MM-dd';

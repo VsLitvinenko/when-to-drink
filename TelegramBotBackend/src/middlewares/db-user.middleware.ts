@@ -22,10 +22,12 @@ export const dbUserMiddleware: RequestHandler = async (req, res, next) => {
       photoUrl: authData.user.photo_url,
     };
     const user = await (!dbId ? createUser(iUser) : updateUser(dbId, iUser));
+    console.log(`database user ${!dbId ? 'created' : 'updated'}`, user);
     logger.info(`database user ${!dbId ? 'created' : 'updated'}`, user);
     res.locals[userIdKey] = user._id;
     return next();
   } catch (e) {
+    console.log('Create user error', e);
     logger.error('Create user error', e);
     res.status(400);
     return next(e);
