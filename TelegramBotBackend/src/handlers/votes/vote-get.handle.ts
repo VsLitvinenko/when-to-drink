@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { getVoteById, isEventExist, isTgUserExist, isVoteExist } from '../../database';
+import { getVoteById, isEventExist, isTgUserExist, isVoteExist, IVoteDb } from '../../database';
 import { getAuthData } from '../../middlewares';
 import { Request, Response } from 'express';
 
@@ -39,7 +39,7 @@ export async function voteGetHandle(
     res.status(200).json({ dates: [], alreadyVoted: false });
     return;
   }
-  const vote = await getVoteById(voteId);
+  const vote = await getVoteById(voteId).select<VDates>('dates');
   // convert dates
   const dFormat = 'yyyy-MM-dd';
   const tFormat = "yyyy-MM-dd'T'HH:mm:ss";
@@ -51,3 +51,8 @@ export async function voteGetHandle(
   }));
   res.status(200).json({ dates, alreadyVoted: true });
 }
+
+
+/*-------------------------helpers-------------------------*/
+
+type VDates = Pick<IVoteDb, 'dates'>;

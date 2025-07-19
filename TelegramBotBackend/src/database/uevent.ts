@@ -61,6 +61,7 @@ export interface IEventDb extends IEvent {
   _id: any;
   createdAt: Date;
   updatedAt: Date;
+  votes: any[];
 }
 
 export type PEvent = Partial<IEvent>;

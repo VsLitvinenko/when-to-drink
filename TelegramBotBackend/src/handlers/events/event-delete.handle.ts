@@ -1,5 +1,5 @@
 import { getDbUserId } from './../../middlewares';
-import { deleteEventById, getEventById } from '../../database';
+import { deleteEventById, getEventById, IEvent } from '../../database';
 import { Request, Response } from 'express';
 import { createLogChild } from '../../logs';
 
@@ -20,7 +20,7 @@ export async function eventDeleteHandle(
   res: Response<ReqRes>
 ) {
   const creator = getDbUserId(res);
-  const event = await getEventById(req.params.id);
+  const event = await getEventById(req.params.id).select<ECreator>('creator');
   if (!event) {
     res.status(404);
     throw new Error('Cannot find event to delete');
@@ -32,3 +32,7 @@ export async function eventDeleteHandle(
   logger.info('event deleted', event);
   res.status(200).json({ id: String(event._id) });
 }
+
+/*-------------------------helpers-------------------------*/
+
+type ECreator = Pick<IEvent, 'creator'>;

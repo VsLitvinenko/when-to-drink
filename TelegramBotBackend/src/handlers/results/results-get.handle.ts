@@ -1,5 +1,5 @@
 import { getAuthData } from '../../middlewares';
-import { getEventById, isEventExist, IUserDb, UVoteModel } from '../../database';
+import { getEventById, IEvent, isEventExist, IUserDb, UVoteModel } from '../../database';
 import { Request, Response } from 'express';
 import { format } from 'date-fns';
 
@@ -44,7 +44,7 @@ export async function resultGetHandle(
   const tgAuthData = getAuthData(res);
   const tgUserId = tgAuthData.user?.id;
   // get event start & end dates
-  const event = await getEventById(eventId);
+  const eDates = await getEventById(eventId).select<EDates>(['starts', 'ends']);
   // get and group data from db
   const dbData = await UVoteModel
     .aggregate<DateUserGroup>()
@@ -52,8 +52,8 @@ export async function resultGetHandle(
     .unwind('$dates')
     .match({
       'dates.date': { 
-        $gte: event.starts,
-        $lte: event.ends,
+        $gte: eDates.starts,
+        $lte: eDates.ends,
       },
     })
     .lookup({
@@ -109,6 +109,8 @@ export async function resultGetHandle(
 }
 
 /*-------------------------helpers-------------------------*/
+
+type EDates = Pick<IEvent, 'starts' | 'ends'>;
 
 type DateUser = {
   user: IUserDb;

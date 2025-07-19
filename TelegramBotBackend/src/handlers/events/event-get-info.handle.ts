@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { getEventById, isEventExist, IUserDb } from '../../database';
+import { getEventById, IEventDb, isEventExist, IUserDb } from '../../database';
 import { getAuthData } from '../../middlewares';
 import { Request, Response } from 'express';
 
@@ -34,7 +34,15 @@ export async function eventGetInfoHandle(
     res.status(404);
     throw new Error('Cannot find event');
   }
-  const event = await getEventById(eventId).populate<{ creator: IUserDb }>('creator');
+  const event = await getEventById(eventId)
+    .select<EInfo>(['-votes', '-createdAt', '-updatedAt'])
+    .populate<{ creator: ECreatorInfo }>('creator', [
+      'tgId',
+      'firstName',
+      'lastName',
+      'photoUrl',
+    ]);
+    
   const requestUserTgId = getAuthData(res)?.user?.id;
   const creator = event.creator;
   res.status(200).json({
@@ -50,3 +58,8 @@ export async function eventGetInfoHandle(
     },
   });
 }
+
+/*-------------------------helpers-------------------------*/
+
+type EInfo = Omit<IEventDb, 'votes' | 'createdAt' | 'updatedAt'>;
+type ECreatorInfo = Pick<IUserDb, 'tgId' | 'firstName' | 'lastName' | 'photoUrl'>;

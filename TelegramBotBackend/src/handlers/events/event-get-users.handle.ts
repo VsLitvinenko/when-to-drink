@@ -1,4 +1,4 @@
-import { getVotesByEvent, isEventExist, IUserDb } from '../../database';
+import { getVotesByEvent, isEventExist, IUserDb, IVoteDb } from '../../database';
 import { Request, Response } from 'express';
 
 
@@ -25,7 +25,15 @@ export async function eventGetUsersHandle(
     res.status(404);
     throw new Error('Cannot find event');
   }
-  const votes = await getVotesByEvent(eventId).populate<{ user: IUserDb }>('user');
+  const votes = await getVotesByEvent(eventId)
+    .select<VUser>('user')
+    .populate<{ user: VUserInfo }>('user', [
+      'username',
+      'firstName',
+      'lastName',
+      'photoUrl',
+    ]);
+
   if (!votes || votes.length === 0) {
     res.status(200).json([]);
     return
@@ -37,3 +45,8 @@ export async function eventGetUsersHandle(
   }));
   res.status(200).json(mappedUsers);
 }
+
+/*-------------------------helpers-------------------------*/
+
+type VUser = Pick<IVoteDb, 'user'>;
+type VUserInfo = Pick<IUserDb, 'username' | 'firstName' | 'lastName' | 'photoUrl'>;

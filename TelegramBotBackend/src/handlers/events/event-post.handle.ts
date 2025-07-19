@@ -36,7 +36,7 @@ export async function eventPostHandle(
     res.status(400);
     throw new Error('Required field is missing');
   } else if (!creator) {
-    res.status(417);
+    res.status(502);
     throw new Error('Cannot get request creator');
   }
   const event = await createEvent({ ...body, creator});

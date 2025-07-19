@@ -1,8 +1,8 @@
 import { env } from './env';
 import { createLogChild } from './logs';
-import { Localization, TelegramLocalize } from './localize';
 import { InitData } from '@telegram-apps/init-data-node';
-import { getEventsByCreator, getUserByTgId, getVotesByUser, IEventDb } from './database';
+import { Localization, TelegramLocalize } from './localize';
+import { getEventsByCreator, getVotesByUser, IEventDb, isTgUserExist } from './database';
 import TelegramBot from 'node-telegram-bot-api';
 
 
@@ -28,6 +28,7 @@ export const initTgBot = () => {
       }
     } catch (e) {
       const loc = (msg.from?.language_code ?? 'en') as Localization;
+      console.log('tg bot command error', msg, e);
       logger.error('tg bot command error', msg, e);
       await bot.sendMessage(msg.chat.id, TelegramLocalize.Error[loc]);
     }
@@ -81,8 +82,8 @@ const createdCommand = async(chatId: number, user?: TelegramBot.User) => {
   if (!user) { return; }
   const loc = (user?.language_code ?? 'en') as Localization;
   const botUrl = await getBotUrl();
-  const dbUser = await getUserByTgId(user.id);
-  const events = !dbUser ? [] : await getEventsByCreator(dbUser._id);
+  const dbUser = await isTgUserExist(user.id);
+  const events = !dbUser ? [] : await getEventsByCreator(dbUser).select<{ name: string }>('name');
   if (!events || events.length === 0) {
     bot.sendMessage(chatId, TelegramLocalize.NoCreatedEvents[loc]);
     return;
@@ -99,8 +100,11 @@ const votedCommand = async(chatId: number, user?: TelegramBot.User) => {
   if (!user) { return; }
   const loc = (user?.language_code ?? 'en') as Localization;
   const botUrl = await getBotUrl();
-  const dbUser = await getUserByTgId(user.id);
-  const votes = !dbUser ? [] : await getVotesByUser(dbUser).populate<{ event: IEventDb }>('event');
+  const dbUser = await isTgUserExist(user.id);
+  const votes = !dbUser ? [] : await getVotesByUser(dbUser)
+    .select<{ event: any }>('event')
+    .populate<{ event: { _id: any; name: string; } }>('event', 'name');
+    
   if (!votes || votes.length === 0) {
     bot.sendMessage(chatId, TelegramLocalize.NoVotedEvents[loc]);
     return;
