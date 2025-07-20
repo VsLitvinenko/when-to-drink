@@ -93,8 +93,8 @@ export async function resultGetHandle(
         photoUrl: item.user.photoUrl,
         username: item.user.username,
         voteType: item.voteType,
-        start: item.start,
-        end: item.end,
+        start: item.start ? format(item.start, tFormat) : undefined,
+        end: item.end ? format(item.end, tFormat) : undefined,
       }));
       return { date, start, end, isWithMe, noTimeOverlap, voteType, users };
     });
