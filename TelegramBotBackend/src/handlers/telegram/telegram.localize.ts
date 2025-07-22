@@ -1,5 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { Localization, LocalizationPreset } from './localize.model';
+import { Localization, LocalizationPreset } from '../../localize/localize.model';
 
 
 export const getTgLocalize = (user: TelegramBot.User): Localization => {
@@ -22,6 +22,7 @@ enum LocalizeEnum {
   ReportBugTimeout = 'ReportBugTimeout',
   Error = 'Error',
 }
+
 
 export const TelegramLocalize: LocalizationPreset<LocalizeEnum> = {
   StartMessage: {

@@ -1,9 +1,18 @@
-import { env } from './env';
+import TelegramBot from 'node-telegram-bot-api';
 import { createLogChild } from './logs';
 import { InitData } from '@telegram-apps/init-data-node';
-import { getTgLocalize, TelegramLocalize } from './localize';
-import { createReport, getEventsByCreator, getVotesByUser, IEventDb, IReportDb, isTgUserExist, updateReportById } from './database';
-import TelegramBot from 'node-telegram-bot-api';
+import { IEventDb, IReportDb } from './database';
+import { env } from './env';
+import {
+  createdCommandHandle,
+  getTgLocalize,
+  reportBugCommandHandle,
+  startCommandHandle,
+  TelegramLocalize,
+  updateReportCommandHandle,
+  votedCommandHandle
+} from './handlers/telegram';
+
 
 
 /*-------------------------init bot-------------------------*/
@@ -18,19 +27,19 @@ export const initTgBot = () => {
       const text = msg.text;
       switch (text) {
         case '/start':
-          await startCommand(chatId, msg.from);
+          await startCommandHandle(bot, chatId, msg.from);
           break;
         case '/created':
-          await createdCommand(chatId, msg.from);
+          await createdCommandHandle(bot, chatId, msg.from);
           break;
         case '/voted':
-          await votedCommand(chatId, msg.from);
+          await votedCommandHandle(bot, chatId, msg.from);
           break;
         case '/reportbug':
-          await reportBugCommand(chatId, msg.from);
+          await reportBugCommandHandle(bot, chatId, msg.from);
           break;
-        case '/updatebugreport':
-          await updateBugReportCommand(chatId, msg.from);
+        case '/updatereport':
+          await updateReportCommandHandle(bot, chatId, msg.from);
           break;
       }
     } catch (e) {
@@ -41,7 +50,7 @@ export const initTgBot = () => {
 
 /*-------------------------helpers-------------------------*/
 
-const handleBotError = async (msg: TelegramBot.Message, e: any) => {
+export const handleBotError = async (msg: TelegramBot.Message, e: any) => {
   const loc = getTgLocalize(msg.from);
   console.log('tg bot command error', msg, e);
   logger.error('tg bot command error', msg, e);
@@ -73,6 +82,7 @@ export const sendMessageOnCreateEvent = async (data: InitData, event: IEventDb) 
 export const notifyAdminAboutReport = async (report: IReportDb) => {
   const adminId = env.tgAdminId();
   const message = `New bug report:\n\n` +
+    `Report ID: ${report._id}\n` +
     `User ID: ${report.userTgId}\n` +
     `Chat ID: ${report.chatId}\n` +
     `Description: ${report.description}\n` +
@@ -99,118 +109,3 @@ export const notifyUserAboutReportStatus = async (report: IReportDb) => {
     logger.error('Failed to notify user about report status', report._id, e);
   }
 };
-
-/*-------------------------commands-------------------------*/
-
-const startCommand = async (chatId: number, user?: TelegramBot.User) => {
-  const options: TelegramBot.SendMessageOptions = {
-    reply_markup: {
-      inline_keyboard: [
-        [{
-          text: 'Create New Event',
-          web_app: { url: env.webAppUrl() },
-        }],
-      ],
-    },
-  };
-  const loc = getTgLocalize(user);
-  const message = TelegramLocalize.StartMessage[loc];
-  await bot.sendMessage(chatId, message, options);
-};
-
-
-const createdCommand = async (chatId: number, user?: TelegramBot.User) => {
-  if (!user) { return; }
-  const loc = getTgLocalize(user);
-  const botUrl = await getBotUrl();
-  const dbUser = await isTgUserExist(user.id);
-  const events = !dbUser ? [] : await getEventsByCreator(dbUser).select<{ name: string }>('name');
-  if (!events || events.length === 0) {
-    bot.sendMessage(chatId, TelegramLocalize.NoCreatedEvents[loc]);
-    return;
-  }
-  const options: TelegramBot.SendMessageOptions = { disable_web_page_preview: true };
-  const eventLinks = events.map((e) => `${e.name} - ${botUrl}?startapp=event${e._id}`);
-  const baseMessage = `${TelegramLocalize.AmountOfCreated[loc]} - ${events.length}`;
-  const message = `${baseMessage}:\n\n${eventLinks.join('\n\n')}`;
-  await bot.sendMessage(chatId, message, options);
-}
-
-
-const votedCommand = async (chatId: number, user?: TelegramBot.User) => {
-  if (!user) { return; }
-  const loc = getTgLocalize(user);
-  const botUrl = await getBotUrl();
-  const dbUser = await isTgUserExist(user.id);
-  const votes = !dbUser ? [] : await getVotesByUser(dbUser)
-    .select<{ event: any }>('event')
-    .populate<{ event: { _id: any; name: string; } }>('event', 'name');
-    
-  if (!votes || votes.length === 0) {
-    bot.sendMessage(chatId, TelegramLocalize.NoVotedEvents[loc]);
-    return;
-  }
-  const options: TelegramBot.SendMessageOptions = { disable_web_page_preview: true };
-  const eventLinks = votes.map((v) => `${v.event.name} - ${botUrl}?startapp=event${v.event._id}`);
-  const baseMessage = `${TelegramLocalize.AmountOfVoted[loc]} - ${votes.length}`;
-  const message = `${baseMessage}:\n\n${eventLinks.join('\n\n')}`;
-  await bot.sendMessage(chatId, message, options);
-};
-
-
-const reportBugCommand = async (chatId: number, user?: TelegramBot.User) => {
-  const loc = getTgLocalize(user);
-  const options: TelegramBot.SendMessageOptions = { reply_markup: { force_reply: true, selective: true } };
-  const replyText = TelegramLocalize.ReportBugInit[loc];
-  const msgToReply = await bot.sendMessage(chatId, replyText, options);
-  // reply listener
-  const listener = bot.onReplyToMessage(chatId, msgToReply.message_id, async (reply) => {
-    clearTimeout(timeout);
-    bot.removeReplyListener(listener);
-    const replyText = reply.text ?? reply.caption;
-    if (!replyText) {
-      const cancelText = TelegramLocalize.ReportBugCancel[loc];
-      await bot.sendMessage(chatId, cancelText);
-      console.log('Report bug command: no text in reply', reply);
-      logger.info('Report bug command: no text in reply', reply);
-      return;
-    }
-    try {
-      const screenshot = reply.photo ? reply.photo[reply.photo.length - 1]?.file_id : undefined;
-      const report = await createReport(user.id, chatId, replyText, screenshot);
-      const successMessage = TelegramLocalize.ReportBugSuccess[loc].replace('{reportId}', String(report._id));
-      await bot.sendMessage(chatId, successMessage);
-      await notifyAdminAboutReport(report);
-      console.log('Report created successfully', report);
-      logger.info('Report created successfully', report);
-    } catch (e) {
-      await handleBotError(reply, e);
-    }
-  });
-  // remove listener after 5 minutes
-  const timeout = setTimeout(() => {
-    bot.removeReplyListener(listener);
-    bot.sendMessage(chatId, TelegramLocalize.ReportBugTimeout[loc]);
-    console.log('Report bug command: timeout', chatId, user);
-    logger.info('Report bug command: timeout', chatId, user);
-  }, 1000 * 60 * 5);
-};
-
-
-const updateBugReportCommand = async (chatId: number, user?: TelegramBot.User) => {
-  if (user.id !== env.tgAdminId()) { return; }
-  const msgText = '*reportId*\n*status*\n*developerNotes*';
-  const options: TelegramBot.SendMessageOptions = { reply_markup: { force_reply: true, selective: true } };
-  const msgToReply = await bot.sendMessage(chatId, msgText, options);
-  // reply listener
-  const listener = bot.onReplyToMessage(chatId, msgToReply.message_id, async (reply) => {
-    clearTimeout(timeout);
-    bot.removeReplyListener(listener);
-    const [reportId, status, developerNotes] = reply.text.split('\n');
-    const updated = await updateReportById(reportId, { status: status as any, developerNotes });
-    await notifyUserAboutReportStatus(updated);
-    bot.sendMessage(chatId, `Report ${reportId} updated successfully.`);
-  });
-  // remove listener after 5 minutes
-  const timeout = setTimeout(() => bot.removeReplyListener(listener), 1000 * 60 * 5);
-}
