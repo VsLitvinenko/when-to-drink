@@ -16,7 +16,6 @@ export const authMiddleware: RequestHandler = (req, res, next) => {
     return next(new Error('You are not authorized'));
   }
   try {
-    // two weeks auth token expire (dev mode)
     validate(authData, env.tgToken(), { expiresIn: env.tgTokenExpiresIn() });
     res.locals[authDataKey] = parse(authData);
     return next();

@@ -1,4 +1,12 @@
-import { LocalizationPreset } from './localize.model';
+import TelegramBot from 'node-telegram-bot-api';
+import { Localization, LocalizationPreset } from './localize.model';
+
+
+export const getTgLocalize = (user: TelegramBot.User): Localization => {
+  const loc = (user?.language_code ?? 'en') as Localization;
+  return [Localization.en, Localization.ru].includes(loc) ? loc : Localization.en;
+};
+
 
 enum LocalizeEnum {
   StartMessage = 'StartMessage',
@@ -8,6 +16,10 @@ enum LocalizeEnum {
   AmountOfVoted = 'AmountOfVoted',
   EventCreated = 'EventCreated',
   ShareWithFriends = 'ShareWithFriends',
+  ReportBugInit = 'ReportBugInit',
+  ReportBugCancel = 'ReportBugCancel',
+  ReportBugSuccess = 'ReportBugSuccess',
+  ReportBugTimeout = 'ReportBugTimeout',
   Error = 'Error',
 }
 
@@ -39,6 +51,22 @@ export const TelegramLocalize: LocalizationPreset<LocalizeEnum> = {
   ShareWithFriends: {
     en: 'Do not forget to share it with your friends!',
     ru: 'Не забудьте поделиться им с друзьями!'
+  },
+  ReportBugInit: {
+    en: 'Please describe the issue you encountered. Optionally attach a screenshot as a photo (not a file).',
+    ru: 'Пожалуйста, опишите проблему, с которой вы столкнулись. Опционально прикрепите скриншот как фото (не файл).',
+  },
+  ReportBugCancel: {
+    en: 'Your message has no text, so the report has been canceled. If that was a mistake, please use command again.',
+    ru: 'Ваше сообщение не содержит текста, поэтому отчет был отменен. Если это была ошибка, пожалуйста, используйте команду снова.',
+  },
+  ReportBugSuccess: {
+    en: 'Your report has been created successfully. Report ID: {reportId}',
+    ru: 'Ваш отчет успешно создан. ID отчета: {reportId}',
+  },
+  ReportBugTimeout: {
+    en: 'You took too long to respond, the report has been canceled.',
+    ru: 'Вы слишком долго не отвечали, отчет был отменен.',
   },
   Error: {
     en: 'Something went wrong, unexpected error',

@@ -1,8 +1,8 @@
 import { env } from './env';
 import { createLogChild } from './logs';
 import { InitData } from '@telegram-apps/init-data-node';
-import { Localization, TelegramLocalize } from './localize';
-import { getEventsByCreator, getVotesByUser, IEventDb, isTgUserExist } from './database';
+import { getTgLocalize, TelegramLocalize } from './localize';
+import { createReport, getEventsByCreator, getVotesByUser, IEventDb, isTgUserExist } from './database';
 import TelegramBot from 'node-telegram-bot-api';
 
 
@@ -25,17 +25,24 @@ export const initTgBot = () => {
         case '/voted':
           await votedCommand(chatId, msg.from);
           break;
+        case '/reportbug':
+          await reportBugCommand(chatId, msg.from);
+          break;
       }
     } catch (e) {
-      const loc = (msg.from?.language_code ?? 'en') as Localization;
-      console.log('tg bot command error', msg, e);
-      logger.error('tg bot command error', msg, e);
-      await bot.sendMessage(msg.chat.id, TelegramLocalize.Error[loc]);
+      await handleBotError(msg, e);
     }
   });
 };
 
 /*-------------------------helpers-------------------------*/
+
+const handleBotError = async (msg: TelegramBot.Message, e: any) => {
+  const loc = getTgLocalize(msg.from);
+  console.log('tg bot command error', msg, e);
+  logger.error('tg bot command error', msg, e);
+  await bot.sendMessage(msg.chat.id, TelegramLocalize.Error[loc]);
+};
 
 export const getBotUrl = async () => {
   const botInfo = await bot.getMe();
@@ -45,7 +52,7 @@ export const getBotUrl = async () => {
 export const sendMessageOnCreateEvent = async (data: InitData, event: IEventDb) => {
   try {
     const botUrl = await getBotUrl();
-    const loc = (data.user?.language_code ?? 'en') as Localization;
+    const loc = getTgLocalize(data.user as any);
     const options: TelegramBot.SendMessageOptions = { disable_web_page_preview: true };
     const eventLink = `${event.name} - ${botUrl}?startapp=event${event._id}`;
     const baseMessage = TelegramLocalize.EventCreated[loc];
@@ -56,6 +63,21 @@ export const sendMessageOnCreateEvent = async (data: InitData, event: IEventDb) 
     logger.warn(`Cannot send message to event ${event._id} creator`, data, event);
     console.log(`Cannot send message to event ${event._id} creator`);
     return;
+  }
+};
+
+export const notifyAdminAboutReport = async (report: any) => {
+  const adminId = env.tgAdminId();
+  const message = `New bug report:\n\n` +
+    `User ID: ${report.userTgId}\n` +
+    `Chat ID: ${report.chatId}\n` +
+    `Description: ${report.description}\n` +
+    `Created At: ${report.createdAt.toISOString()}\n` +
+    `Status: ${report.status}`;
+  if (report.screenshot) {
+    await bot.sendPhoto(adminId, report.screenshot, { caption: message });
+  } else {
+    await bot.sendMessage(adminId, message);
   }
 };
 
@@ -72,15 +94,15 @@ const startCommand = async (chatId: number, user?: TelegramBot.User) => {
       ],
     },
   };
-  const loc = (user?.language_code ?? 'en') as Localization;
+  const loc = getTgLocalize(user);
   const message = TelegramLocalize.StartMessage[loc];
   await bot.sendMessage(chatId, message, options);
 };
 
 
-const createdCommand = async(chatId: number, user?: TelegramBot.User) => {
+const createdCommand = async (chatId: number, user?: TelegramBot.User) => {
   if (!user) { return; }
-  const loc = (user?.language_code ?? 'en') as Localization;
+  const loc = getTgLocalize(user);
   const botUrl = await getBotUrl();
   const dbUser = await isTgUserExist(user.id);
   const events = !dbUser ? [] : await getEventsByCreator(dbUser).select<{ name: string }>('name');
@@ -96,9 +118,9 @@ const createdCommand = async(chatId: number, user?: TelegramBot.User) => {
 }
 
 
-const votedCommand = async(chatId: number, user?: TelegramBot.User) => {
+const votedCommand = async (chatId: number, user?: TelegramBot.User) => {
   if (!user) { return; }
-  const loc = (user?.language_code ?? 'en') as Localization;
+  const loc = getTgLocalize(user);
   const botUrl = await getBotUrl();
   const dbUser = await isTgUserExist(user.id);
   const votes = !dbUser ? [] : await getVotesByUser(dbUser)
@@ -114,4 +136,43 @@ const votedCommand = async(chatId: number, user?: TelegramBot.User) => {
   const baseMessage = `${TelegramLocalize.AmountOfVoted[loc]} - ${votes.length}`;
   const message = `${baseMessage}:\n\n${eventLinks.join('\n\n')}`;
   await bot.sendMessage(chatId, message, options);
+};
+
+
+const reportBugCommand = async (chatId: number, user?: TelegramBot.User) => {
+  const loc = getTgLocalize(user);
+  const options: TelegramBot.SendMessageOptions = { reply_markup: { force_reply: true, selective: true } };
+  const replyText = TelegramLocalize.ReportBugInit[loc];
+  const msgToReply = await bot.sendMessage(chatId, replyText, options);
+  // reply listener
+  const listener = bot.onReplyToMessage(chatId, msgToReply.message_id, async (reply) => {
+    clearTimeout(timeout);
+    bot.removeReplyListener(listener);
+    const replyText = reply.text ?? reply.caption;
+    if (!replyText) {
+      const cancelText = TelegramLocalize.ReportBugCancel[loc];
+      await bot.sendMessage(chatId, cancelText);
+      console.log('Report bug command: no text in reply', reply);
+      logger.info('Report bug command: no text in reply', reply);
+      return;
+    }
+    try {
+      const screenshot = reply.photo ? reply.photo[reply.photo.length - 1]?.file_id : undefined;
+      const report = await createReport(user.id, chatId, replyText, screenshot);
+      const successMessage = TelegramLocalize.ReportBugSuccess[loc].replace('{reportId}', String(report._id));
+      await bot.sendMessage(chatId, successMessage);
+      await notifyAdminAboutReport(report);
+      console.log('Report created successfully', report);
+      logger.info('Report created successfully', report);
+    } catch (e) {
+      await handleBotError(reply, e);
+    }
+  });
+  // remove listener after 5 minutes
+  const timeout = setTimeout(() => {
+    bot.removeReplyListener(listener);
+    bot.sendMessage(chatId, TelegramLocalize.ReportBugTimeout[loc]);
+    console.log('Report bug command: timeout', chatId, user);
+    logger.info('Report bug command: timeout', chatId, user);
+  }, 1000 * 60 * 5);
 };
