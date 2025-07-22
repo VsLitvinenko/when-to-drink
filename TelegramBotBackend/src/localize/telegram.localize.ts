@@ -26,7 +26,7 @@ enum LocalizeEnum {
 export const TelegramLocalize: LocalizationPreset<LocalizeEnum> = {
   StartMessage: {
     en: 'Use this bot to choose dates, when you and your friends are ready for some events!',
-    ru: 'Используйте этого бота, чтобы выбрать даты, когда вы и ваши друзья будете готовы к каким-либо мероприятиям!',
+    ru: 'Используйте этого бота, чтобы выбрать даты, когда вы и ваши друзья будете готовы к каким-либо событиям!',
   },
   NoCreatedEvents: {
     en: 'You have not created any events yet',

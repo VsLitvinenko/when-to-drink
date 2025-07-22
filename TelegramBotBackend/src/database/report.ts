@@ -32,7 +32,24 @@ export const ReportSchema = new mongoose.Schema({
 
 export const ReportModel = mongoose.model('Report', ReportSchema);
 
+export interface IReportDb {
+  _id: any;
+  userTgId: number;
+  chatId: number;
+  description: string;
+  screenshot?: string;
+  createdAt: Date;
+  status: 'open' | 'in_progress' | 'resolved';
+  developerNotes?: string;
+}
+
 export const createReport = async (userTgId: number, chatId: number, description: string, screenshot?: string) => {
   const report = new ReportModel({ userTgId, chatId, description, screenshot });
   return await report.save().then((report) => report.toObject());
 }
+
+export const updateReportById = async (reportId: string, updateData: Partial<IReportDb>) => {
+  return await ReportModel.findByIdAndUpdate(reportId, updateData, { new: true })
+    .then((report) => report.save())
+    .then((report) => report.toObject());
+};

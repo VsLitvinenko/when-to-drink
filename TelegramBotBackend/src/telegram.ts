@@ -2,11 +2,12 @@ import { env } from './env';
 import { createLogChild } from './logs';
 import { InitData } from '@telegram-apps/init-data-node';
 import { getTgLocalize, TelegramLocalize } from './localize';
-import { createReport, getEventsByCreator, getVotesByUser, IEventDb, isTgUserExist } from './database';
+import { createReport, getEventsByCreator, getVotesByUser, IEventDb, IReportDb, isTgUserExist, updateReportById } from './database';
 import TelegramBot from 'node-telegram-bot-api';
 
 
 /*-------------------------init bot-------------------------*/
+
 const logger = createLogChild('telegram', 'bot');
 const bot = new TelegramBot(env.tgToken(), { polling: true });
 
@@ -27,6 +28,9 @@ export const initTgBot = () => {
           break;
         case '/reportbug':
           await reportBugCommand(chatId, msg.from);
+          break;
+        case '/updatebugreport':
+          await updateBugReportCommand(chatId, msg.from);
           break;
       }
     } catch (e) {
@@ -66,7 +70,7 @@ export const sendMessageOnCreateEvent = async (data: InitData, event: IEventDb) 
   }
 };
 
-export const notifyAdminAboutReport = async (report: any) => {
+export const notifyAdminAboutReport = async (report: IReportDb) => {
   const adminId = env.tgAdminId();
   const message = `New bug report:\n\n` +
     `User ID: ${report.userTgId}\n` +
@@ -78,6 +82,21 @@ export const notifyAdminAboutReport = async (report: any) => {
     await bot.sendPhoto(adminId, report.screenshot, { caption: message });
   } else {
     await bot.sendMessage(adminId, message);
+  }
+};
+
+export const notifyUserAboutReportStatus = async (report: IReportDb) => {
+  const message = `Your bug report has been updated:\n\n` +
+    `Report ID: ${report._id}\n` +
+    `Status: ${report.status}\n` +
+    `Developer notes: ${report.developerNotes ?? 'No developer notes provided'}\n`;
+  try {
+    await bot.sendMessage(report.userTgId, message);
+    console.log('User notified about report status', report._id);
+    logger.info('User notified about report status', report._id);
+  } catch (e) {
+    console.error('Failed to notify user about report status', report._id, e);
+    logger.error('Failed to notify user about report status', report._id, e);
   }
 };
 
@@ -176,3 +195,22 @@ const reportBugCommand = async (chatId: number, user?: TelegramBot.User) => {
     logger.info('Report bug command: timeout', chatId, user);
   }, 1000 * 60 * 5);
 };
+
+
+const updateBugReportCommand = async (chatId: number, user?: TelegramBot.User) => {
+  if (user.id !== env.tgAdminId()) { return; }
+  const msgText = '*reportId*\n*status*\n*developerNotes*';
+  const options: TelegramBot.SendMessageOptions = { reply_markup: { force_reply: true, selective: true } };
+  const msgToReply = await bot.sendMessage(chatId, msgText, options);
+  // reply listener
+  const listener = bot.onReplyToMessage(chatId, msgToReply.message_id, async (reply) => {
+    clearTimeout(timeout);
+    bot.removeReplyListener(listener);
+    const [reportId, status, developerNotes] = reply.text.split('\n');
+    const updated = await updateReportById(reportId, { status: status as any, developerNotes });
+    await notifyUserAboutReportStatus(updated);
+    bot.sendMessage(chatId, `Report ${reportId} updated successfully.`);
+  });
+  // remove listener after 5 minutes
+  const timeout = setTimeout(() => bot.removeReplyListener(listener), 1000 * 60 * 5);
+}
