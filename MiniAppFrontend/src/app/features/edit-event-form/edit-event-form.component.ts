@@ -75,7 +75,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
 
   @Output() noUnsavedChanges = combineLatest([
     this.eventFormGroup.valueChanges,
-    this.eventInfo$.pipe(startWith(null))
+    this.eventInfo$
   ]).pipe(
     map(([formValue, info]) => {
       return !info
@@ -85,6 +85,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
             return infoValue === value;
           });
     }),
+    startWith(true),
     shareReplay(1)
   );
 
