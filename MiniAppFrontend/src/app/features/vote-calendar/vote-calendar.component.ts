@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, Output, output, signal, viewChild } from '@angular/core';
 import { PreventContextDirective, VoteDataDirective, VoteHandleClickDirective, VoteHandlePopoverDirective } from './directives';
 import { distinctUntilChanged, finalize, map, merge, Observable, shareReplay, startWith, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/standalone';
@@ -92,13 +92,6 @@ export class VoteCalendarComponent {
       map((dates) => dates.slice())
     ),
   );
-
-  public readonly noUnsavedChanges$ = toObservable(this.voteDatesFromCalendar).pipe(
-    withLatestFrom(this.stagedVoteDates$),
-    map(([current, staged]) => isEqual(current, staged)),
-    distinctUntilChanged(),
-    shareReplay(1)
-  );
   
   public readonly startTime = signal(format(new Date(), timeFormat));
   public readonly endTime = signal(format(new Date(), timeFormat));
@@ -118,6 +111,13 @@ export class VoteCalendarComponent {
   private readonly loc = inject(LocalizeService);
   public readonly localizeFormat$ = this.loc.localizationWithFormat$;
   public readonly VoteCalendarLocalize = VoteCalendarLocalize;
+
+  @Output() noUnsavedChanges = toObservable(this.voteDatesFromCalendar).pipe(
+    withLatestFrom(this.stagedVoteDates$),
+    map(([current, staged]) => isEqual(current, staged)),
+    distinctUntilChanged(),
+    shareReplay(1)
+  );
 
   constructor() { }
 

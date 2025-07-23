@@ -38,15 +38,15 @@
   ></ion-datetime>
   
   <ion-buttons class="vote-calendar-actions" mode="ios">
-    @let noUnsavedChanges = noUnsavedChanges$ | async;
+    @let noUnsaved = noUnsavedChanges | async;
     <ion-button color="medium" (click)="clearDates$.next(true)">
       {{ VoteCalendarLocalize.Clear | localize }}
     </ion-button>
     <div class="right">
-      <ion-button color="danger" (click)="resetDates$.next(true)" [disabled]="noUnsavedChanges">
+      <ion-button color="danger" (click)="resetDates$.next(true)" [disabled]="noUnsaved">
         {{ VoteCalendarLocalize.Cancel | localize }}
       </ion-button>
-      <ion-button color="primary" (click)="saveDates$.next(true)" [disabled]="noUnsavedChanges">
+      <ion-button color="primary" (click)="saveDates$.next(true)" [disabled]="noUnsaved">
         {{ VoteCalendarLocalize.Save | localize }}
       </ion-button>
     </div>

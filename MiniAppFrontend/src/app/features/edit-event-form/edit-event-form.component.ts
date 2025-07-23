@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, inject, input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IonDatetime, IonDatetimeButton, IonInput, IonModal, IonSpinner, IonTextarea } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { EditEventFormLocalize } from './edit-event-form.localize';
@@ -73,7 +73,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
     shareReplay(1)
   );
 
-  public readonly noUnsavedChanges$ = combineLatest([
+  @Output() noUnsavedChanges = combineLatest([
     this.eventFormGroup.valueChanges,
     this.eventInfo$.pipe(startWith(null))
   ]).pipe(
