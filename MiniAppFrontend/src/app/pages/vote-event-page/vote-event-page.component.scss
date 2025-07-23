@@ -3,6 +3,12 @@ ion-segment {
   background: var(--ion-color-light, #f4f5f8);
 }
 
+ion-segment-button {
+  &::before {
+    content: none !important;
+  }
+}
+
 ion-segment-view {
   height: auto;
 }
