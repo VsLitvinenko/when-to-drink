@@ -1,7 +1,7 @@
 import { AfterViewInit, Directive, EventEmitter, inject, Input, Output } from '@angular/core';
 import { VoteDataDirective } from './vote-data.directive';
 import { fromEvent, map, merge, switchMap, tap } from 'rxjs';
-import { TimeModalData, TimeModalDataAction, VoteDate, VoteType } from '../models';
+import { TimeModalDataAction, TimeModalDataParam, VoteDate, VoteType } from '../models';
 
 @Directive({
   selector: '[appVoteHandleClick]',
@@ -37,12 +37,13 @@ export class VoteHandleClickDirective implements AfterViewInit {
     if (readyDates.has(date)) { readyDates.delete(date); }
     else if (maybeDates.has(date)) { maybeDates.delete(date);}
     else if (timeDates.has(date)) { timeDates.delete(date); }
-    else { await this.addDateToSet(date, year, month, day); }
+    else { await this.addDateToSet(buttonEl, date, year, month, day); }
     // emit changes
     this.data.emitAllDatesSignals();
   }
 
   private async addDateToSet(
+    buttonEl: HTMLButtonElement,
     date: string,
     year: number,
     month: number,
@@ -57,8 +58,10 @@ export class VoteHandleClickDirective implements AfterViewInit {
         break;
       case VoteType.Time:
         // open time modal and wait for user input
-        const action = new Promise<TimeModalData | undefined>((r) => this.timeModalAction.emit(r));
+        buttonEl.style.opacity = '0.65';
+        const action = new Promise<TimeModalDataParam>((r) => this.timeModalAction.emit(r));
         const voteDateData = await action;
+        buttonEl.style.opacity = '';
         if (!voteDateData) { return; }
         const startDate = new Date(voteDateData.start);
         const endDate = new Date(voteDateData.end);

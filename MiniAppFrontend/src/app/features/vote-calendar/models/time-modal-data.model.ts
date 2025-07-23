@@ -4,4 +4,5 @@ export interface TimeModalData {
   end: string;
 }
 
-export type TimeModalDataAction = (opt: TimeModalData | undefined) => void;
+export type TimeModalDataParam = TimeModalData | undefined;
+export type TimeModalDataAction = (opt?: TimeModalData) => void;

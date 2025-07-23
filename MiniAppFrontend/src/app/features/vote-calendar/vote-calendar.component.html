@@ -47,7 +47,7 @@
     [appVoteHandlePopover]="popover"
     [voteDates]="(voteDates$ | async) ?? []"
     (focusedTimeChanges)="updateTime($event)"
-    (timeModalAction)="timeModalPassDataAction.set($event)"
+    (timeModalAction)="timeModalDataAction.set($event)"
     [firstDayOfWeek]="1"
     [min]="minDate() ?? undefined"
     [max]="maxDate() ?? undefined"
@@ -93,23 +93,20 @@
       </ion-button>
       <ion-button
         size="small" color="success"
-        (click)="timeModalPassDataAction.set(popover.dismiss.bind(popover))">
+        (click)="timeModalDataAction.set(popover.dismiss.bind(popover))">
         <ion-icon name="time-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
   </ng-template>
 </ion-popover>
 
-@let modalAction = timeModalPassDataAction();
+@let modalAction = timeModalDataAction();
 <ion-modal
   #timeModal
   [initialBreakpoint]="1"
   [breakpoints]="[0, 1]"
   [isOpen]="modalAction !== undefined"
-  (ionModalWillDismiss)="
-    modalAction!(undefined);
-    timeModalPassDataAction.set(undefined)
-  ">
+  (ionModalWillDismiss)="modalAction?.(); timeModalDataAction.set(undefined)">
   <ng-template>
     <div class="time-modal-content">
       <div class="time-pickers">

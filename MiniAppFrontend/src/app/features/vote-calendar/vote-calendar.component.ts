@@ -104,7 +104,7 @@ export class VoteCalendarComponent {
     return startDate >= endDate;
   });
 
-  public timeModalPassDataAction = signal<TimeModalDataAction | undefined>(undefined);
+  public timeModalDataAction = signal<TimeModalDataAction | undefined>(undefined);
 
   private readonly toast = inject(ToastService);
   private readonly tools = inject(SmallToolsService);
@@ -142,10 +142,10 @@ export class VoteCalendarComponent {
     timeModal.dismiss();
     this.lastAppliedStartTime = this.startTime();
     this.lastAppliedEndTime = this.endTime();
-    const action = this.timeModalPassDataAction();
+    const action = this.timeModalDataAction();
     if (action) {
       action({ time: true, start: this.startTime(), end: this.endTime() });
-      this.timeModalPassDataAction.set(undefined);
+      this.timeModalDataAction.set(undefined);
     }
   }
   
