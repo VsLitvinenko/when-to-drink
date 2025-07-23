@@ -22,8 +22,16 @@ export class ConfirmTgService extends ConfirmService {
           title: options.header,
           message: options.message,
           buttons: [
-            { id: 'cancel', text: options.cancelText ?? 'Cancel' },
-            { id: 'ok', text: options.okText ?? 'OK' },
+            {
+              id: 'ok',
+              text: options.okText ?? 'OK',
+              type: options.okDanger ? 'destructive' : 'default',
+            },
+            {
+              id: 'cancel',
+              text: options.cancelText,
+              type: options.cancelText ? 'default' : 'cancel',
+            },
           ],
         };
         miniApp.showPopup(params, (id: string) => {

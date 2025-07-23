@@ -1,7 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { PageCommonModule } from 'src/app/shared';
 import { EditEventFormComponent } from 'src/app/features/edit-event-form';
-import { IonButton } from '@ionic/angular/standalone';
+import { IonButton, ViewDidLeave } from '@ionic/angular/standalone';
 import { LocalizeService } from 'src/app/shared/localize';
 import { TelegramService, ToastService } from 'src/app/core/services';
 import { EditEventPageLocalize } from './edit-event-page.localize';
@@ -22,7 +22,7 @@ import { ConfirmService } from 'src/app/core/confirm';
     class: 'app-page-inner',
   },
 })
-export class EditEventPageComponent {
+export class EditEventPageComponent implements ViewDidLeave {
   // query param input
   public readonly eventId = input<string | undefined>();
 
@@ -37,6 +37,10 @@ export class EditEventPageComponent {
   private preventLeave = false;
 
   constructor() { }
+
+  ionViewDidLeave(): void {
+    this.tg.toggleClosingConfirm(false);
+  }
 
   canDeactivate(): Observable<boolean> {
     const header = this.local.localizeSync(EditEventPageLocalize.LeaveQuestion);

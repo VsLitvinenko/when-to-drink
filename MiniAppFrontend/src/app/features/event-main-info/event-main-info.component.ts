@@ -109,8 +109,9 @@ export class EventMainInfoComponent {
   public deleteEvent(): void {
     const header = this.local.localizeSync(EventMainInfoLocalize.DeleteQuestion);
     const message = this.local.localizeSync(EventMainInfoLocalize.CannotBeUndone);
+    const okText = this.local.localizeSync(EventMainInfoLocalize.Delete);
     const toastMessage = this.local.localizeSync(EventMainInfoLocalize.EventWasDeleted);
-    this.confirm.createConfirm({ header, message }).pipe(
+    this.confirm.createConfirm({ header, message, okText, okDanger: true }).pipe(
       filter(Boolean),
       tap(() => this.featureLoad?.incrLoading()),
       switchMap(() => this.request.deleteEvent(this.eventId())),

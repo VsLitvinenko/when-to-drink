@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, viewChild } from '@angular/core';
-import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, ViewWillEnter } from '@ionic/angular/standalone';
+import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, ViewDidLeave, ViewWillEnter } from '@ionic/angular/standalone';
 import { EventMainInfoComponent } from 'src/app/features/event-main-info';
 import { ResultFiltersComponent } from 'src/app/features/result-filters';
 import { VoteCalendarComponent } from 'src/app/features/vote-calendar';
@@ -38,7 +38,7 @@ import { LocalizeService } from 'src/app/shared/localize';
     class: 'app-page-inner',
   },
 })
-export class VoteEventPageComponent  implements ViewWillEnter {
+export class VoteEventPageComponent  implements ViewWillEnter, ViewDidLeave {
   public readonly eventId = input.required<string>();
 
   private readonly mainInfoComponent = viewChild(EventMainInfoComponent);
@@ -63,6 +63,10 @@ export class VoteEventPageComponent  implements ViewWillEnter {
     } else {
       this.alreadyInit = true;
     }
+  }
+
+  ionViewDidLeave(): void {
+    this.tg.toggleClosingConfirm(false);
   }
 
   canDeactivate(): Observable<boolean> {

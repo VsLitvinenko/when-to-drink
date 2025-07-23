@@ -19,7 +19,8 @@ export class ConfirmIonService extends ConfirmService {
       backdropDismiss: false,
       buttons: [
         {
-          text: options.cancelText ?? 'Cancel',
+          text: options.cancelText ?? this.cancelText,
+          role: 'cancel',
           handler: () => {
             res$.next(false);
             res$.complete();
@@ -27,6 +28,7 @@ export class ConfirmIonService extends ConfirmService {
         },
         {
           text: options.okText ?? 'OK',
+          role: options.okDanger ? 'destructive' : undefined,
           handler: () => {
             res$.next(true);
             res$.complete();
