@@ -7,7 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { addMonths, format } from 'date-fns';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ToastService } from 'src/app/core/services';
-import { filter, of, shareReplay, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, filter, map, of, shareReplay, startWith, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { EdiEventFormRequestService } from './edit-event-form-request.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
@@ -70,6 +70,21 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
     tap(() => this.eventFormGroup.disable()),
     switchMap((eventId) => !!eventId ? this.request.getEventInfo(eventId) : of(null)),
     tap(() => this.eventFormGroup.enable()),
+    shareReplay(1)
+  );
+
+  public readonly noUnsavedChanges$ = combineLatest([
+    this.eventFormGroup.valueChanges,
+    this.eventInfo$.pipe(startWith(null))
+  ]).pipe(
+    map(([formValue, info]) => {
+      return !info
+        ? false
+        : Object.entries(formValue).every(([key, value]) => {
+            const infoValue = (info as any)[key];
+            return infoValue === value;
+          });
+    }),
     shareReplay(1)
   );
 
