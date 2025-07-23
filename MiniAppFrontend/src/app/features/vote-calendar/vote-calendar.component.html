@@ -1,18 +1,36 @@
 <div class="vote-calendar">
   <div class="vote-calendar-header">
     <div class="chips">
-      <ion-chip color="primary" class="ion-activated">
-        <ion-icon name="checkmark-outline"></ion-icon>
-        <ion-label> {{ VoteCalendarLocalize.Ready | localize }} </ion-label>
-      </ion-chip>
-      <ion-chip color="warning" class="ion-activated">
-        <ion-icon name="help-outline"></ion-icon>
-        <ion-label> {{ VoteCalendarLocalize.Maybe | localize }} </ion-label>
-      </ion-chip>
-      <ion-chip color="success" class="ion-activated">
-        <ion-icon name="time-outline"></ion-icon>
-        <ion-label> {{ VoteCalendarLocalize.Time | localize }} </ion-label>
-      </ion-chip>
+      <div
+        class="chip-container"
+        [class.active]="defaultVoteType === VoteType.Ready"
+        (click)="defaultVoteType = VoteType.Ready"
+      >
+        <ion-chip color="primary">
+          <ion-icon name="checkmark-outline"></ion-icon>
+          <ion-label> {{ VoteCalendarLocalize.Ready | localize }} </ion-label>
+        </ion-chip>
+      </div>
+      <div
+        class="chip-container"
+        [class.active]="defaultVoteType === VoteType.Maybe"
+        (click)="defaultVoteType = VoteType.Maybe"
+      >
+        <ion-chip color="warning">
+          <ion-icon name="help-outline"></ion-icon>
+          <ion-label> {{ VoteCalendarLocalize.Maybe | localize }} </ion-label>
+        </ion-chip>
+      </div>
+      <div
+        class="chip-container"
+        [class.active]="defaultVoteType === VoteType.Time"
+        (click)="defaultVoteType = VoteType.Time"
+      >
+        <ion-chip color="success">
+          <ion-icon name="time-outline"></ion-icon>
+          <ion-label> {{ VoteCalendarLocalize.Time | localize }} </ion-label>
+        </ion-chip>
+      </div>
     </div>
      <span class="subtitle">
       {{ (isTouchDevice
@@ -25,10 +43,11 @@
 
   <ion-datetime
     appVoteData
-    appVoteHandleClick
+    [appVoteHandleClick]="defaultVoteType"
     [appVoteHandlePopover]="popover"
     [voteDates]="(voteDates$ | async) ?? []"
     (focusedTimeChanges)="updateTime($event)"
+    (timeModalAction)="timeModalPassDataAction.set($event)"
     [firstDayOfWeek]="1"
     [min]="minDate() ?? undefined"
     [max]="maxDate() ?? undefined"
@@ -62,20 +81,35 @@
 >
   <ng-template>
     <div class="popover-content">
-      <ion-button #readyButton size="small" color="primary" (click)="popover.dismiss({ ready: true })">
+      <ion-button
+        size="small" color="primary"
+        (click)="popover.dismiss({ ready: true })">
         <ion-icon name="checkmark-outline" slot="icon-only"></ion-icon>
       </ion-button>
-      <ion-button #maybeButton size="small" color="warning" (click)="popover.dismiss({ maybe: true })">
+      <ion-button
+        size="small" color="warning"
+        (click)="popover.dismiss({ maybe: true })">
         <ion-icon name="help-outline" slot="icon-only"></ion-icon>
       </ion-button>
-      <ion-button #timeButton size="small" color="success" (click)="timeModal.present()">
+      <ion-button
+        size="small" color="success"
+        (click)="timeModalPassDataAction.set(popover.dismiss.bind(popover))">
         <ion-icon name="time-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
   </ng-template>
 </ion-popover>
 
-<ion-modal #timeModal [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+@let modalAction = timeModalPassDataAction();
+<ion-modal
+  #timeModal
+  [initialBreakpoint]="1"
+  [breakpoints]="[0, 1]"
+  [isOpen]="modalAction !== undefined"
+  (ionModalWillDismiss)="
+    modalAction!(undefined);
+    timeModalPassDataAction.set(undefined)
+  ">
   <ng-template>
     <div class="time-modal-content">
       <div class="time-pickers">
@@ -91,15 +125,7 @@
       <ion-button
         mode="ios"
         [disabled]="isTimeInvalid()"
-        (click)="
-          timeModal.dismiss();
-          lastAppliedStartTime = startTime();
-          lastAppliedEndTime = endTime();
-          popover.dismiss({
-            time: true,
-            start: startTime(),
-            end: endTime()
-          })">
+        (click)="onTimeSelected(timeModal)">
         {{ VoteCalendarLocalize.SpecifyTime | localize }}
       </ion-button>
     </div>

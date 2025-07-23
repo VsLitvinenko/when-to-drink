@@ -1,12 +1,15 @@
-import { AfterViewInit, Directive, inject } from '@angular/core';
+import { AfterViewInit, Directive, EventEmitter, inject, Input, Output } from '@angular/core';
 import { VoteDataDirective } from './vote-data.directive';
 import { fromEvent, map, merge, switchMap, tap } from 'rxjs';
+import { TimeModalData, TimeModalDataAction, VoteDate, VoteType } from '../models';
 
 @Directive({
   selector: '[appVoteHandleClick]',
 })
 export class VoteHandleClickDirective implements AfterViewInit {
-  
+  @Input({ required: true }) appVoteHandleClick!: VoteType;
+  @Output() timeModalAction = new EventEmitter<TimeModalDataAction>();
+
   private readonly data = inject(VoteDataDirective);
 
   ngAfterViewInit(): void {
@@ -24,7 +27,7 @@ export class VoteHandleClickDirective implements AfterViewInit {
     ).subscribe((buttonEl) => this.handleClick(buttonEl));
   }
 
-  private handleClick(buttonEl: HTMLButtonElement): void {
+  private async handleClick(buttonEl: HTMLButtonElement): Promise<void> {
     const { day, month, year } = this.data.getDataFromButton(buttonEl);
     const date = this.data.formatVoteDate(new Date(year, month - 1, day));
     const readyDates = this.data.readyDates();
@@ -34,8 +37,41 @@ export class VoteHandleClickDirective implements AfterViewInit {
     if (readyDates.has(date)) { readyDates.delete(date); }
     else if (maybeDates.has(date)) { maybeDates.delete(date);}
     else if (timeDates.has(date)) { timeDates.delete(date); }
-    else { readyDates.add(date); }
+    else { await this.addDateToSet(date, year, month, day); }
     // emit changes
     this.data.emitAllDatesSignals();
+  }
+
+  private async addDateToSet(
+    date: string,
+    year: number,
+    month: number,
+    day: number
+  ): Promise<void> {
+    switch (this.appVoteHandleClick) {
+      case VoteType.Ready:
+        this.data.readyDates().add(date);
+        break;
+      case VoteType.Maybe:
+        this.data.maybeDates().add(date);
+        break;
+      case VoteType.Time:
+        // open time modal and wait for user input
+        const action = new Promise<TimeModalData | undefined>((r) => this.timeModalAction.emit(r));
+        const voteDateData = await action;
+        if (!voteDateData) { return; }
+        const startDate = new Date(voteDateData.start);
+        const endDate = new Date(voteDateData.end);
+        startDate.setFullYear(year, month - 1, day);
+        endDate.setFullYear(year, month - 1, day);
+        const voteDate: VoteDate = {
+          date: new Date(date),
+          voteType: VoteType.Time,
+          start: startDate,
+          end: endDate,
+        };
+        this.data.timeDates().set(date, voteDate);
+        break;
+    }
   }
 }

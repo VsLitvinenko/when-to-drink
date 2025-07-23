@@ -4,7 +4,7 @@ import { distinctUntilChanged, finalize, map, merge, Observable, shareReplay, st
 import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { format } from 'date-fns';
-import { VoteDate } from './models';
+import { TimeModalDataAction, VoteDate, VoteType } from './models';
 import { FormsModule } from '@angular/forms';
 import { SmallToolsService, ToastService } from 'src/app/core/services';
 import { LocalizeService } from 'src/app/shared/localize';
@@ -104,9 +104,14 @@ export class VoteCalendarComponent {
     return startDate >= endDate;
   });
 
+  public timeModalPassDataAction = signal<TimeModalDataAction | undefined>(undefined);
+
   private readonly toast = inject(ToastService);
   private readonly tools = inject(SmallToolsService);
   public readonly isTouchDevice = this.tools.isTouchDevice;
+
+  public readonly VoteType = VoteType;
+  public defaultVoteType: VoteType = VoteType.Ready;
 
   private readonly loc = inject(LocalizeService);
   public readonly localizeFormat$ = this.loc.localizationWithFormat$;
@@ -131,6 +136,17 @@ export class VoteCalendarComponent {
       
     this.startTime.set(startValue);
     this.endTime.set(endValue);
+  }
+
+  public onTimeSelected(timeModal: IonModal): void {
+    timeModal.dismiss();
+    this.lastAppliedStartTime = this.startTime();
+    this.lastAppliedEndTime = this.endTime();
+    const action = this.timeModalPassDataAction();
+    if (action) {
+      action({ time: true, start: this.startTime(), end: this.endTime() });
+      this.timeModalPassDataAction.set(undefined);
+    }
   }
   
 }
