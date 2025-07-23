@@ -7,6 +7,8 @@ enum LocalizeEnum {
   Share = 'Share',
   GoTo = 'GoTo',
   ClipboardLink = 'ClipboardLink',
+  LeaveQuestion = 'LeaveQuestion',
+  LoseUnsaved = 'LoseUnsaved',
 }
 
 export const EditEventPageLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -33,5 +35,13 @@ export const EditEventPageLocalize: LocalizationPreset<LocalizeEnum> = {
   ClipboardLink: {
     en: 'Link to event was copied to clipboard',
     ru: 'Ссылка на событие скопирована в буфер обмена',
+  },
+  LeaveQuestion: {
+    en: 'Leave this page?',
+    ru: 'Покинуть эту страницу?',
+  },
+  LoseUnsaved: {
+    en: 'You have unsaved changes',
+    ru: 'Есть несохраненные изменения',
   },
 };

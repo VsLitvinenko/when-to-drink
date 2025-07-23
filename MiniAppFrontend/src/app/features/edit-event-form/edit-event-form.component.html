@@ -1,5 +1,6 @@
 @let disabled = eventFormGroup.disabled;
 @let canEdit = (eventInfo$ | async)?.canEdit !== false;
+@let noUnsaved = noUnsavedChanges | async;
 <ion-list
   mode="ios"
   [inset]="true"
@@ -75,6 +76,7 @@
   [disabled]="
     !canEdit ||
     disabled ||
+    noUnsaved ||
     eventFormGroup.invalid ||
     isDatesInvalid()
   ">

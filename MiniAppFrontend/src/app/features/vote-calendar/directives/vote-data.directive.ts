@@ -1,4 +1,4 @@
-import { AfterViewInit, Directive, effect, ElementRef, inject, Input, OnDestroy, Output, signal } from '@angular/core';
+import { AfterViewInit, computed, Directive, effect, ElementRef, inject, Input, OnDestroy, Output, signal } from '@angular/core';
 import { IonDatetime } from '@ionic/angular/standalone';
 import { VoteDate, VoteType } from '../models';
 import { map, ReplaySubject } from 'rxjs';
@@ -21,6 +21,14 @@ export class VoteDataDirective implements AfterViewInit, OnDestroy {
   }
 
   public get voteDates(): VoteDate[] {
+    return this.voteDatesSignal();
+  }
+
+  public readonly readyDates = signal(new Set<string>());
+  public readonly maybeDates = signal(new Set<string>());
+  public readonly timeDates = signal(new Map<string, VoteDate>());
+
+  public readonly voteDatesSignal = computed(() => {
     const ready = this.readyDates();
     const maybe = this.maybeDates();
     const time = this.timeDates();
@@ -29,11 +37,7 @@ export class VoteDataDirective implements AfterViewInit, OnDestroy {
       ...Array.from(maybe).map((date) => ({ date: new Date(date), voteType: VoteType.Maybe })),
       ...Array.from(time.values())
     ];
-  }
-
-  public readonly readyDates = signal(new Set<string>());
-  public readonly maybeDates = signal(new Set<string>());
-  public readonly timeDates = signal(new Map<string, VoteDate>());
+  });
 
   public readonly lastFocusedDateButton$ = new ReplaySubject<HTMLButtonElement | undefined>(1);
   @Output() focusedTimeChanges = this.lastFocusedDateButton$.pipe(

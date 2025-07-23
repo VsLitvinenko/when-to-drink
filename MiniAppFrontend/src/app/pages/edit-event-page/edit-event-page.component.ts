@@ -6,7 +6,8 @@ import { LocalizeService } from 'src/app/shared/localize';
 import { TelegramService, ToastService } from 'src/app/core/services';
 import { EditEventPageLocalize } from './edit-event-page.localize';
 import { Router } from '@angular/router';
-import { from, switchMap, take } from 'rxjs';
+import { from, Observable, of, switchMap, take } from 'rxjs';
+import { ConfirmService } from 'src/app/core/confirm';
 
 @Component({
   selector: 'app-edit-event-page',
@@ -28,11 +29,27 @@ export class EditEventPageComponent {
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
   private readonly tg = inject(TelegramService);
+  private readonly confirm = inject(ConfirmService);
   
   private readonly local = inject(LocalizeService);
   public readonly EditEventPageLocalize = EditEventPageLocalize;
 
+  private preventLeave = false;
+
   constructor() { }
+
+  canDeactivate(): Observable<boolean> {
+    const header = this.local.localizeSync(EditEventPageLocalize.LeaveQuestion);
+    const message = this.local.localizeSync(EditEventPageLocalize.LoseUnsaved);
+    return this.preventLeave
+      ? this.confirm.createConfirm({ header, message })
+      : of(true);
+  }
+
+  public onNoUnsavedChanges(noUnsaved: boolean): void {
+    this.preventLeave = !noUnsaved;
+    this.tg.toggleClosingConfirm(!noUnsaved);
+  }
 
   public copyToClipboard(): void {
     this.tg.getEventTgLink(this.eventId()!)

@@ -30,9 +30,14 @@
     padding: 0 0.2rem;
     justify-content: space-between;
     gap: 0.25rem;
-  }
-  .ion-activated {
-    pointer-events: none;
+
+    .chip-container.active {
+      ion-chip {
+        background: rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.2) !important;
+        outline: 2px solid rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.2);
+        outline-offset: 2px;
+      }
+    }
   }
 }
 

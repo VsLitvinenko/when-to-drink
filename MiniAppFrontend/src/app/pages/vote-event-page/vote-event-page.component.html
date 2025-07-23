@@ -27,6 +27,7 @@
           [eventId]="eventId()"
           [minDate]="info?.starts"
           [maxDate]="info?.ends"
+          (noUnsavedChanges)="onNoUnsavedChanges($event)"
           (voteUpdated)="
             $event.alreadyVoted ? true: eventMainInfo.refreshUsers();
             result.refresh()

@@ -1,6 +1,6 @@
 import { env } from '../../env';
 import { updateReportById } from '../../database';
-import { notifyUserAboutReportStatus } from '../../telegram';
+import { handleBotError, notifyUserAboutReportStatus } from '../../telegram';
 import TelegramBot from 'node-telegram-bot-api';
 
 
@@ -11,12 +11,16 @@ export const updateReportCommandHandle = async (bot: TelegramBot, chatId: number
   const msgToReply = await bot.sendMessage(chatId, msgText, options);
   // reply listener
   const listener = bot.onReplyToMessage(chatId, msgToReply.message_id, async (reply) => {
-    clearTimeout(timeout);
-    bot.removeReplyListener(listener);
-    const [reportId, status, developerNotes] = reply.text.split('\n');
-    const updated = await updateReportById(reportId, { status: status as any, developerNotes });
-    await notifyUserAboutReportStatus(updated);
-    bot.sendMessage(chatId, `Report ${reportId} updated successfully.`);
+    try {
+      clearTimeout(timeout);
+      bot.removeReplyListener(listener);
+      const [reportId, status, developerNotes] = reply.text.split('\n');
+      const updated = await updateReportById(reportId, { status: status as any, developerNotes });
+      await notifyUserAboutReportStatus(updated);
+      bot.sendMessage(chatId, `Report ${reportId} updated successfully.`, { reply_markup: { remove_keyboard: true } });
+    } catch (e) {
+      await handleBotError(reply, e);
+    }
   });
   // remove listener after 5 minutes
   const timeout = setTimeout(() => bot.removeReplyListener(listener), 1000 * 60 * 5);

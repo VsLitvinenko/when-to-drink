@@ -43,6 +43,10 @@ ion-datetime.datetime-presentation-date {
     box-shadow: none !important;
     font-weight: 400 !important;
     font-size: 1.25rem !important;
+    &:focus {
+      background-color: transparent;
+      opacity: 0.65;
+    }
   }
   &::part(calendar-day today) {
     color: var(--ion-text-color) !important;

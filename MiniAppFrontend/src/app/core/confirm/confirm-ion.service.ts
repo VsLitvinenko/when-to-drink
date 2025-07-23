@@ -1,22 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { AlertController } from '@ionic/angular/standalone';
+import { ConfirmOptions, ConfirmService } from './confirm.service';
 import { Observable, Subject } from 'rxjs';
 
-export interface ConfirmOptions {
-  header: string;
-  message: string;
-  cancelText?: string;
-  okText?: string;
-}
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ConfirmService {
-
+@Injectable()
+export class ConfirmIonService extends ConfirmService {
   private readonly alert = inject(AlertController);
 
-  constructor() { }
+  constructor() { super(); }
 
   public createConfirm(options: ConfirmOptions): Observable<boolean> {
     const res$ = new Subject<boolean>();
@@ -24,6 +16,7 @@ export class ConfirmService {
       mode: 'ios',
       header: options.header,
       message: options.message,
+      backdropDismiss: false,
       buttons: [
         {
           text: options.cancelText ?? 'Cancel',
