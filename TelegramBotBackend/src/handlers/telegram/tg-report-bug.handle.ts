@@ -14,21 +14,21 @@ export const reportBugCommandHandle = async (bot: TelegramBot, chatId: number, u
   const msgToReply = await bot.sendMessage(chatId, replyText, options);
   // reply listener
   const listener = bot.onReplyToMessage(chatId, msgToReply.message_id, async (reply) => {
-    clearTimeout(timeout);
-    bot.removeReplyListener(listener);
-    const replyText = reply.text ?? reply.caption;
-    if (!replyText) {
-      const cancelText = TelegramLocalize.ReportBugCancel[loc];
-      await bot.sendMessage(chatId, cancelText);
-      console.log('Report bug command: no text in reply', reply);
-      logger.info('Report bug command: no text in reply', reply);
-      return;
-    }
     try {
+      clearTimeout(timeout);
+      bot.removeReplyListener(listener);
+      const replyText = reply.text ?? reply.caption;
+      if (!replyText) {
+        const cancelText = TelegramLocalize.ReportBugCancel[loc];
+        await bot.sendMessage(chatId, cancelText);
+        console.log('Report bug command: no text in reply', reply);
+        logger.info('Report bug command: no text in reply', reply);
+        return;
+      }
       const screenshot = reply.photo ? reply.photo[reply.photo.length - 1]?.file_id : undefined;
       const report = await createReport(user.id, chatId, replyText, screenshot);
       const successMessage = TelegramLocalize.ReportBugSuccess[loc].replace('{reportId}', String(report._id));
-      await bot.sendMessage(chatId, successMessage);
+      await bot.sendMessage(chatId, successMessage, { reply_markup: { remove_keyboard: true } });
       await notifyAdminAboutReport(report);
       console.log('Report created successfully', report);
       logger.info('Report created successfully', report);
