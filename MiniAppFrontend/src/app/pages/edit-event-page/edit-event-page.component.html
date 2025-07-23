@@ -4,7 +4,13 @@
           ? EditEventPageLocalize.EditEvent
           : EditEventPageLocalize.CreateEvent) | localize }}
   </h3>
-  <app-edit-event-form #form [eventId]="eventId()"/>
+
+  <app-edit-event-form
+    #form
+    [eventId]="eventId()"
+    (noUnsavedChanges)="onNoUnsavedChanges($event)"
+  ></app-edit-event-form>
+  
   <div
     *ngIf="eventId()"
     class="done-actions"

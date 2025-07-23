@@ -1,19 +1,17 @@
 import { Routes } from '@angular/router';
+import { VoteEventPageComponent } from './pages/vote-event-page/vote-event-page.component';
+import { EditEventPageComponent } from './pages/edit-event-page/edit-event-page.component';
 
 export const routes: Routes = [
   {
     path: 'edit',
-    loadComponent: () =>
-      import('./pages/edit-event-page/edit-event-page.component').then(
-        (c) => c.EditEventPageComponent
-      ),
+    component: EditEventPageComponent,
+    canDeactivate: [(c: EditEventPageComponent) => c.canDeactivate()],
   },
   {
     path: 'vote/:eventId',
-    loadComponent: () =>
-      import('./pages/vote-event-page/vote-event-page.component').then(
-        (c) => c.VoteEventPageComponent
-      ),
+    component: VoteEventPageComponent,
+    canDeactivate: [(c: VoteEventPageComponent) => c.canDeactivate()],
   },
   {
     path: 'not-found',

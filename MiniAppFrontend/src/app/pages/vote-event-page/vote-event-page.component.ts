@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, viewChild } from '@angular/core';
 import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, ViewWillEnter } from '@ionic/angular/standalone';
 import { EventMainInfoComponent } from 'src/app/features/event-main-info';
 import { ResultFiltersComponent } from 'src/app/features/result-filters';
@@ -8,6 +8,10 @@ import { ResultViewPickerContainerComponent, ResultViewPickerControlComponent, V
 import { ResultViewCalendarComponent, ResultViewDirective, ResultViewListComponent } from 'src/app/features/result-view';
 import { VotePageLocalize } from './vote-event-page.localize';
 import { FeatureLoadDirective } from 'src/app/shared/directives';
+import { Observable, of } from 'rxjs';
+import { TelegramService } from 'src/app/core/services';
+import { ConfirmService } from 'src/app/core/confirm';
+import { LocalizeService } from 'src/app/shared/localize';
 
 @Component({
   selector: 'app-vote-event-page',
@@ -36,8 +40,16 @@ import { FeatureLoadDirective } from 'src/app/shared/directives';
 })
 export class VoteEventPageComponent  implements ViewWillEnter {
   public readonly eventId = input.required<string>();
+
   private readonly mainInfoComponent = viewChild(EventMainInfoComponent);
+  private readonly voteCalendarComponent = viewChild(VoteCalendarComponent);
+
   private alreadyInit = false;
+  private preventLeave = false;
+
+  private readonly tg = inject(TelegramService);
+  private readonly confirm = inject(ConfirmService);
+  private readonly local = inject(LocalizeService);
 
   public readonly ViewPick = ViewPick;
   public readonly VotePageLocalize = VotePageLocalize;
@@ -47,8 +59,22 @@ export class VoteEventPageComponent  implements ViewWillEnter {
   ionViewWillEnter(): void {
     if (this.alreadyInit) {
       this.mainInfoComponent()?.refreshInfo();
+      this.voteCalendarComponent()?.resetDates$.next(true);
     } else {
       this.alreadyInit = true;
     }
+  }
+
+  canDeactivate(): Observable<boolean> {
+    const header = this.local.localizeSync(VotePageLocalize.LeaveQuestion);
+    const message = this.local.localizeSync(VotePageLocalize.LoseUnsaved);
+    return this.preventLeave
+      ? this.confirm.createConfirm({ header, message })
+      : of(true);
+  }
+
+  public onNoUnsavedChanges(noUnsaved: boolean): void {
+    this.preventLeave = !noUnsaved;
+    this.tg.toggleClosingConfirm(!noUnsaved);
   }
 }
