@@ -19,7 +19,7 @@ export class TelegramService {
     shareReplay(1)
   );
 
-  private readonly miniApp$ = this.getTelegramMiniApp();
+  public readonly miniApp$ = this.getTelegramMiniApp();
 
   public readonly initData$ = this.miniApp$.pipe(
     map((miniApp) => miniApp?.initData as string),
@@ -68,6 +68,18 @@ export class TelegramService {
     );
   }
 
+  public toggleClosingConfirm(confirm: boolean): void {
+    this.miniApp$
+      .pipe(take(1))
+      .subscribe((miniApp) => {
+        if (confirm) {
+          miniApp?.enableClosingConfirmation();
+        } else {
+          miniApp?.disableClosingConfirmation();
+        }
+      });
+  }
+
   public getEventTgLink(eventId: string): Observable<string> {
     return this.tgBotUrl$.pipe(map((botUrl) => `${botUrl}?startapp=event${eventId}`));
   }
@@ -84,9 +96,6 @@ export class TelegramService {
   private getTelegramMiniApp(): Observable<any> {
     return !environment.isTelegramMiniApp
       ? of(null)
-      : of((window as any).Telegram?.WebApp).pipe(
-          filter(Boolean),
-          shareReplay(1)
-        );
+      : of((window as any).Telegram?.WebApp).pipe(shareReplay(1));
   }
 }

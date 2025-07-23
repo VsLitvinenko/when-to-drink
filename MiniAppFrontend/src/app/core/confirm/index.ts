@@ -1,14 +1,16 @@
 import { makeEnvironmentProviders } from '@angular/core';
-import { IonConfirmService } from './confirm-ion.service';
-import { TgConfirmService } from './confirm-tg.service';
 import { ConfirmService } from './confirm.service';
+import { ConfirmTgService } from './confirm-tg.service';
+import { ConfirmIonService } from './confirm-ion.service';
 
 
 export const provideConfirmService = (useTelegramConfirm: boolean) => {
   return makeEnvironmentProviders([
     {
       provide: ConfirmService,
-      useClass: useTelegramConfirm ? TgConfirmService : IonConfirmService,
+      useClass: useTelegramConfirm
+        ? ConfirmTgService
+        : ConfirmIonService,
     },
   ]);
 }

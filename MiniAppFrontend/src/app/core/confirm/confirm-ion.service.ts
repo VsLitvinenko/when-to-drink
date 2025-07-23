@@ -5,7 +5,7 @@ import { Observable, Subject } from 'rxjs';
 
 
 @Injectable()
-export class IonConfirmService extends ConfirmService {
+export class ConfirmIonService extends ConfirmService {
   private readonly alert = inject(AlertController);
 
   constructor() { super(); }
@@ -16,6 +16,7 @@ export class IonConfirmService extends ConfirmService {
       mode: 'ios',
       header: options.header,
       message: options.message,
+      backdropDismiss: false,
       buttons: [
         {
           text: options.cancelText ?? 'Cancel',

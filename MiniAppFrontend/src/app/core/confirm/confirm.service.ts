@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 export interface ConfirmOptions {
   header: string;
-  message?: string;
+  message: string;
   cancelText?: string;
   okText?: string;
 }
