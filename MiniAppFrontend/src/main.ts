@@ -4,8 +4,10 @@ import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular/standalo
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { apiUrlInterceptor, authInterceptor, errorsHandleInterceptor } from './app/core/interceptors';
-import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
+import { AppComponent } from './app/app.component';
+import { environment } from './environments/environment';
+import { provideConfirmService } from './app/core/confirm';
 import { inject, provideAppInitializer } from '@angular/core';
 import { TelegramService } from './app/core/services';
 import { registerLocaleData } from '@angular/common';
@@ -34,6 +36,7 @@ bootstrapApplication(AppComponent, {
         errorsHandleInterceptor,
       ])
     ),
+    provideConfirmService(environment.isTelegramMiniApp),
     provideAppInitializer(() => {
       const tg = inject(TelegramService);
       return tg.initApp();
