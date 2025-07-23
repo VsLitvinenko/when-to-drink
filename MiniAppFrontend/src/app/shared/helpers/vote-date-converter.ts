@@ -5,12 +5,15 @@ import { VoteDate } from 'src/app/features/vote-calendar/models';
 export class VoteDateConverter {
 
   static toJsDates<T extends VoteDate>(item: T): T {
-    return {
+    const date = {
       ...item,
       date: new Date(item.date),
       start: item.start ? new Date(item.start) : undefined,
       end: item.end ? new Date(item.end) : undefined,
-    }
+    };
+    if (item.start === undefined) { delete date.start; }
+    if (item.end === undefined) { delete date.end; }
+    return date;
   }
 
   static toStringDates(item: VoteDate): any {
