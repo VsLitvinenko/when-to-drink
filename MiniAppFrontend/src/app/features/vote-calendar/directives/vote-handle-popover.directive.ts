@@ -39,7 +39,7 @@ export class VoteHandlePopoverDirective implements AfterViewInit {
       .pipe(take(1))
       .subscribe(() => {
         this.data.lastFocusedDateButton$.next(buttonEl);
-        buttonEl.style.opacity = '0.65';
+        buttonEl.style.opacity = '0.7';
       });
     // remove style and handle buttons if needed
     this.appVoteHandlePopover.willDismiss

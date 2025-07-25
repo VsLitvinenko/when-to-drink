@@ -58,7 +58,7 @@ export class VoteHandleClickDirective implements AfterViewInit {
         break;
       case VoteType.Time:
         // open time modal and wait for user input
-        buttonEl.style.opacity = '0.65';
+        buttonEl.style.opacity = '0.7';
         const action = new Promise<TimeModalDataParam>((r) => this.timeModalAction.emit(r));
         const voteDateData = await action;
         buttonEl.style.opacity = '';

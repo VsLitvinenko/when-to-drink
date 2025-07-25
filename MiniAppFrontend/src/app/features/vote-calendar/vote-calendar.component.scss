@@ -33,8 +33,8 @@
 
     .chip-container.active {
       ion-chip {
-        background: rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.2) !important;
-        outline: 2px solid rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.2);
+        background: rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.225) !important;
+        outline: 2px solid rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.225);
         outline-offset: 2px;
       }
     }
