@@ -94,14 +94,14 @@ export class ResultViewCalendarPickerDirective implements AfterViewInit, OnDestr
     if (oldEvent && !this.noActionsAfterReset) {
       // return prev style if needed
       const el = oldEvent.buttonEl;
-      el.style.backgroundColor = oldEvent.prevBgColor;
-      el.style.color = oldEvent.prevColor;
+      el.style.backgroundColor = `${oldEvent.prevBgColor} !important`;
+      el.style.color = `${oldEvent.prevColor} !important`;
     }
     if (newEvent) {
       // update new button style
       const el = newEvent.buttonEl;
-      el.style.backgroundColor = el.style.color;
-      el.style.color = 'var(--ion-color-contrast)';
+      el.style.backgroundColor = `${el.style.color} !important`;
+      el.style.color = 'var(--ion-color-contrast) !important';
     }
   }
 }
