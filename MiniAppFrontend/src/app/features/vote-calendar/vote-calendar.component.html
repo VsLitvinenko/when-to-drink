@@ -96,6 +96,11 @@
         (click)="timeModalDataAction.set(popover.dismiss.bind(popover))">
         <ion-icon name="time-outline" slot="icon-only"></ion-icon>
       </ion-button>
+      <ion-button
+        size="small" color="light"
+        (click)="popover.dismiss({ clear: true })">
+        <ion-icon name="ban-outline" slot="icon-only"></ion-icon>
+      </ion-button>
     </div>
   </ng-template>
 </ion-popover>

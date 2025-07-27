@@ -57,16 +57,18 @@ export class VoteHandlePopoverDirective implements AfterViewInit {
   private handlePopoverButtons(event: any, year: number, month: number, day: number): void {
     const date = new Date(year, month - 1, day);
     const formatted = this.data.formatVoteDate(date);
+    if (event.clear || !event.ready && !event.maybe && !event.time) {
+      // clear all if some action
+      this.data.readyDates().delete(formatted);
+      this.data.maybeDates().delete(formatted);
+      this.data.timeDates().delete(formatted);
+    }
     if (event.ready) {
       // handle ready date
       this.data.readyDates().add(formatted);
-      this.data.maybeDates().delete(formatted);
-      this.data.timeDates().delete(formatted);
     } else if (event.maybe) {
       // handle maybe date
       this.data.maybeDates().add(formatted);
-      this.data.readyDates().delete(formatted);
-      this.data.timeDates().delete(formatted);
     } else if (event.time) {
       // handle time date
       const startDate = new Date(event.start);
@@ -80,8 +82,6 @@ export class VoteHandlePopoverDirective implements AfterViewInit {
         end: endDate,
       };
       this.data.timeDates().set(formatted, voteDate);
-      this.data.readyDates().delete(formatted);
-      this.data.maybeDates().delete(formatted);
     }
     this.data.emitAllDatesSignals();
   }

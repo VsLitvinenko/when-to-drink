@@ -12,6 +12,17 @@ export class VoteHandleClickDirective implements AfterViewInit {
 
   private readonly data = inject(VoteDataDirective);
 
+  private get currentSet(): Set<string> | Map<string, VoteDate> {
+    switch (this.appVoteHandleClick) {
+      case VoteType.Ready:
+        return this.data.readyDates();
+      case VoteType.Maybe:
+        return this.data.maybeDates();
+      case VoteType.Time:
+        return this.data.timeDates();
+    }
+  }
+
   ngAfterViewInit(): void {
     // completes on VoteDataDirective destroy
     this.data.dateButtons$.pipe(
@@ -30,14 +41,16 @@ export class VoteHandleClickDirective implements AfterViewInit {
   private async handleClick(buttonEl: HTMLButtonElement): Promise<void> {
     const { day, month, year } = this.data.getDataFromButton(buttonEl);
     const date = this.data.formatVoteDate(new Date(year, month - 1, day));
-    const readyDates = this.data.readyDates();
-    const maybeDates = this.data.maybeDates();
-    const timeDates = this.data.timeDates();
-    // mutate data signals
-    if (readyDates.has(date)) { readyDates.delete(date); }
-    else if (maybeDates.has(date)) { maybeDates.delete(date);}
-    else if (timeDates.has(date)) { timeDates.delete(date); }
-    else { await this.addDateToSet(buttonEl, date, year, month, day); }
+    if (this.currentSet.has(date)) {
+      // remove date from current set
+      this.currentSet.delete(date);
+    } else {
+      // add date to current set
+      this.data.readyDates().delete(date);
+      this.data.maybeDates().delete(date);
+      this.data.timeDates().delete(date);
+      await this.addDateToSet(buttonEl, date, year, month, day);
+    }
     // emit changes
     this.data.emitAllDatesSignals();
   }
