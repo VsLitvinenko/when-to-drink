@@ -46,7 +46,7 @@
     [appVoteHandleClick]="defaultVoteType"
     [appVoteHandlePopover]="popover"
     [voteDates]="(voteDates$ | async) ?? []"
-    (focusedTimeChanges)="updateTime($event)"
+    (focusedDateChanges)="updateFocusedDate($event)"
     (timeModalAction)="timeModalDataAction.set($event)"
     [firstDayOfWeek]="1"
     [min]="minDate() ?? undefined"
@@ -97,6 +97,7 @@
         <ion-icon name="time-outline" slot="icon-only"></ion-icon>
       </ion-button>
       <ion-button
+        *ngIf="focusedDate !== undefined"
         size="small" color="light"
         (click)="popover.dismiss({ clear: true })">
         <ion-icon name="ban-outline" slot="icon-only"></ion-icon>

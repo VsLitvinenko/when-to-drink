@@ -1,4 +1,4 @@
-import { AfterViewInit, computed, Directive, effect, ElementRef, inject, Input, OnDestroy, Output, signal } from '@angular/core';
+import { AfterViewInit, computed, Directive, effect, ElementRef, inject, Input, OnDestroy, signal } from '@angular/core';
 import { IonDatetime } from '@ionic/angular/standalone';
 import { VoteDate, VoteType } from '../models';
 import { map, ReplaySubject } from 'rxjs';
@@ -38,18 +38,6 @@ export class VoteDataDirective implements AfterViewInit, OnDestroy {
       ...Array.from(time.values())
     ];
   });
-
-  public readonly lastFocusedDateButton$ = new ReplaySubject<HTMLButtonElement | undefined>(1);
-  @Output() focusedTimeChanges = this.lastFocusedDateButton$.pipe(
-    map((el) => {
-      if (!el) { return undefined; }
-      const day = Number(el.getAttribute('data-day'));
-      const month = Number(el.getAttribute('data-month'));
-      const year = Number(el.getAttribute('data-year'));
-      const date = new Date(year, month - 1, day);
-      return this.timeDates().get(this.formatVoteDate(date));
-    })
-  );
 
   private readonly ionDateComponent = inject(IonDatetime);
   private readonly elRef = inject(ElementRef);

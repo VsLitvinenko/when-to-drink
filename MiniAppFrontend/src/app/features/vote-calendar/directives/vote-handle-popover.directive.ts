@@ -1,6 +1,6 @@
-import { AfterViewInit, Directive, inject, Input } from '@angular/core';
+import { AfterViewInit, Directive, inject, Input, Output } from '@angular/core';
 import { VoteDataDirective } from './vote-data.directive';
-import { fromEvent, map, merge, switchMap, take, tap, throttleTime } from 'rxjs';
+import { fromEvent, map, merge, Subject, switchMap, take, tap, throttleTime } from 'rxjs';
 import { IonPopover } from '@ionic/angular/standalone';
 import { touchHoldEvent } from 'src/app/shared/helpers';
 import { VoteDate, VoteType } from '../models';
@@ -11,6 +11,23 @@ import { VoteDate, VoteType } from '../models';
 export class VoteHandlePopoverDirective implements AfterViewInit {
   @Input({ required: true }) appVoteHandlePopover!: IonPopover;
   private readonly data = inject(VoteDataDirective);
+  private readonly lastFocusedButton$ = new Subject<HTMLButtonElement | undefined>();
+
+  @Output() focusedDateChanges = this.lastFocusedButton$.pipe(
+    map((el) => {
+      if (!el) { return undefined; }
+      const { day, month, year } = this.data.getDataFromButton(el);
+      const date = new Date(year, month - 1, day);
+      const formatted = this.data.formatVoteDate(date);
+      if (this.data.readyDates().has(formatted)) {
+        return { date, voteType: VoteType.Ready }
+      } else if (this.data.maybeDates().has(formatted)) {
+        return { date, voteType: VoteType.Maybe };
+      } else {
+        return this.data.timeDates().get(formatted);
+      }
+    })
+  );
 
   ngAfterViewInit(): void {
     // completes on VoteDataDirective destroy
@@ -33,19 +50,17 @@ export class VoteHandlePopoverDirective implements AfterViewInit {
 
   private showPopover(event: PointerEvent): void {
     const buttonEl = event.target as HTMLButtonElement;
+    this.lastFocusedButton$.next(buttonEl);
     this.appVoteHandlePopover.present(event);
     // add style
     this.appVoteHandlePopover.willPresent
       .pipe(take(1))
-      .subscribe(() => {
-        this.data.lastFocusedDateButton$.next(buttonEl);
-        buttonEl.style.opacity = '0.7';
-      });
+      .subscribe(() => buttonEl.style.opacity = '0.7');
     // remove style and handle buttons if needed
-    this.appVoteHandlePopover.willDismiss
+    this.appVoteHandlePopover.didDismiss
       .pipe(take(1))
       .subscribe((event) => {
-        this.data.lastFocusedDateButton$.next(undefined);
+        this.lastFocusedButton$.next(undefined);
         buttonEl.style.opacity = '';
         if (event.detail.data) {
           const { day, month, year } = this.data.getDataFromButton(buttonEl);

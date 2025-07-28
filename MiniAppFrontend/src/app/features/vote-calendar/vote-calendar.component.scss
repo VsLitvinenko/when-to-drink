@@ -60,7 +60,7 @@ ion-datetime {
 
 ion-popover {
   --offset-y: -0.15rem;
-  --width: 10rem;
+  --width: auto;
 }
 
 .popover-content {
@@ -68,8 +68,8 @@ ion-popover {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  gap: 0.25rem;
-  opacity: 0.95;
+  gap: 5px;
+  opacity: 0.9;
 }
 
 ion-modal {

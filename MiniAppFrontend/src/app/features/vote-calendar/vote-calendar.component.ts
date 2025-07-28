@@ -104,6 +104,7 @@ export class VoteCalendarComponent {
     return startDate >= endDate;
   });
 
+  public focusedDate?: VoteDate = undefined;
   public timeModalDataAction = signal<TimeModalDataAction | undefined>(undefined);
 
   private readonly toast = inject(ToastService);
@@ -126,7 +127,9 @@ export class VoteCalendarComponent {
 
   constructor() { }
 
-  public updateTime(voteDate?: VoteDate): void {
+  public updateFocusedDate(voteDate?: VoteDate): void {
+    this.focusedDate = voteDate;
+
     const startValue = voteDate?.start
       ? format(voteDate.start, timeFormat)
       : this.lastAppliedStartTime;
