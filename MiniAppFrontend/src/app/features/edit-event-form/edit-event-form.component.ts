@@ -7,7 +7,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { addMonths, format } from 'date-fns';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ToastService } from 'src/app/core/services';
-import { combineLatest, filter, map, of, shareReplay, startWith, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
+import { combineLatest, filter, map, of, shareReplay, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { EdiEventFormRequestService } from './edit-event-form-request.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 
@@ -73,19 +73,18 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
     shareReplay(1)
   );
 
+  private readonly initFormValues = this.eventFormGroup.getRawValue(); 
   @Output() noUnsavedChanges = combineLatest([
     this.eventFormGroup.valueChanges,
     this.eventInfo$
   ]).pipe(
     map(([formValue, info]) => {
-      return !info
-        ? false
-        : Object.entries(formValue).every(([key, value]) => {
-            const infoValue = (info as any)[key];
-            return infoValue === value;
-          });
+      const compareVal = info ?? this.initFormValues;
+      return Object.entries(formValue).every(([key, value]) => {
+        const infoValue = (compareVal as any)[key];
+        return infoValue === value;
+      });
     }),
-    startWith(true),
     shareReplay(1)
   );
 
