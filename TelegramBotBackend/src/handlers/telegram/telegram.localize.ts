@@ -1,10 +1,10 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { Localization, LocalizationPreset } from '../../localize/localize.model';
+import { Localization, LocalizationPreset, LocalizationSet } from '../../localize/localize.model';
 
 
 export const getTgLocalize = (user: TelegramBot.User): Localization => {
-  const loc = (user?.language_code ?? 'en') as Localization;
-  return [Localization.en, Localization.ru].includes(loc) ? loc : Localization.en;
+  const loc = user?.language_code as Localization;
+  return LocalizationSet.has(loc) ? loc : Localization.en;
 };
 
 

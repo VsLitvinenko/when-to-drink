@@ -49,7 +49,7 @@ ion-popover {
   --width: auto;
   .popover-menu-list {
     padding: 0.25rem 0;
-    background-color: var(--ion-background-color-step-100);
+    background-color: var(--popover-menu-bg);
     white-space: nowrap;
   }
 }

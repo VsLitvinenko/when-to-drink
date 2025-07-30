@@ -50,12 +50,12 @@ export class LocalizeService {
   );
 
   public localize(value: LocalizationPresetLeaf, onlyFirst?: boolean): Observable<string> {
-    const res$ = this.localization$.pipe(map((loc) => value[loc] ?? value.en));
+    const res$ = this.localization$.pipe(map((loc) => value[loc]));
     return onlyFirst ? res$.pipe(first()) : res$;
   }
 
   public localizeSync(value: LocalizationPresetLeaf): string {
-    return value[this.localizationSignal()] ?? value.en;
+    return value[this.localizationSignal()];
   }
 
   public localizeMany(value: LocalizationPresetLeaf, n: number, onlyFirst?: boolean): Observable<string> {
