@@ -4,10 +4,12 @@ enum LocalizeEnum {
   Ready = 'Ready',
   Maybe = 'Maybe',
   Time = 'Time',
+  ToggleStatus = 'ToggleStatus',
+  Or = 'Or',
   HoldDate = 'HoldDate',
   RightClickDate = 'RightClickDate',
   SelectSpecificStatus = 'SelectSpecificStatus',
-  DoNotForgetSave = 'DoNotForgetSave',
+  // DoNotForgetSave = 'DoNotForgetSave',
   Clear = 'Clear',
   Cancel = 'Cancel',
   Save = 'Save',
@@ -30,22 +32,30 @@ export const VoteCalendarLocalize: LocalizationPreset<LocalizeEnum> = {
     en: 'Time',
     ru: 'Время',
   },
+  ToggleStatus: {
+    en: 'Toggle default status',
+    ru: 'Переключайте статус по-умолчанию',
+  },
+  Or: {
+    en: 'Or',
+    ru: 'Или',
+  },
   HoldDate: {
-    en: 'Hold date',
-    ru: 'Удерживайте дату,',
+    en: 'hold date',
+    ru: 'удерживайте дату',
   },
   RightClickDate: {
-    en: 'Right click on date',
-    ru: 'Нажмите правой кнопкой мыши по дате,',
+    en: 'right click on date',
+    ru: 'нажмите правой кнопкой мыши по дате',
   },
   SelectSpecificStatus: {
-    en: 'to select specific status',
-    ru: 'чтобы выбрать статус'
+    en: 'to select specific one',
+    ru: 'для точного выбора'
   },
-  DoNotForgetSave: {
-    en: "Don't forget to save changes",
-    ru: 'Не забудьте сохранить изменения',
-  },
+  // DoNotForgetSave: {
+  //   en: "Don't forget to save changes",
+  //   ru: 'Не забудьте сохранить изменения',
+  // },
   Clear: {
     en: 'Clear',
     ru: 'Очистить',

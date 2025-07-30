@@ -17,26 +17,32 @@
   border-top-right-radius: 0.5rem;
 
   .subtitle {
-    padding: 0 0.5rem;
-    color: var(--ion-text-color-step-600, #b3b3b3);
+    // padding to match results calendar
+    padding: 0.25rem 0.5rem 0.825rem;
+    opacity: 0.8;
+    color: var(--ion-text-color-step-500, #b3b3b3);
     font-size: 0.9rem;
     line-height: 1.25rem;
-    // margin to match results calendar
-    margin-top: 0.25rem;
-    margin-bottom: 0.825rem;
   }
   .chips {
     display: flex;
     padding: 0 0.2rem;
     justify-content: space-between;
-    gap: 0.25rem;
-
+    gap: 0.5rem;
     .chip-container.active {
       ion-chip {
-        background: rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.225) !important;
-        outline: 2px solid rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.225);
+        background: rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.215) !important;
+        outline: 2px solid rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.215);
         outline-offset: 2px;
       }
+      &.brighter ion-chip {
+        color: var(--ion-color-base);
+        background: rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.27) !important;
+        outline-color: rgba(var(--ion-color-base-rgb, 0, 0, 0), 0.27);
+      }
+    }
+    .chip-container:not(.active):not(.brighter) {
+      opacity: 0.85;
     }
   }
 }

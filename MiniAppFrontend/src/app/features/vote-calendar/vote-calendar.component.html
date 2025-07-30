@@ -2,7 +2,7 @@
   <div class="vote-calendar-header">
     <div class="chips">
       <div
-        class="chip-container"
+        class="chip-container brighter"
         [class.active]="defaultVoteType === VoteType.Ready"
         (click)="defaultVoteType = VoteType.Ready"
       >
@@ -33,11 +33,12 @@
       </div>
     </div>
      <span class="subtitle">
+      {{ VoteCalendarLocalize.ToggleStatus | localize }} <br>
+      {{ VoteCalendarLocalize.Or | localize }}
       {{ (isTouchDevice
             ? VoteCalendarLocalize.HoldDate
             : VoteCalendarLocalize.RightClickDate) | localize }}
       {{ VoteCalendarLocalize.SelectSpecificStatus | localize }} <br>
-      {{ VoteCalendarLocalize.DoNotForgetSave | localize }}
     </span>
   </div>
 
