@@ -79,6 +79,7 @@
           formControlName="isoDaysOfWeek"
           [label]="EditEventFormLocalize.DaysOfWeekPlaceholder | localize"
           [placeholder]="EditEventFormLocalize.DaysOfWeekPlaceholder | localize"
+          [cancelText]="EditEventFormLocalize.Cancel | localize"
           [multiple]="true"
         >
           @for (item of daysOfWeek; track $index) {

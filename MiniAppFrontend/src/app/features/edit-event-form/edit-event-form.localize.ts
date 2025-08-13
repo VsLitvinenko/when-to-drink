@@ -11,6 +11,7 @@ enum LocalizeEnum {
   HasBeenSaved = 'HasBeenSaved',
   SpecificDaysOfWeek = 'SpecificDaysOfWeek',
   DaysOfWeekPlaceholder = 'DaysOfWeekPlaceholder',
+  Cancel = 'Cancel',
 }
 
 export const EditEventFormLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -53,5 +54,9 @@ export const EditEventFormLocalize: LocalizationPreset<LocalizeEnum> = {
   HasBeenSaved: {
     en: 'All changes have been saved successfully',
     ru: 'Все изменения успешно сохранены',
+  },
+  Cancel: {
+    en: 'Cancel',
+    ru: 'Отмена',
   },
 };
