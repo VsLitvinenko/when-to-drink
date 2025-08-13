@@ -43,6 +43,7 @@ export class VoteEventPageComponent  implements ViewWillEnter, ViewDidLeave {
 
   private readonly mainInfoComponent = viewChild(EventMainInfoComponent);
   private readonly voteCalendarComponent = viewChild(VoteCalendarComponent);
+  private readonly resultDirective = viewChild(ResultViewDirective);
 
   private alreadyInit = false;
   private preventLeave = false;
@@ -58,6 +59,7 @@ export class VoteEventPageComponent  implements ViewWillEnter, ViewDidLeave {
 
   ionViewWillEnter(): void {
     if (this.alreadyInit) {
+      this.resultDirective()?.refresh();
       this.mainInfoComponent()?.refreshInfo();
       this.voteCalendarComponent()?.resetDates$.next(true);
     } else {
