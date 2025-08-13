@@ -110,7 +110,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
         starts: info.starts,
         ends: info.ends,
         description: info.description,
-        specifyDaysOfWeek: !!info.isoDaysOfWeek,
+        specifyDaysOfWeek: info.specifyDaysOfWeek,
         isoDaysOfWeek: info.isoDaysOfWeek ?? [],
       });
     });
@@ -123,17 +123,11 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
 
   public saveChanges(): void {
     const eventId = this.eventId();
-    const formValue = this.eventFormGroup.getRawValue();
-    const eventValue: any = {
-      ...formValue,
-      isoDaysOfWeek: formValue.specifyDaysOfWeek
-        ? formValue.isoDaysOfWeek
-        : undefined,
-    };
+    const formValue = this.eventFormGroup.getRawValue() as any;
 
     const request$ = eventId
-      ? this.request.updateEvent(eventId, eventValue)
-      : this.request.createEvent(eventValue);
+      ? this.request.updateEvent(eventId, formValue)
+      : this.request.createEvent(formValue);
     
     this.eventFormGroup.disable();
     request$.pipe(take(1)).subscribe((id) => {

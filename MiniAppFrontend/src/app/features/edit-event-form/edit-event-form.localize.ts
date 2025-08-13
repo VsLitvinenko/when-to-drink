@@ -43,8 +43,8 @@ export const EditEventFormLocalize: LocalizationPreset<LocalizeEnum> = {
     ru: 'Ограничить по дням недели',
   },
   DaysOfWeekPlaceholder: {
-    en: 'Select days of week',
-    ru: 'Выбрать дни недели',
+    en: 'Available days of week',
+    ru: 'Доступные дни недели',
   },
   SaveEvent: {
     en: 'Save event',
