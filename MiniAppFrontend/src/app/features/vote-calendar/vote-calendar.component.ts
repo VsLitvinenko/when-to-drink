@@ -3,7 +3,7 @@ import { PreventContextDirective, VoteDataDirective, VoteHandleClickDirective, V
 import { distinctUntilChanged, finalize, map, merge, Observable, shareReplay, startWith, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { IonDatetime, IonChip, IonPopover, IonModal } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
-import { format } from 'date-fns';
+import { format, getISODay } from 'date-fns';
 import { TimeModalDataAction, VoteDate, VoteType } from './models';
 import { FormsModule } from '@angular/forms';
 import { SmallToolsService, ToastService } from 'src/app/core/services';
@@ -41,7 +41,19 @@ export class VoteCalendarComponent {
   public readonly eventId = input.required<string>();
   public readonly minDate = input();
   public readonly maxDate = input();
+  public readonly daysOfWeek = input<number[]>();
   public readonly voteUpdated = output<EventVote>();
+
+  public readonly isDateEnabled = computed(() => {
+    const daysOfWeekSet = new Set(this.daysOfWeek());
+    return (dateString: string) => {
+      if (daysOfWeekSet.size === 0) {
+        return true;
+      }
+      const date = new Date(dateString);
+      return daysOfWeekSet.has(getISODay(date));
+    };
+  });
 
   // update vote dates event
   public readonly resetDates$ = new Subject<boolean>();
