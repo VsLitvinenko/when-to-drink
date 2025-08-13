@@ -50,8 +50,8 @@ export async function resultGetHandle(
     'starts',
     'ends',
   ]);
-  // format days of week params to secure previously created events
-  const specifyDaysOfWeek = eInfo.specifyDaysOfWeek === true;
+  // handle days of week params to secure previously created events
+  const specifyDaysOfWeek = !!(eInfo.specifyDaysOfWeek && eInfo.isoDaysOfWeek?.length);
   const daysOfWeek = eInfo.isoDaysOfWeek ?? [];
   // get and group data from db
   const dbData = await UVoteModel
