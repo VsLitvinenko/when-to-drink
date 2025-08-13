@@ -63,12 +63,9 @@ export async function resultGetHandle(
         $gte: eInfo.starts,
         $lte: eInfo.ends,
       },
-      $expr: {
-        $or: [
-          { $eq: [specifyDaysOfWeek, false] },
-          { $in: [{ $isoDayOfWeek: "$dates.date" }, daysOfWeek] }
-        ],
-      },
+      $expr: specifyDaysOfWeek
+        ? { $in: [{ $isoDayOfWeek: "$dates.date" }, daysOfWeek] }
+        : { },
     })
     .lookup({
       from: 'users',
