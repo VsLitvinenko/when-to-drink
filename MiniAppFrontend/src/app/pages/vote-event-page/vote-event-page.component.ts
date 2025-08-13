@@ -12,6 +12,7 @@ import { Observable, of } from 'rxjs';
 import { TelegramService } from 'src/app/core/services';
 import { ConfirmService } from 'src/app/core/confirm';
 import { LocalizeService } from 'src/app/shared/localize';
+import { startOfDay } from 'date-fns';
 
 @Component({
   selector: 'app-vote-event-page',
@@ -54,6 +55,7 @@ export class VoteEventPageComponent  implements ViewWillEnter, ViewDidLeave {
 
   public readonly ViewPick = ViewPick;
   public readonly VotePageLocalize = VotePageLocalize;
+  private readonly today = startOfDay(new Date());
 
   constructor() { }
 
@@ -77,6 +79,10 @@ export class VoteEventPageComponent  implements ViewWillEnter, ViewDidLeave {
     return this.preventLeave
       ? this.confirm.createConfirm({ header, message })
       : of(true);
+  }
+
+  public isEventEnded(ends?: Date): boolean {
+    return ends ? this.today > new Date(ends) : false;
   }
 
   public onNoUnsavedChanges(noUnsaved: boolean): void {

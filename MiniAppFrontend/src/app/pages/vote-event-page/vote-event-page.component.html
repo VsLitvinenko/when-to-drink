@@ -18,6 +18,13 @@
     </ion-segment-button>
   </ion-segment>
 
+  @if (isEventEnded(info?.ends)) {
+    <div class="event-ended-warning">
+      <ion-icon name="alert-circle-outline"/>
+      <span class="label"> {{ VotePageLocalize.EventEnded | localize }} </span>
+    </div>
+  }
+
   <ion-segment-view mode="ios">
     <ion-segment-content id="vote">
       <div class="segment-view-content">
