@@ -31,15 +31,11 @@ export class EdiEventFormRequestService {
     return this.http.get<EventInfo>(`${this.baseUrl}/info/${eventId}`);
   }
 
-  public createEvent(body: EventBody): Observable<string> {
-    return this.http.post<any>(this.baseUrl, body).pipe(
-      map((res) => res.id)
-    );
+  public createEvent(body: EventBody): Observable<EventInfo> {
+    return this.http.post<any>(this.baseUrl, body);
   }
 
-  public updateEvent(eventId: string, body: EventBody): Observable<string> {
-    return this.http.patch<any>(`${this.baseUrl}/${eventId}`, body).pipe(
-      map((res) => res.id)
-    );
+  public updateEvent(eventId: string, body: EventBody): Observable<EventInfo> {
+    return this.http.patch<any>(`${this.baseUrl}/${eventId}`, body);
   }
 }

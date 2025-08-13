@@ -7,8 +7,8 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { addMonths, format } from 'date-fns';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { SmallToolsService, ToastService } from 'src/app/core/services';
-import { combineLatest, filter, map, of, shareReplay, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
-import { EdiEventFormRequestService } from './edit-event-form-request.service';
+import { combineLatest, filter, map, of, shareReplay, Subject, switchMap, take, takeUntil, tap, merge } from 'rxjs';
+import { EdiEventFormRequestService, EventInfo } from './edit-event-form-request.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { isEqual } from 'lodash';
 
@@ -76,6 +76,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
   private readonly request = inject(EdiEventFormRequestService);
   public readonly loading$ = new Subject<boolean>();
 
+  private readonly eventInfoManual$ = new Subject<EventInfo>();
   public readonly eventInfo$ = toObservable(this.eventId).pipe(
     tap(() => this.eventFormGroup.disable()),
     switchMap((eventId) => !!eventId ? this.request.getEventInfo(eventId) : of(null)),
@@ -86,7 +87,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
   private readonly initFormValues = this.eventFormGroup.getRawValue(); 
   @Output() noUnsavedChanges = combineLatest([
     this.eventFormGroup.valueChanges,
-    this.eventInfo$
+    merge(this.eventInfo$, this.eventInfoManual$)
   ]).pipe(
     map(([formValue, info]) => {
       const compareVal = info ?? this.initFormValues;
@@ -132,11 +133,12 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
       : this.request.createEvent(formValue);
     
     this.eventFormGroup.disable();
-    request$.pipe(take(1)).subscribe((id) => {
+    request$.pipe(take(1)).subscribe((newEvent) => {
       this.eventFormGroup.enable();
       const mes = this.local.localizeSync(EditEventFormLocalize.HasBeenSaved);
-      this.toast.info(mes, 'cloud-done-outline')
-      this.updateIdQueryParam(id)
+      this.toast.info(mes, 'cloud-done-outline');
+      this.eventInfoManual$.next(newEvent);
+      this.updateIdQueryParam(newEvent.id);
     });
   }
 
