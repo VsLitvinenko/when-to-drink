@@ -44,7 +44,15 @@ export async function resultGetHandle(
   const tgAuthData = getAuthData(res);
   const tgUserId = tgAuthData.user?.id;
   // get event start & end dates
-  const eDates = await getEventById(eventId).select<EDates>(['starts', 'ends']);
+  const eInfo = await getEventById(eventId).select<EInfo>([
+    'specifyDaysOfWeek',
+    'isoDaysOfWeek',
+    'starts',
+    'ends',
+  ]);
+  // handle days of week params to secure previously created events
+  const specifyDaysOfWeek = !!(eInfo.specifyDaysOfWeek && eInfo.isoDaysOfWeek?.length);
+  const daysOfWeek = eInfo.isoDaysOfWeek ?? [];
   // get and group data from db
   const dbData = await UVoteModel
     .aggregate<DateUserGroup>()
@@ -52,9 +60,12 @@ export async function resultGetHandle(
     .unwind('$dates')
     .match({
       'dates.date': { 
-        $gte: eDates.starts,
-        $lte: eDates.ends,
+        $gte: eInfo.starts,
+        $lte: eInfo.ends,
       },
+      $expr: specifyDaysOfWeek
+        ? { $in: [{ $isoDayOfWeek: "$dates.date" }, daysOfWeek] }
+        : { },
     })
     .lookup({
       from: 'users',
@@ -110,7 +121,7 @@ export async function resultGetHandle(
 
 /*-------------------------helpers-------------------------*/
 
-type EDates = Pick<IEvent, 'starts' | 'ends'>;
+type EInfo = Pick<IEvent, 'starts' | 'ends' | 'specifyDaysOfWeek' | 'isoDaysOfWeek'>;
 
 type DateUser = {
   user: IUserDb;

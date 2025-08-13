@@ -4,7 +4,7 @@ import { SharedFeatureModule } from 'src/app/shared';
 import { AvatarsListComponent, UsersListComponent } from 'src/app/shared/components';
 import { EventMainInfoLocalize } from './event-main-info.localize';
 import { Router } from '@angular/router';
-import { TelegramService, ToastService } from 'src/app/core/services';
+import { SmallToolsService, TelegramService, ToastService } from 'src/app/core/services';
 import { ConfirmService } from 'src/app/core/confirm';
 import { LocalizeService } from 'src/app/shared/localize';
 import { filter, finalize, from, shareReplay, startWith, Subject, switchMap, take, tap } from 'rxjs';
@@ -71,7 +71,11 @@ export class EventMainInfoComponent {
   public readonly users = toSignal(this.users$);
   
   private readonly local = inject(LocalizeService);
+  public readonly localizeFormat$ = this.local.localizationWithFormat$;
   public readonly EventMainInfoLocalize = EventMainInfoLocalize;
+
+  private readonly tools = inject(SmallToolsService);
+  public readonly daysOfWeek = this.tools.daysOfWeek;
 
   constructor() { }
 

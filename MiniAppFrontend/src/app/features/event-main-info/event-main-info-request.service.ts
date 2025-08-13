@@ -10,6 +10,8 @@ export interface EventInfo {
   starts: Date;
   ends: Date;
   description?: string;
+  specifyDaysOfWeek?: boolean;
+  isoDaysOfWeek?: number[];
   creator: UserItem;
   canEdit: boolean;
 }

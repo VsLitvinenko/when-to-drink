@@ -1,6 +1,6 @@
 ion-list {
   // background: transparent;
-  padding: 0.5rem 0.25rem 0.75rem;
+  padding: 0.25rem;
   background: var(--ion-color-light, #f4f5f8);
 }
 
@@ -13,6 +13,8 @@ ion-list {
 
 ion-item {
   --background: transparent;
+  --min-height: 56px;
+  border-radius: 0.5rem;
   ion-label {
     margin: 1.25rem 0.5rem 1.25rem 0;
   }
@@ -24,6 +26,20 @@ ion-input {
   margin-right: 0.25rem;
   width: 60% !important;
 }
+
+.week-select {
+  &::part(label) {
+    display: none;
+  }
+  &::part(container) {
+    padding-right: 1.5rem;
+  }
+  &::part(icon) {
+    position: absolute;
+    right: 2px;
+  }
+}
+
 
 .notes-item {
   ion-label {

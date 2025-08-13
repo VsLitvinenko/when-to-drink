@@ -1,15 +1,17 @@
 import { Component, computed, inject, input, OnDestroy, OnInit, Output } from '@angular/core';
-import { IonDatetime, IonDatetimeButton, IonInput, IonModal, IonSpinner, IonTextarea } from '@ionic/angular/standalone';
+import { IonDatetime, IonDatetimeButton, IonInput, IonModal, IonSpinner, IonTextarea, IonCheckbox, IonSelect, IonSelectOption } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { EditEventFormLocalize } from './edit-event-form.localize';
 import { LocalizeService } from 'src/app/shared/localize';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { addMonths, format } from 'date-fns';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { ToastService } from 'src/app/core/services';
-import { combineLatest, filter, map, of, shareReplay, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
-import { EdiEventFormRequestService } from './edit-event-form-request.service';
+import { SmallToolsService, ToastService } from 'src/app/core/services';
+import { combineLatest, filter, map, of, shareReplay, Subject, switchMap, take, takeUntil, tap, merge } from 'rxjs';
+import { EdiEventFormRequestService, EventInfo } from './edit-event-form-request.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { isEqual } from 'lodash';
+
 
 @Component({
   selector: 'app-edit-event-form',
@@ -23,6 +25,9 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
     IonDatetimeButton,
     IonTextarea,
     IonSpinner,
+    IonCheckbox,
+    IonSelect,
+    IonSelectOption,
     ReactiveFormsModule,
   ],
 })
@@ -37,6 +42,8 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
     starts: new FormControl(this.startVal, Validators.required),
     ends: new FormControl(this.endVal, Validators.required),
     description: new FormControl(''),
+    specifyDaysOfWeek: new FormControl(false),
+    isoDaysOfWeek: new FormControl([] as number[]),
   });
 
   private readonly startDate = toSignal(
@@ -59,6 +66,9 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
   public readonly localizeFormat$ = this.local.localizationWithFormat$;
   public readonly EditEventFormLocalize = EditEventFormLocalize;
 
+  private readonly tools = inject(SmallToolsService);
+  public readonly daysOfWeek = this.tools.daysOfWeek.map((date, i) => ({ date, value: i + 1, }));
+
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
 
@@ -66,6 +76,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
   private readonly request = inject(EdiEventFormRequestService);
   public readonly loading$ = new Subject<boolean>();
 
+  private readonly eventInfoManual$ = new Subject<EventInfo>();
   public readonly eventInfo$ = toObservable(this.eventId).pipe(
     tap(() => this.eventFormGroup.disable()),
     switchMap((eventId) => !!eventId ? this.request.getEventInfo(eventId) : of(null)),
@@ -76,13 +87,13 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
   private readonly initFormValues = this.eventFormGroup.getRawValue(); 
   @Output() noUnsavedChanges = combineLatest([
     this.eventFormGroup.valueChanges,
-    this.eventInfo$
+    merge(this.eventInfo$, this.eventInfoManual$)
   ]).pipe(
     map(([formValue, info]) => {
       const compareVal = info ?? this.initFormValues;
       return Object.entries(formValue).every(([key, value]) => {
         const infoValue = (compareVal as any)[key];
-        return infoValue === value;
+        return isEqual(infoValue, value);
       });
     }),
     shareReplay(1)
@@ -102,6 +113,8 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
         starts: info.starts,
         ends: info.ends,
         description: info.description,
+        specifyDaysOfWeek: info.specifyDaysOfWeek === true,
+        isoDaysOfWeek: info.isoDaysOfWeek ?? [],
       });
     });
   }
@@ -114,16 +127,18 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
   public saveChanges(): void {
     const eventId = this.eventId();
     const formValue = this.eventFormGroup.getRawValue() as any;
+
     const request$ = eventId
       ? this.request.updateEvent(eventId, formValue)
       : this.request.createEvent(formValue);
     
     this.eventFormGroup.disable();
-    request$.pipe(take(1)).subscribe((id) => {
+    request$.pipe(take(1)).subscribe((newEvent) => {
       this.eventFormGroup.enable();
       const mes = this.local.localizeSync(EditEventFormLocalize.HasBeenSaved);
-      this.toast.info(mes, 'cloud-done-outline')
-      this.updateIdQueryParam(id)
+      this.toast.info(mes, 'cloud-done-outline');
+      this.eventInfoManual$.next(newEvent);
+      this.updateIdQueryParam(newEvent.id);
     });
   }
 

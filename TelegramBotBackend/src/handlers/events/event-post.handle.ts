@@ -13,15 +13,11 @@ type ReqBody = {
   starts: string;
   ends: string;
   description?: string;
+  specifyDaysOfWeek: boolean;
+  isoDaysOfWeek?: number[];
 };
 
-type ReqRes = {
-  id: string;
-  name: string;
-  starts: string;
-  ends: string;
-  description?: string;
-};
+type ReqRes = ReqBody & { id: string; };
 const logger = createLogChild('handler', 'event');
 
 /*-------------------------request-------------------------*/
@@ -52,5 +48,7 @@ export async function eventPostHandle(
     starts: format(event.starts, 'yyyy-MM-dd'),
     ends: format(event.ends, 'yyyy-MM-dd'),
     description: event.description,
+    specifyDaysOfWeek: event.specifyDaysOfWeek,
+    isoDaysOfWeek: event.isoDaysOfWeek,
   });
 }

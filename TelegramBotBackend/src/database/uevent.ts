@@ -19,6 +19,12 @@ export const UEventSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  specifyDaysOfWeek: {
+    type: Boolean,
+    default: () => false,
+  },
+  isoDaysOfWeek: [Number],
+  description: String,
   votes: {
     type: [{
       type: mongoose.SchemaTypes.ObjectId,
@@ -26,7 +32,6 @@ export const UEventSchema = new mongoose.Schema({
     }],
     default: () => ([] as any[]),
   },
-  description: String,
   createdAt: {
     type: Date,
     immutable: true,
@@ -54,6 +59,8 @@ export interface IEvent {
   name: string;
   starts: string;
   ends: string;
+  specifyDaysOfWeek: boolean;
+  isoDaysOfWeek?: number[];
   description?: string;
 }
 

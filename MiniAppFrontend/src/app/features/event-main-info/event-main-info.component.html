@@ -1,5 +1,7 @@
 @let eventInfo = info();
 @let eventUsers = users();
+@let localizeFormat = (localizeFormat$ | async) ?? undefined;
+
 <ion-accordion-group mode="ios">
   <ion-accordion value="info">
     <!-- header -->
@@ -71,11 +73,28 @@
         <ion-label> {{ EventMainInfoLocalize.Starts | localize }} </ion-label>
         <ion-note> {{ eventInfo?.starts | date : 'dd.MM.yyyy'}} </ion-note>
       </ion-item>
-      <ion-item [lines]="eventInfo?.description ? '' : 'none'">
+
+      @let hasDaysOfWeek = !!(eventInfo?.specifyDaysOfWeek && eventInfo?.isoDaysOfWeek?.length);
+      @let hasDescription = !!eventInfo?.description;
+
+      <ion-item [lines]="hasDaysOfWeek || hasDescription ? '' : 'none'">
         <ion-label> {{ EventMainInfoLocalize.Ends | localize }} </ion-label>
         <ion-note> {{ eventInfo?.ends | date : 'dd.MM.yyyy'}} </ion-note>
       </ion-item>
-      @if (eventInfo?.description) {
+
+      @if (hasDaysOfWeek) {
+        <ion-item [lines]="eventInfo?.description ? '' : 'none'">
+          <ion-label> {{ EventMainInfoLocalize.DaysOfWeek | localize }} </ion-label>
+          <ion-note>
+            @for (item of eventInfo?.isoDaysOfWeek; track $index) {
+              @let label = daysOfWeek[item - 1] | date : 'EEE' : undefined : localizeFormat;
+              {{ label | titlecase }}{{ $last ? '' : ',' }}
+            }
+          </ion-note>
+        </ion-item>
+      }
+
+      @if (hasDescription) {
         <ion-item class="notes-item" lines="none">
           <ion-label> {{ EventMainInfoLocalize.Description | localize }} </ion-label>
           <ion-note> {{ eventInfo?.description }} </ion-note>

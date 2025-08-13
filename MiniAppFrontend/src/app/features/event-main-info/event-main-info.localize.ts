@@ -5,6 +5,7 @@ enum LocalizeEnum {
   Initiator = 'Initiator',
   Starts = 'Starts',
   Ends = 'Ends',
+  DaysOfWeek = 'DaysOfWeek',
   Description = 'Description',
   Refresh = 'Refresh',
   Share = 'Share',
@@ -33,6 +34,10 @@ export const EventMainInfoLocalize: LocalizationPreset<LocalizeEnum> = {
   Ends: {
     en: 'Ends',
     ru: 'Конец',
+  },
+  DaysOfWeek: {
+    en: 'Days of week',
+    ru: 'Дни недели',
   },
   Description: {
     en: 'Description',

@@ -9,6 +9,8 @@ enum LocalizeEnum {
   DescriptionPlaceholder = 'DescriptionPlaceholder',
   SaveEvent = 'SaveEvent',
   HasBeenSaved = 'HasBeenSaved',
+  SpecificDaysOfWeek = 'SpecificDaysOfWeek',
+  DaysOfWeekPlaceholder = 'DaysOfWeekPlaceholder',
 }
 
 export const EditEventFormLocalize: LocalizationPreset<LocalizeEnum> = {
@@ -35,6 +37,14 @@ export const EditEventFormLocalize: LocalizationPreset<LocalizeEnum> = {
   DescriptionPlaceholder: {
     en: 'Enter description',
     ru: 'Введите описание',
+  },
+  SpecificDaysOfWeek: {
+    en: 'Restrict by days of week',
+    ru: 'Ограничить по дням недели',
+  },
+  DaysOfWeekPlaceholder: {
+    en: 'Available days of week',
+    ru: 'Доступные дни недели',
   },
   SaveEvent: {
     en: 'Save event',

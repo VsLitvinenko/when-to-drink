@@ -1,72 +1,95 @@
 @let disabled = eventFormGroup.disabled;
 @let canEdit = (eventInfo$ | async)?.canEdit !== false;
 @let noUnsaved = noUnsavedChanges | async;
-<ion-list
-  mode="ios"
-  [inset]="true"
-  [formGroup]="eventFormGroup"
-  [class.form-disabled]="disabled"
->
-  <ion-item>
-    <ion-label> {{ EditEventFormLocalize.Name | localize }} </ion-label>
-    <ion-input
-      color="dark" slot="end"
-      formControlName="name"
-      [placeholder]="EditEventFormLocalize.NamePlaceholder | localize"
-    ></ion-input>
-  </ion-item>
-  <ion-item (click)="startDateModal.present()">
-    <ion-label> {{ EditEventFormLocalize.Starts | localize }} </ion-label>
-    <ion-datetime-button datetime="datetimeStart"></ion-datetime-button>
-    <ion-modal
-      #startDateModal
-      class="event-datetime-modal"
-      [keepContentsMounted]="true"
-      [initialBreakpoint]="1"
-      [breakpoints]="[0, 1]">
-      <ng-template>
-        <ion-datetime
-          id="datetimeStart"
-          formControlName="starts"
-          [firstDayOfWeek]="1"
-          [locale]="localizeFormat$ | async"
-          presentation="date"
-          mode="ios"
-        ></ion-datetime>
-      </ng-template>
-    </ion-modal>
-  </ion-item>
-  <ion-item (click)="endDateModal.present()">
-    <ion-label> {{ EditEventFormLocalize.Ends | localize }} </ion-label>
-    <ion-datetime-button datetime="datetimeEnd"></ion-datetime-button>
-    <ion-modal
-      #endDateModal
-      class="event-datetime-modal"
-      [keepContentsMounted]="true"
-      [initialBreakpoint]="1"
-      [breakpoints]="[0, 1]">
-      <ng-template>
-        <ion-datetime
-          id="datetimeEnd"
-          formControlName="ends"
-          [firstDayOfWeek]="1"
-          [locale]="localizeFormat$ | async"
-          presentation="date"
-          mode="ios"
-        ></ion-datetime>
-      </ng-template>
-    </ion-modal>
-  </ion-item>
-  <ion-item lines="none" class="notes-item">
-    <ion-label> {{ EditEventFormLocalize.Description | localize }} </ion-label>
-    <ion-textarea
-      color="dark" slot="end"
-      formControlName="description"
-      [autoGrow]="true"
-      [placeholder]="EditEventFormLocalize.DescriptionPlaceholder | localize"
-    ></ion-textarea>
-  </ion-item>
-</ion-list>
+@let localizeFormat = (localizeFormat$ | async) ?? undefined;
+
+<ng-container [formGroup]="eventFormGroup">
+  <ion-list mode="ios" [inset]="true" [class.form-disabled]="disabled">
+    <ion-item>
+      <ion-label> {{ EditEventFormLocalize.Name | localize }} </ion-label>
+      <ion-input
+        color="dark" slot="end"
+        formControlName="name"
+        [placeholder]="EditEventFormLocalize.NamePlaceholder | localize"
+      ></ion-input>
+    </ion-item>
+    <ion-item (click)="startDateModal.present()">
+      <ion-label> {{ EditEventFormLocalize.Starts | localize }} </ion-label>
+      <ion-datetime-button datetime="datetimeStart"></ion-datetime-button>
+      <ion-modal
+        #startDateModal
+        class="event-datetime-modal"
+        [keepContentsMounted]="true"
+        [initialBreakpoint]="1"
+        [breakpoints]="[0, 1]">
+        <ng-template>
+          <ion-datetime
+            id="datetimeStart"
+            formControlName="starts"
+            [firstDayOfWeek]="1"
+            [locale]="localizeFormat"
+            presentation="date"
+            mode="ios"
+          ></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+    <ion-item (click)="endDateModal.present()">
+      <ion-label> {{ EditEventFormLocalize.Ends | localize }} </ion-label>
+      <ion-datetime-button datetime="datetimeEnd"></ion-datetime-button>
+      <ion-modal
+        #endDateModal
+        class="event-datetime-modal"
+        [keepContentsMounted]="true"
+        [initialBreakpoint]="1"
+        [breakpoints]="[0, 1]">
+        <ng-template>
+          <ion-datetime
+            id="datetimeEnd"
+            formControlName="ends"
+            [firstDayOfWeek]="1"
+            [locale]="localizeFormat"
+            presentation="date"
+            mode="ios"
+          ></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </ion-item>
+    <ion-item lines="none" class="notes-item">
+      <ion-label> {{ EditEventFormLocalize.Description | localize }} </ion-label>
+      <ion-textarea
+        color="dark" slot="end"
+        formControlName="description"
+        [autoGrow]="true"
+        [placeholder]="EditEventFormLocalize.DescriptionPlaceholder | localize"
+      ></ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  <ion-list mode="ios" [inset]="true" [class.form-disabled]="disabled">
+    <ion-item>
+      <ion-checkbox formControlName="specifyDaysOfWeek">
+        {{ EditEventFormLocalize.SpecificDaysOfWeek | localize }}
+      </ion-checkbox>
+    </ion-item>
+    @if (eventFormGroup.controls.specifyDaysOfWeek.value) {
+      <ion-item>
+        <ion-select
+          class="week-select"
+          formControlName="isoDaysOfWeek"
+          [label]="EditEventFormLocalize.DaysOfWeekPlaceholder | localize"
+          [placeholder]="EditEventFormLocalize.DaysOfWeekPlaceholder | localize"
+          [multiple]="true"
+        >
+          @for (item of daysOfWeek; track $index) {
+            @let label = item.date | date : 'EEEE' : undefined : localizeFormat;
+            <ion-select-option [value]="item.value">{{ label | titlecase}}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+    }
+  </ion-list>
+</ng-container>
 
 <ion-button
   mode="ios"

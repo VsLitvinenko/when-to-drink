@@ -13,6 +13,30 @@ ion-segment-view {
   height: auto;
 }
 
+.event-ended-warning {
+  margin: 0.75rem 0.75rem 0.25rem;
+  padding: 0.5rem 1.15rem;
+  border-radius: 0.5rem;
+
+  $color-text: var(--ion-color-danger-shade, #ad000d);
+  $color-bg: var(--ion-color-danger-rgb, 197, 0, 15);
+
+  color: $color-text;
+  background-color: rgba($color-bg, 0.12);
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  ion-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .label {
+    font-size: 0.9rem;
+  }
+}
+
 .segment-view-content {
   padding: 0.25rem 0.75rem 1.25rem;
   display: flex;
