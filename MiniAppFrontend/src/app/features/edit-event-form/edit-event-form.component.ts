@@ -10,6 +10,8 @@ import { SmallToolsService, ToastService } from 'src/app/core/services';
 import { combineLatest, filter, map, of, shareReplay, Subject, switchMap, take, takeUntil, tap } from 'rxjs';
 import { EdiEventFormRequestService } from './edit-event-form-request.service';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { isEqual } from 'lodash';
+
 
 @Component({
   selector: 'app-edit-event-form',
@@ -90,7 +92,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
       const compareVal = info ?? this.initFormValues;
       return Object.entries(formValue).every(([key, value]) => {
         const infoValue = (compareVal as any)[key];
-        return infoValue === value;
+        return isEqual(infoValue, value);
       });
     }),
     shareReplay(1)
@@ -110,7 +112,7 @@ export class EditEventFormComponent implements OnInit, OnDestroy {
         starts: info.starts,
         ends: info.ends,
         description: info.description,
-        specifyDaysOfWeek: info.specifyDaysOfWeek,
+        specifyDaysOfWeek: info.specifyDaysOfWeek === true,
         isoDaysOfWeek: info.isoDaysOfWeek ?? [],
       });
     });

@@ -16,6 +16,8 @@ type ReqBody = {
   starts?: string;
   ends?: string;
   description?: string;
+  specifyDaysOfWeek?: boolean;
+  isoDaysOfWeek?: number[];
 };
 
 type ReqRes = ReqBody & { id: string };
@@ -46,6 +48,8 @@ export async function eventPatchHandle(
     starts: format(newEvent.starts, 'yyyy-MM-dd'),
     ends: format(newEvent.ends, 'yyyy-MM-dd'),
     description: newEvent.description,
+    specifyDaysOfWeek: newEvent.specifyDaysOfWeek,
+    isoDaysOfWeek: newEvent.isoDaysOfWeek,
   }); 
 }
 

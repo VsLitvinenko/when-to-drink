@@ -17,6 +17,8 @@ type ReqRes = {
   starts: string;
   ends: string;
   description?: string;
+  specifyDaysOfWeek: boolean;
+  isoDaysOfWeek?: number[];
   creator: {
     fullName: string;
     photoUrl?: string;
@@ -52,6 +54,8 @@ export async function eventGetInfoHandle(
     starts: format(event.starts, 'yyyy-MM-dd'),
     ends: format(event.ends, 'yyyy-MM-dd'),
     description: event.description,
+    specifyDaysOfWeek: event.specifyDaysOfWeek,
+    isoDaysOfWeek: event.isoDaysOfWeek ?? undefined,
     creator: {
       fullName: `${creator.firstName} ${creator.lastName}`,
       photoUrl: creator.photoUrl,
