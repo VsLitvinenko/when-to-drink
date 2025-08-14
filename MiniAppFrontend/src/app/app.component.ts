@@ -26,6 +26,7 @@ import {
   trashOutline,
   addOutline,
   banOutline,
+  arrowUp,
 } from 'ionicons/icons';
 
 
@@ -64,6 +65,7 @@ export class AppComponent implements OnInit, OnDestroy {
       trashOutline,
       addOutline,
       banOutline,
+      arrowUp,
     });
   }
 

@@ -1,0 +1,17 @@
+:host {
+  z-index: 5;
+  position: fixed;
+  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 1.5rem;
+}
+
+ion-button {
+  white-space: nowrap;
+  --padding-top: 0.5rem;
+  --padding-bottom: 0.5rem;
+  --padding-start: 1.25rem;
+  --padding-end: 1.25rem;
+  --box-shadow: 0 0 1rem 0 var(--ion-background-color, #fff);;
+}
