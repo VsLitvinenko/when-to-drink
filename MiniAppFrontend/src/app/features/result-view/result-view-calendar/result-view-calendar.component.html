@@ -7,29 +7,29 @@
     [firstDayOfWeek]="1"
     [min]="minDate() ?? undefined"
     [max]="maxDate() ?? undefined"
+    [isDateEnabled]="isDateEnabled()"
     [locale]="localizeFormat$ | async"
     presentation="date"
     mode="ios"
   ></ion-datetime>
-  <div
-    *ngIf="selectedDate() as sDate"
-    class="calendar-footer"
-  >
-    <ion-item (click)="infoModal.present(sDate)" button lines="none">
-      <ion-icon
-        slot="start"
-        [color]="sDate.noTimeOverlap ? 'danger' : Helpers.getColorByType(sDate.voteType)"
-        [name]="Helpers.getIconByType(sDate.voteType)"
-      ></ion-icon>
-      <ion-label>
-        {{ sDate.date | date : 'dd.MM.yyyy' }}
-      </ion-label>
-      <ion-note slot="end">
-        {{ sDate.users.length }}
-        {{ ResultViewLocalize.Member | localizeMany : sDate.users.length }}
-      </ion-note>
-    </ion-item>
-  </div>
+  @if (selectedDate(); as sDate) {
+    <div class="calendar-footer">
+      <ion-item (click)="infoModal.present(sDate)" button lines="none">
+        <ion-icon
+          slot="start"
+          [color]="sDate.noTimeOverlap ? 'danger' : Helpers.getColorByType(sDate.voteType)"
+          [name]="Helpers.getIconByType(sDate.voteType)"
+        ></ion-icon>
+        <ion-label>
+          {{ sDate.date | date : 'dd.MM.yyyy' }}
+        </ion-label>
+        <ion-note slot="end">
+          {{ sDate.users.length }}
+          {{ ResultViewLocalize.Member | localizeMany : sDate.users.length }}
+        </ion-note>
+      </ion-item>
+    </div>
+  }
 </div>
 
-<app-result-date-info-modal #infoModal></app-result-date-info-modal>
+<app-result-date-info-modal #infoModal/>

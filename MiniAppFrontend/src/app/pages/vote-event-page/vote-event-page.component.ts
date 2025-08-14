@@ -3,6 +3,7 @@ import { IonSegment, IonSegmentButton, IonSegmentContent, IonSegmentView, ViewDi
 import { EventMainInfoComponent } from 'src/app/features/event-main-info';
 import { ResultFiltersComponent } from 'src/app/features/result-filters';
 import { VoteCalendarComponent } from 'src/app/features/vote-calendar';
+import { ScrollTopButtonComponent } from 'src/app/shared/components';
 import { PageCommonModule } from 'src/app/shared';
 import { ResultViewPickerContainerComponent, ResultViewPickerControlComponent, ViewPick } from '../../features/result-view-picker';
 import { ResultViewCalendarComponent, ResultViewDirective, ResultViewListComponent } from 'src/app/features/result-view';
@@ -34,6 +35,7 @@ import { startOfDay } from 'date-fns';
     IonSegmentContent,
     IonSegmentView,
     FeatureLoadDirective,
+    ScrollTopButtonComponent,
   ],
   host: {
     class: 'app-page-inner',

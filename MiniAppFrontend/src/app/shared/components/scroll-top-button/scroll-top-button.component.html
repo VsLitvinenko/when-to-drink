@@ -1,0 +1,13 @@
+@if (!manualHideButton && (showButton$ | async)) {
+  <ion-button
+    @ifAnimation
+    mode="ios"
+    size="small"
+    color="dark"
+    shape="round"
+    (click)="scrollTop()"
+  >
+    <ion-icon name="arrow-up" slot="start"/>
+    <span> {{ ScrollTopButtonLocalize.ScrollTop | localize }} </span>
+  </ion-button>
+}

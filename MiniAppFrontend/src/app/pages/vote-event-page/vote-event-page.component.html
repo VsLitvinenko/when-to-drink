@@ -1,5 +1,6 @@
 
 <ion-content class="ion-padding">
+  <app-scroll-top-button/>
   <app-event-main-info
     #eventMainInfo
     appFeatureLoad
@@ -9,6 +10,8 @@
 
   @let info = eventMainInfo.info();
   @let users = eventMainInfo.users();
+  @let daysOfWeek = info?.specifyDaysOfWeek ? info?.isoDaysOfWeek : [];
+
   <ion-segment mode="ios">
     <ion-segment-button value="vote" contentId="vote">
       <ion-label> {{ VotePageLocalize.Vote | localize }} </ion-label>
@@ -34,7 +37,7 @@
           [eventId]="eventId()"
           [minDate]="info?.starts"
           [maxDate]="info?.ends"
-          [daysOfWeek]="info?.specifyDaysOfWeek ? info?.isoDaysOfWeek : []"
+          [daysOfWeek]="daysOfWeek"
           (noUnsavedChanges)="onNoUnsavedChanges($event)"
           (voteUpdated)="
             $event.alreadyVoted ? true: eventMainInfo.refreshUsers();
@@ -77,6 +80,7 @@
               <app-result-view-calendar
                 [minDate]="info?.starts"
                 [maxDate]="info?.ends"
+                [daysOfWeek]="daysOfWeek"
               ></app-result-view-calendar>
             }
           }
