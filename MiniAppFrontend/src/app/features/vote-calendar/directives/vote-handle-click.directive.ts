@@ -8,7 +8,8 @@ import { TimeModalDataAction, TimeModalDataParam, VoteDate, VoteType } from '../
 })
 export class VoteHandleClickDirective implements AfterViewInit {
   @Input({ required: true }) appVoteHandleClick!: VoteType;
-  @Output() timeModalAction = new EventEmitter<TimeModalDataAction>();
+  @Output() timeModalActionChange = new EventEmitter<TimeModalDataAction>();
+  @Output() timeModalCancelChange = new EventEmitter<TimeModalDataAction>();
 
   private readonly data = inject(VoteDataDirective);
 
@@ -72,10 +73,15 @@ export class VoteHandleClickDirective implements AfterViewInit {
       case VoteType.Time:
         // open time modal and wait for user input
         buttonEl.style.opacity = '0.7';
-        const action = new Promise<TimeModalDataParam>((r) => this.timeModalAction.emit(r));
+        const action = new Promise<TimeModalDataParam>((resolve) => {
+          this.timeModalCancelChange.emit(() => resolve(undefined));
+          this.timeModalActionChange.emit(resolve);
+        });
         const voteDateData = await action;
         buttonEl.style.opacity = '';
-        if (!voteDateData) { return; }
+        if (!voteDateData) {
+          return;
+        }
         const startDate = new Date(voteDateData.start);
         const endDate = new Date(voteDateData.end);
         startDate.setFullYear(year, month - 1, day);

@@ -117,7 +117,8 @@ export class VoteCalendarComponent {
   });
 
   public focusedDate?: VoteDate = undefined;
-  public timeModalDataAction = signal<TimeModalDataAction | undefined>(undefined);
+  public timeModalAction = signal<TimeModalDataAction | undefined>(undefined);
+  public timeModalCancel = signal<TimeModalDataAction | undefined>(undefined);
 
   private readonly toast = inject(ToastService);
   private readonly tools = inject(SmallToolsService);
@@ -154,14 +155,15 @@ export class VoteCalendarComponent {
   }
 
   public onTimeSelected(timeModal: IonModal): void {
-    timeModal.dismiss();
     this.lastAppliedStartTime = this.startTime();
     this.lastAppliedEndTime = this.endTime();
-    const action = this.timeModalDataAction();
+    const action = this.timeModalAction();
     if (action) {
       action({ time: true, start: this.startTime(), end: this.endTime() });
-      this.timeModalDataAction.set(undefined);
+      this.timeModalAction.set(undefined);
+      this.timeModalCancel.set(undefined);
     }
+    timeModal.dismiss();
   }
   
 }
