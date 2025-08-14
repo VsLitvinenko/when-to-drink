@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal, viewChild } from '@angular/core';
 import { IonDatetime } from '@ionic/angular/standalone';
 import { SharedFeatureModule } from 'src/app/shared';
 import { ResultViewDirective } from '../result-view.directive';
@@ -9,6 +9,7 @@ import { ResultViewCalendarPickerDirective } from './result-view-calendar-picker
 import { ResultDate, ResultViewHelpers } from '../models';
 import { LocalizeService } from 'src/app/shared/localize';
 import { ResultViewLocalize } from '../result-view.localize';
+import { getISODay } from 'date-fns';
 
 @Component({
   selector: 'app-result-view-calendar',
@@ -25,6 +26,18 @@ import { ResultViewLocalize } from '../result-view.localize';
 export class ResultViewCalendarComponent {
   public readonly minDate = input();
   public readonly maxDate = input();
+  public readonly daysOfWeek = input<number[]>();
+
+  public readonly isDateEnabled = computed(() => {
+    const daysOfWeekSet = new Set(this.daysOfWeek());
+    return (dateString: string) => {
+      if (daysOfWeekSet.size === 0) {
+        return true;
+      }
+      const date = new Date(dateString);
+      return daysOfWeekSet.has(getISODay(date));
+    };
+  });
 
   private readonly ionDateComponent = viewChild(IonDatetime);
   private readonly data = inject(ResultViewDirective);
